@@ -6,7 +6,12 @@ import org.bytedeco.opencv.opencv_core.*;
 import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.*;
+import android.content.*;
+import android.content.Context;
+import android.util.Log;
 
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
@@ -138,6 +143,9 @@ public class ImageGallery{
 
     public void userSendprint()
     {
+//        update()
+//        sendPrint()
+//        update()
         // update trackingGallery
     }
 
@@ -145,6 +153,12 @@ public class ImageGallery{
     {
         // update trackingGallery
     }
+
+    public void recovery(ImageIndex idx)
+    {
+        //
+    }
+
 
     public ImageIndex[] readImageIndex(String filename)
     {
@@ -207,6 +221,7 @@ public class ImageGallery{
         {
             trackingGallery[idxes[i].x][idxes[i].y] = ImageStatus.ADMIN_AVAILABLE;
         }
+        // update Disk
     }
 
     public enum degreeEnum
@@ -691,6 +706,116 @@ public class ImageGallery{
         return image_out;
 
     }
+
+    public boolean androidWrite(Mat img)
+    {
+        return true;
+    }
+
+    public static Mat assetsRead(String filename, Context context)
+    {
+        Mat image = new Mat();
+        File file = new File(context.getCacheDir() + "/" + filename);
+        if (!file.exists())
+            try {
+
+                InputStream is = context.getAssets().open(filename);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+
+                FileOutputStream fos = new FileOutputStream(file);
+
+                fos.write(buffer);
+                fos.close();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+        if (file.exists()) {
+            image = imread(file.getAbsolutePath());
+        }
+        return image;
+    }
+
+    public static String imageDirPath(Context context)
+    {
+        File Images = new File(context.getFilesDir(), "Images");
+        return Images.getAbsolutePath();
+    }
+
+    public static void internalImgWrite(String filename, Mat img, Context context)
+    {
+        File internalEntryPoint = context.getFilesDir();
+        if(internalEntryPoint.canWrite())
+        {
+            // Get into Images
+            File imgDir = new File(internalEntryPoint.getAbsolutePath(), "Images");
+            if(!imgDir.exists())
+            {
+                imgDir.mkdir();
+            }
+            // Write Img
+            File imgfile = new File(imgDir, filename);
+            String imgfilePath = imgfile.getAbsolutePath();
+            if(!imwrite(imgfilePath, img))
+            {
+                Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+            }
+            else
+            {
+                Log.d("Write", "ImageGallery.internalWrite: Write Success.");
+            }
+        }
+        else
+        {
+            Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+        }
+    }
+
+    public static Mat internalImgRead(String filename, Context context)
+    {
+        File internalEntryPoint = context.getFilesDir();
+        Mat img = new Mat();
+        if(internalEntryPoint.canRead())
+        {
+            // Get into Images
+            File imgDir = new File(internalEntryPoint.getAbsolutePath(), "Images");
+            if(!imgDir.exists())
+            {
+                Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+            }
+            // Write Img
+            File imgfile = new File(imgDir, filename);
+            String imgfilePath = imgfile.getAbsolutePath();
+            img = imread(imgfilePath);
+            if(img.empty())
+            {
+                Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+            }
+            else
+            {
+                Log.d("Write", "ImageGallery.internalWrite: Write Success.");
+            }
+        }
+        else
+        {
+            Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+        }
+        return img;
+    }
+
+    public static void printImageDir(Context context)
+    {
+        String imageDirpath = imageDirPath(context);
+        File imageDirFile = new File(imageDirpath);
+        for(String f: imageDirFile.list())
+        {
+            System.out.println(f);
+            Log.d("ImageDir", f);
+        }
+    }
 //
 //    private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
 //        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
@@ -705,14 +830,17 @@ public class ImageGallery{
 //    }
 //
 
+
 // ==============================
 
     public ImageGallery(Mat image, int small_img_width, int small_img_height)
     {
+        // read Disk Status
+
         // do partition and save subImages into BufferedImage[][]
         partition(image, small_img_width, small_img_height);
 
         // user partitions update
-        adminPartitionsUpdate("1.txt");
+//        adminPartitionsUpdate("1.txt");
     }
 }
