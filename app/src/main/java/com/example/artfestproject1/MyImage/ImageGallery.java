@@ -120,6 +120,13 @@ public class ImageGallery{
 
     public static Mat stdLoadImg(String filename)
     {
+        File imgFile = new File(filename);
+        if(!imgFile.getParentFile().exists())
+        {
+            File Images = imgFile.getParentFile();
+            Images.mkdir();
+        }
+
         String from = (DIRPATH+filename);
         Mat image = imread(from);
         if(image == null)
@@ -132,6 +139,12 @@ public class ImageGallery{
 
     public static void stdSaveImg(Mat img, String filename)
     {
+        File imgFile = new File(filename);
+        if(!imgFile.getParentFile().exists())
+        {
+            File Images = imgFile.getParentFile();
+            Images.mkdir();
+        }
         String destination = (DIRPATH+filename);
         if(img == null)
         {
