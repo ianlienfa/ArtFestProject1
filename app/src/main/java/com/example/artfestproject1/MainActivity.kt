@@ -24,9 +24,13 @@ class MainActivity : AppCompatActivity() {
 
         // set up Intent
         binding.cameraOpen.setOnClickListener{
-            Log.d("button", "camera open clicked.")
-            val intent_to_camera = Intent(this, ShowCamera::class.java)
-            startActivity(intent_to_camera)
+            // ==============================
+//            Log.d("button", "camera open clicked.")
+//            val intent_to_camera = Intent(this, ShowCamera::class.java)
+//            startActivity(intent_to_camera)
+            val intent_to_nfc = Intent(this, NfcActivity::class.java)
+            startActivity(intent_to_nfc)
+            // ==============================
         }
 
 //        Log.d("Write", "Start")
