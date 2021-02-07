@@ -86,6 +86,7 @@ class ShowCamera : AppCompatActivity() {
 
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 val savedURI = Uri.fromFile(photoFile)
+                // TODO:用intent傳回給MainActivity
                 val msg = "Photo captured succeed ${savedURI}"
                 Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                 Log.d(TAG, msg)

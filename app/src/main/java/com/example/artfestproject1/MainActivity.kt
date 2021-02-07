@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityMainBinding
 import org.bytedeco.opencv.global.opencv_imgcodecs.imread
+import org.bytedeco.opencv.opencv_core.Mat
 import org.opencv.android.BaseLoaderCallback
 import org.opencv.android.LoaderCallbackInterface
 import java.io.File
@@ -48,5 +49,11 @@ class MainActivity : AppCompatActivity() {
 //        val img_new = imageGallery.algorithm_BAI(img_user, img_base)
 //        ImageGallery.stdSaveImg(img_new, "output.jpg")
 //        ImageGallery.printImageDir(this)    // For Debug
+
+        // ==============================
+//        var mat: Mat = ImageGallery.internalImgRead("2021-02-04-15-50-10-790.jpg", this)
+//        mat = ImageGallery.colorToGray(mat)
+//        ImageGallery.internalImgWrite("test.jpg", mat, this)
+        // ==============================
     }
 }
