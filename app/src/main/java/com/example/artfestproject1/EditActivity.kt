@@ -39,8 +39,8 @@ class EditActivity : AppCompatActivity() {
         // Image parameters
         val crop_x = 1500
         val crop_y = 1500
-        val crop_width = 1000
-        val crop_height = 1000
+        val crop_width = 108
+        val crop_height = 108
 
         // Set Content view
         setContentView(rootview)
@@ -101,7 +101,7 @@ class EditActivity : AppCompatActivity() {
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
 
                 // end testing for algorithm ----
