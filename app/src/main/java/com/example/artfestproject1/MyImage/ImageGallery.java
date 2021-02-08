@@ -13,6 +13,8 @@ import android.content.*;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.core.content.ContextCompat;
+
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
 import static org.opencv.imgproc.Imgproc.cvtColor;
@@ -117,17 +119,15 @@ public class ImageGallery{
             }
         }
     }
-
-    public static Mat stdLoadImg(String filename)
+    public static Mat stdLoadImg(String filename, Context context)
     {
-        File imgFile = new File(filename);
-        if(!imgFile.getParentFile().exists())
+        File Images = imageDirFile(context);
+        if(!Images.exists())
         {
-            File Images = imgFile.getParentFile();
             Images.mkdir();
         }
-
-        String from = (DIRPATH+filename);
+        String from = (Images.getAbsolutePath()+File.separator+filename);
+        Log.d("Destination", from);
         Mat image = imread(from);
         if(image == null)
         {
@@ -137,15 +137,15 @@ public class ImageGallery{
         return image;
     }
 
-    public static void stdSaveImg(Mat img, String filename)
+    public static void stdSaveImg(Mat img, String filename, Context context)
     {
-        File imgFile = new File(filename);
-        if(!imgFile.getParentFile().exists())
+        File Images = imageDirFile(context);
+        if(!Images.exists())
         {
-            File Images = imgFile.getParentFile();
             Images.mkdir();
         }
-        String destination = (DIRPATH+filename);
+        String destination = (Images.getAbsolutePath()+File.separator+filename);
+        Log.d("Destination", destination);
         if(img == null)
         {
             System.out.println("stdSaveImg error: img is null.");
@@ -756,6 +756,12 @@ public class ImageGallery{
     {
         File Images = new File(context.getFilesDir(), "Images");
         return Images.getAbsolutePath();
+    }
+
+    public static File imageDirFile(Context context)
+    {
+        File Images = new File(context.getFilesDir(), "Images");
+        return Images;
     }
 
     public static void internalImgWrite(String filename, Mat img, Context context)
