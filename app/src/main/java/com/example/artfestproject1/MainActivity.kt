@@ -33,20 +33,21 @@ class MainActivity : AppCompatActivity() {
             // ==============================
         }
 
-//        Log.d("Write", "Start")
-//        val img = ImageGallery.assetsRead("rex.jpg", this)  // Load source img from apk's assets Directory
-//        ImageGallery.internalImgWrite("rex.jpg", img, this) // Save source img into internal Directory
-//        ImageGallery.printImageDir(this)    // For Debug
-//
-//        // put image for test
-//        ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
-//        val image_load = ImageGallery.stdLoadImg("rex.jpg")
-//        ImageGallery.stdSaveImg(image_load, "rex.jpg")
-//
-//        // do algorithm
-//        System.out.println("${ImageGallery.DIRPATH}")
-//        val image = ImageGallery.stdLoadImg("rex.jpg")
-//        val imageGallery = ImageGallery(image, 108, 108)
+        Log.d("Write", "Start")
+        val img = ImageGallery.assetsRead("rex.jpg", this)  // Load source img from apk's assets Directory
+        ImageGallery.internalImgWrite("rex.jpg", img, this) // Save source img into internal Directory
+        ImageGallery.printImageDir(this)    // For Debug
+
+        // put image for test
+        ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
+        val image_load = ImageGallery.stdLoadImg("rex.jpg", this)
+        ImageGallery.stdSaveImg(image_load, "rex.jpg", this)
+
+        // do algorithm
+        System.out.println("${ImageGallery.DIRPATH}")
+        val image = ImageGallery.stdLoadImg("rex.jpg", this)
+        val imageGallery = ImageGallery(image, 108, 108)
+
 //
 //        val img_user = ImageGallery.stdLoadImg("[4][7].jpg")
 //        val img_base = ImageGallery.stdLoadImg("[1][7].jpg")

@@ -145,8 +145,13 @@ class NfcActivity : AppCompatActivity() {
                     Toast.makeText(this, "刷過囉！", Toast.LENGTH_SHORT).show()
 
                     // 回到主畫面讓下一位使用
-                    val intent_to_main = Intent(this, MainActivity::class.java)
+//                    val intent_to_main = Intent(this, MainActivity::class.java)
+
+                    // For Debug
+                    val intent_to_main = Intent(this, ShowCamera::class.java)
                     startActivity(intent_to_main)
+
+
 
                 } else {
 

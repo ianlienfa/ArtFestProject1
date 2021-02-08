@@ -120,7 +120,7 @@ class ShowCamera : AppCompatActivity() {
 
             // set up use case: Capture Image
             imageCapture = ImageCapture.Builder()
-                .build()
+                    .build()
 
             // Select back camera as default
             val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA

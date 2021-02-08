@@ -5,12 +5,16 @@ import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.*;
 import org.opencv.imgproc.Imgproc;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.*;
 import android.content.*;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
@@ -780,6 +784,7 @@ public class ImageGallery{
             // Write Img
             File imgfile = new File(imgDir, filename);
             String imgfilePath = imgfile.getAbsolutePath();
+            Log.d("ImgDir", "imgfilePath: "+imgfilePath);
             if(!imwrite(imgfilePath, img))
             {
                 Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
@@ -827,6 +832,39 @@ public class ImageGallery{
         return img;
     }
 
+    public static Bitmap internalBitMapRead(String filename, Context context) throws FileNotFoundException
+    {
+        File internalEntryPoint = context.getFilesDir();
+        Bitmap img = null;
+        if(internalEntryPoint.canRead())
+        {
+            // Get into Images
+            File imgDir = new File(internalEntryPoint.getAbsolutePath(), "Images");
+            if(!imgDir.exists())
+            {
+                Log.d("Read", "ImageGallery.internalBitMapRead: Unable to read internal storage.");
+            }
+            // Write Img
+            File imgfile = new File(imgDir, filename);
+            if(imgfile.exists())
+            {
+                Log.d("Read", "ImageGallery.internalBitMapRead: File exists");
+            }
+            else
+            {
+                Log.d("Read", "ImageGallery.internalBitMapRead: File not found");
+                System.exit(1);
+            }
+            img = BitmapFactory.decodeStream(new FileInputStream(imgfile));
+        }
+        else
+        {
+            Log.d("Read", "ImageGallery.internalBitMapRead: Unable to read from internal storage.");
+            System.exit(1);
+        }
+        return img;
+    }
+
     public static void printImageDir(Context context)
     {
         String imageDirpath = imageDirPath(context);
@@ -837,6 +875,21 @@ public class ImageGallery{
             Log.d("ImageDir", f);
         }
     }
+
+    public static Bitmap bitmapCrop(Bitmap map, int startx, int starty, int width, int height)
+    {
+        return Bitmap.createBitmap(map, startx, starty, width, height);
+    }
+
+    public static Mat matCrop(Mat mat, int startx, int starty, int width, int height)
+    {
+        Rect myROI = new Rect(startx, starty, width, height);
+        Mat cropImage = new Mat(mat, myROI);
+        return cropImage;
+    }
+
+
+
 //
 //    private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
 //        BufferedImage resizedImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
