@@ -694,7 +694,9 @@ public class ImageGallery{
 
     }
 
-   public Mat colorToGray(Mat image_in)
+     public static Mat colorToGray(Mat image_in)
+    // 不上面那樣做是因為，要用constructor來使用比較安全
+//    public Mat colorToGray(Mat image_in)
     {
 
         Mat image_out = image_in;

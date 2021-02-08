@@ -2,8 +2,10 @@ package com.example.artfestproject1
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.nfc.tech.NfcA
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -90,6 +92,11 @@ class ShowCamera : AppCompatActivity() {
                 Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                 Log.d(TAG, msg)
                 printImageDir(baseContext)
+
+                // 傳 savedURI 給 edit 頁面
+                val intent_to_edit = Intent(this@ShowCamera, EditActivity::class.java)
+                intent_to_edit.putExtra("imageURI", savedURI.toString());
+                startActivity(intent_to_edit)
             }
         })
 
