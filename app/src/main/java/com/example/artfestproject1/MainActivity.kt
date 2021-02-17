@@ -33,6 +33,11 @@ class MainActivity : AppCompatActivity() {
             // ==============================
         }
 
+        binding.adminOpen.setOnClickListener {
+            val intent_to_login = Intent(this, LoginActivity::class.java)
+            startActivity(intent_to_login)
+        }
+
         Log.d("Write", "Start")
         val img = ImageGallery.assetsRead("rex.jpg", this)  // Load source img from apk's assets Directory
         ImageGallery.internalImgWrite("rex.jpg", img, this) // Save source img into internal Directory

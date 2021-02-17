@@ -7,6 +7,21 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/admin_open"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="456dp"
+        android:elevation="2dp"
+        android:scaleType="fitCenter"
+        android:text="admin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.823"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
         android:id="@+id/camera_open"
         android:layout_width="100dp"
         android:layout_height="100dp"
