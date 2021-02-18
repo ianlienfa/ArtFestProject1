@@ -5,12 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.nfc.Tag
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings.ACTION_NFC_SETTINGS
-import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.utils.Utils
 import org.json.JSONObject
 import java.io.*
