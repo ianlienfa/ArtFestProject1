@@ -1,6 +1,7 @@
 package com.example.artfestproject1
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.databinding.ActivityAdminBinding

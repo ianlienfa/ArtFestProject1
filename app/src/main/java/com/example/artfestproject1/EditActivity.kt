@@ -31,6 +31,7 @@ class EditActivity : AppCompatActivity() {
         val loadingPanel = binding.loadingPanel
         val printButton = binding.printButton
         val compute_button = binding.computeButton
+        val user_send_print_button = binding.userSendPrintButton
 
         // file parameters
         var newFilename: String = ""
@@ -108,6 +109,8 @@ class EditActivity : AppCompatActivity() {
 
                 // Write computed img
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
+                //TODO:
+                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
 
                 // Prepare for the image show
                 val internalEntryPoint: File = this.getFilesDir()
@@ -143,6 +146,70 @@ class EditActivity : AppCompatActivity() {
                     doPhotoPrint(imgFilePath)
                 }
             }
+        }
+
+        // Compute & Print
+        user_send_print_button.setOnClickListener {
+
+            Thread(Runnable {
+
+                // 轉換照片並存檔
+                newFilename = "algorithm_"+filename
+                var img_user: Mat = ImageGallery.internalImgRead(filename, this)
+                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, crop_width, crop_height)
+
+                // start testing for algorithm ----
+
+                // put image for test
+                ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
+
+                // do algorithm
+                System.out.println("${ImageGallery.DIRPATH}")
+                val image = ImageGallery.stdLoadImg("rex.jpg", this)
+                val imageGallery = ImageGallery(image, 108, 108)
+                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
+                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                ImageGallery.printImageDir(this)    // For Debug
+
+                // end testing for algorithm ----
+
+                // Write computed img
+                ImageGallery.internalImgWrite(newFilename, img_new,this)
+                //TODO:
+                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
+
+                // Prepare for the image show
+                val internalEntryPoint: File = this.getFilesDir()
+                val imgDir = File(internalEntryPoint.absolutePath, "Images")
+                val imgFile: File = File(imgDir, newFilename)
+                val imgFilePath = imgFile.absolutePath
+                val newURI = Uri.parse(imgFilePath)
+
+                // only update UI on UI thread, hide the loadingPanel and show the others
+                loadingPanel.post{
+                    loadingPanel.visibility = GONE
+                }
+                printButton.post{
+                    printButton.visibility = VISIBLE
+                }
+                compute_button.post{
+                    compute_button.visibility = VISIBLE
+                }
+                imageView.post{
+                    imageView.setImageURI(newURI)
+                    imageView.visibility = VISIBLE
+                }
+
+                if(!newFilename.equals("")) {
+                    val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
+                    val imgFilePath = imgFile.absolutePath
+                    if(File(imgFilePath).exists()) {
+                        doPhotoPrint(imgFilePath)
+                    }
+                }
+
+            }).start()
+
         }
     }
 
