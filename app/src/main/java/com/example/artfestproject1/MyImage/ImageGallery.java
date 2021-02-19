@@ -243,7 +243,7 @@ public class ImageGallery{
 
     public enum degreeEnum
     {
-        A(1),B(2),C(20);
+        A(1),B(2),C(2);
 
         private int value;
         degreeEnum(int value) {
@@ -411,7 +411,7 @@ public class ImageGallery{
         double win_prob = 0.2;
         int breed_radius = 10;
         boolean infection_effect_on = true;
-        boolean breed_effect_on = true;
+        boolean breed_effect_on = false;
 
         // width, height check
         if(image_in.arrayWidth() != image_base.arrayWidth() || image_in.arrayHeight() != image_base.arrayHeight())
@@ -421,6 +421,9 @@ public class ImageGallery{
             System.out.println("Image size error!");
             System.exit(-2);
         }
+
+        // set the affected pixels
+
 
         // change every pixel of the image_in
         for(int w = 0; w < image_in.arrayWidth(); w++)
@@ -438,7 +441,9 @@ public class ImageGallery{
                 // set this pixel to gray scale and tune its brightness to match the pixel_base
                 UByteIndexer indexer_in = image_in.createIndexer();
                 float hsb_in[] = RGBtoHSB(indexer_in.get(w, h, 2),indexer_in.get(w, h, 1),indexer_in.get(w, h, 0), null);
-                int rgb_val = HSBtoRGB(hsb_in[0], 0, brightness);
+                // 修改！！
+                brightness = (float)(brightness * 0.2 + hsb_in[2]*0.8);
+                int rgb_val = HSBtoRGB(hsb_in[0], hsb_in[1], brightness);
                 int r = getR(rgb_val); int g = getG(rgb_val); int b = getB(rgb_val);
                 indexer_in.put(w, h, 0, b);
                 indexer_in.put(w, h, 1, g);
@@ -471,52 +476,66 @@ public class ImageGallery{
             }
         }
 
-        // set the affected pixels
         if(infection_effect_on)
-        {    for(int w = 0; w < image_in.arrayWidth(); w++)
+        { for(int w = 0; w < image_in.arrayWidth(); w++)
+        {
+            for(int h = 0; h < image_in.arrayHeight(); h++)
             {
-                for(int h = 0; h < image_in.arrayHeight(); h++)
+                // get base pixel HSB
+                UByteIndexer indexer_base = image_base.createIndexer();
+                UByteIndexer indexer_in = image_in.createIndexer();
+                float hsb_base[] = RGBtoHSB(indexer_base.get(w, h, 2),indexer_base.get(w, h, 1),indexer_base.get(w, h, 0), null);
+                float brightness = hsb_base[2];
+
+                // set affect_degree
+                int affect_degree = 0;
+
+                // affect_table: 0~20: C, 20~30: B, 30~70: A, 70~80: B, 80~100:C
+                if(brightness <= 0.3)
+                    affect_degree = degreeEnum.C.value;
+                else if(brightness > 0.3 && brightness < 0.5)
+                    affect_degree = degreeEnum.A.value;
+                else
+                    affect_degree = 0;
+
+                // get infection_region
+                ImageIndex[] infection_region = infectionRegion(image_base, w, h, affect_degree);
+
+                // set the affected pixels
+                for(int i = 0; i < infection_region.length; i++)
                 {
-                    // get base pixel HSB
-                    UByteIndexer indexer_base = image_base.createIndexer();
-                    UByteIndexer indexer_in = image_in.createIndexer();
-                    float hsb_base[] = RGBtoHSB(indexer_base.get(w, h, 2),indexer_base.get(w, h, 1),indexer_base.get(w, h, 0), null);
-                    float brightness = hsb_base[2];
-
-                    // set affect_degree
-                    int affect_degree = 0;
-
-                    // affect_table: 0~20: C, 20~30: B, 30~70: A, 70~80: B, 80~100:C
-                    if(brightness <= 0.3)
-                        affect_degree = degreeEnum.C.value;
-                    else if(brightness > 0.3 && brightness < 0.5)
-                        affect_degree = degreeEnum.B.value;
-                    else
-                        affect_degree = degreeEnum.A.value;
-
-                    // get infection_region
-                    ImageIndex[] infection_region = infectionRegion(image_base, w, h, affect_degree);
-
-                    // set the affected pixels
-                    for(int i = 0; i < infection_region.length; i++)
-                    {
-                        int inf_w = infection_region[i].x, inf_h = infection_region[i].y;
-                        float inf_hsb[] = RGBtoHSB(indexer_base.get(inf_w, inf_h, 2),indexer_base.get(inf_w, inf_h, 1),indexer_base.get(inf_w, inf_h, 0), null);
-                        int inf_rgb = HSBtoRGB(inf_hsb[0], inf_hsb[1], (brightness+inf_hsb[2])/2);
-                        int r = getR(inf_rgb), g = getG(inf_rgb), b = getB(inf_rgb);
-                        indexer_in.put(inf_w, inf_h, 0, b);
-                        indexer_in.put(inf_w, inf_h, 1, g);
-                        indexer_in.put(inf_w, inf_h, 2, r);
-                    }
-                    indexer_base.release();
-                    indexer_in.release();
+                    int inf_w = infection_region[i].x, inf_h = infection_region[i].y;
+                    float inf_hsb[] = RGBtoHSB(indexer_base.get(inf_w, inf_h, 2),indexer_base.get(inf_w, inf_h, 1),indexer_base.get(inf_w, inf_h, 0), null);
+                    float hsb_in[] = RGBtoHSB(indexer_in.get(inf_w, inf_h, 2),indexer_in.get(inf_w, inf_h, 1),indexer_in.get(inf_w, inf_h, 0), null);
+                    int inf_rgb = HSBtoRGB(hsb_in[0], hsb_in[1], (brightness+hsb_in[2])/2);
+                    int r = getR(inf_rgb), g = getG(inf_rgb), b = getB(inf_rgb);
+                    indexer_in.put(inf_w, inf_h, 0, b);
+                    indexer_in.put(inf_w, inf_h, 1, g);
+                    indexer_in.put(inf_w, inf_h, 2, r);
                 }
+                indexer_base.release();
+                indexer_in.release();
             }
         }
+        }
+
+        for(int w = 0; w < image_in.arrayWidth(); w++) {
+            for (int h = 0; h < image_in.arrayHeight(); h++) {
+                UByteIndexer indexer_in = image_in.createIndexer();
+                float hsb_in[] = RGBtoHSB(indexer_in.get(w, h, 2),indexer_in.get(w, h, 1),indexer_in.get(w, h, 0), null);
+                int rgb_val = HSBtoRGB(0, 0, hsb_in[2]);
+                int r = getR(rgb_val); int g = getG(rgb_val); int b = getB(rgb_val);
+                indexer_in.put(w, h, 0, b);
+                indexer_in.put(w, h, 1, g);
+                indexer_in.put(w, h, 2, r);
+                indexer_in.release();
+            }
+        }
+
         return image_in;
     }
 
-//
+    //
 ////    public BufferedImage colorToGray1(BufferedImage image_in)
 ////    {
 ////
@@ -541,7 +560,7 @@ public class ImageGallery{
 ////
 ////    }
 ////
-   public Mat algorithm_shiuan(Mat image_in, Mat image_base)
+    public Mat algorithm_shiuan(Mat image_in, Mat image_base)
     {
         Mat image_out, image_black;
         opencv_imgproc.cvtColor(image_in, image_in, opencv_imgproc.COLOR_BGR2GRAY);
@@ -577,17 +596,17 @@ public class ImageGallery{
 
                 }
                 else
-               {
-                   UByteIndexer indexer_in =image_in.createIndexer();
-                   UByteIndexer indexer_out =image_out.createIndexer();
-                   int b=(int)(indexer_in.get(j, i,0));
-                   int g=(int)(indexer_in.get(j, i,1));
-                   int r=(int)(indexer_in.get(j, i,2));
-                   indexer_out.put(j, i, 0, b);
-                   indexer_out.put(j, i, 1, g);
-                   indexer_out.put(j, i, 2, r);
-                   indexer_out.release();
-                   indexer_in.release();
+                {
+                    UByteIndexer indexer_in =image_in.createIndexer();
+                    UByteIndexer indexer_out =image_out.createIndexer();
+                    int b=(int)(indexer_in.get(j, i,0));
+                    int g=(int)(indexer_in.get(j, i,1));
+                    int r=(int)(indexer_in.get(j, i,2));
+                    indexer_out.put(j, i, 0, b);
+                    indexer_out.put(j, i, 1, g);
+                    indexer_out.put(j, i, 2, r);
+                    indexer_out.release();
+                    indexer_in.release();
                 }
 
             }
@@ -698,7 +717,7 @@ public class ImageGallery{
 
     }
 
-     public static Mat colorToGray(Mat image_in)
+    public static Mat colorToGray(Mat image_in)
     // 不上面那樣做是因為，要用constructor來使用比較安全
 //    public Mat colorToGray(Mat image_in)
     {
