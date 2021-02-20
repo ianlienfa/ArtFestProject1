@@ -44,14 +44,17 @@ public class ImageGallery{
         }
     }
     enum ImageStatus {
-        USER_PRINTED,
-        USER_AVAILABLE,
-        ADMIN_PRINTED,
-        ADMIN_AVAILABLE
+        USER_PRINTED,       // 1
+        USER_AVAILABLE,     // 2
+        ADMIN_PRINTED,      // 3
+        ADMIN_AVAILABLE     // 4
     }
 
 
     /*  Methods  */
+    public int get_ImageGallery_width() { return imageGallery_width; }
+    public int get_ImageGallery_height() { return imageGallery_height; }
+
     public Mat get_baseImg(int w, int h)
     {
         return imageGallery[w][h];

@@ -15,9 +15,8 @@ import androidx.print.PrintHelper
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityEditBinding
 import org.bytedeco.opencv.opencv_core.Mat
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
+import java.util.*
 
 
 class EditActivity : AppCompatActivity() {
@@ -109,8 +108,6 @@ class EditActivity : AppCompatActivity() {
 
                 // Write computed img
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
-                //TODO:
-                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
 
                 // Prepare for the image show
                 val internalEntryPoint: File = this.getFilesDir()
@@ -171,12 +168,16 @@ class EditActivity : AppCompatActivity() {
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
 
+                // ==============================
+
+                saveStatusToTxt(imageGallery)
+
+                // ==============================
+
                 // end testing for algorithm ----
 
                 // Write computed img
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
-                //TODO:
-                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
 
                 // Prepare for the image show
                 val internalEntryPoint: File = this.getFilesDir()
@@ -246,4 +247,69 @@ class EditActivity : AppCompatActivity() {
             }
         }
     }
+
+    // TODO: separate this function to several parts
+    private fun saveStatusToTxt(imageGallery: ImageGallery) {
+
+        var w: Int = imageGallery.get_ImageGallery_width()
+        var h: Int = imageGallery.get_ImageGallery_height()
+
+        val status = Array(h) { IntArray(w) }
+
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                status[i][j] = 2    // USER_AVAILABLE
+            }
+        }
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                builder.append(status[i][j].toString());
+                if (j < status[i].size - 1) {
+                    builder.append(",")
+                }
+            }
+            builder.append("\n")
+        }
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // generate new status file
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+        // ==============================
+
+        val readStatus = Array(h) { IntArray(w) }
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+        for (line in reader.lineSequence()) {
+            val cols = line.split(",").toTypedArray()
+            var col: Int = 0
+            for (c in cols) {
+                readStatus[row][col] = c.toInt()
+                col++
+            }
+            row++
+        }
+        reader.close()
+
+        Log.d("Admin", Arrays.deepToString(status))
+        Log.d("Admin", Arrays.deepToString(readStatus))
+    }
+
 }
