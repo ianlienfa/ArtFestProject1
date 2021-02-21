@@ -170,7 +170,17 @@ class EditActivity : AppCompatActivity() {
 
                 // ==============================
 
-                saveStatusToTxt(imageGallery)
+                var w: Int = imageGallery.get_ImageGallery_width()
+                var h: Int = imageGallery.get_ImageGallery_height()
+                val status = Array(h) { IntArray(w) }
+
+                if (!hasStatusFile()) {
+                    initStatus(w, h, status)
+                    createStatusFile()
+                    saveStatusToTxt(w, h, status)
+                } else {
+                    readStatusFromTxt(w, h, status)
+                }
 
                 // ==============================
 
@@ -248,19 +258,39 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: separate this function to several parts
-    private fun saveStatusToTxt(imageGallery: ImageGallery) {
+    private fun hasStatusFile(): Boolean {
 
-        var w: Int = imageGallery.get_ImageGallery_width()
-        var h: Int = imageGallery.get_ImageGallery_height()
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
 
-        val status = Array(h) { IntArray(w) }
+        return file.exists()
+    }
+
+    private fun initStatus(w: Int, h: Int, status: Array<IntArray>) {
 
         for (i in 0..h-1) {
             for (j in 0..w-1) {
                 status[i][j] = 2    // USER_AVAILABLE
             }
         }
+
+    }
+
+    private fun createStatusFile() {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveStatusToTxt(w: Int, h: Int, status: Array<IntArray>) {
 
         // 2D-array to string
         val builder = StringBuilder()
@@ -277,23 +307,20 @@ class EditActivity : AppCompatActivity() {
         val filename = "status.txt"
         val file = File(this.getFilesDir(), filename)
 
-        // generate new status file
-        if (!file.exists()) {
-            val fileContents = ""
-            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
-                it.write(fileContents.toByteArray())
-            }
-        }
-
         // write the 2D-array string to status file
         val statusFilePath = file.absolutePath
         val writer = BufferedWriter(FileWriter(statusFilePath))
         writer.write(builder.toString());
         writer.close();
 
-        // ==============================
+    }
 
-        val readStatus = Array(h) { IntArray(w) }
+    // TODO: separate this function to several parts
+    private fun readStatusFromTxt(w: Int, h: Int, status: Array<IntArray>) {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
         val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
         var line = ""
         var row: Int = 0
@@ -301,15 +328,16 @@ class EditActivity : AppCompatActivity() {
             val cols = line.split(",").toTypedArray()
             var col: Int = 0
             for (c in cols) {
-                readStatus[row][col] = c.toInt()
+                status[row][col] = c.toInt()
                 col++
             }
             row++
         }
         reader.close()
 
-        Log.d("Admin", Arrays.deepToString(status))
-        Log.d("Admin", Arrays.deepToString(readStatus))
+        // For testing
+        // Log.d("Admin", Arrays.deepToString(status))
+
     }
 
 }
