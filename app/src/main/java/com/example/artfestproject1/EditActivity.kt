@@ -34,7 +34,7 @@ class EditActivity : AppCompatActivity() {
 
         // file parameters
         var newFilename: String = ""
-        val baseImgName = "[1][7].jpg"
+//        val baseImgName = "[1][7].jpg"
 
         // Image parameters
         val crop_x = 1500
@@ -83,56 +83,56 @@ class EditActivity : AppCompatActivity() {
             }
         }).start()
 
-        compute_button.setOnClickListener{
-            Thread(Runnable {
-
-                // 轉換照片並存檔
-                newFilename = "algorithm_"+filename
-                var img_user: Mat = ImageGallery.internalImgRead(filename, this)
-                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, crop_width, crop_height)
-
-                // start testing for algorithm ----
-
-                // put image for test
-                ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
-
-                // do algorithm
-                System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
-                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                ImageGallery.printImageDir(this)    // For Debug
-
-                // end testing for algorithm ----
-
-                // Write computed img
-                ImageGallery.internalImgWrite(newFilename, img_new,this)
-
-                // Prepare for the image show
-                val internalEntryPoint: File = this.getFilesDir()
-                val imgDir = File(internalEntryPoint.absolutePath, "Images")
-                val imgFile: File = File(imgDir, newFilename)
-                val imgFilePath = imgFile.absolutePath
-                val newURI = Uri.parse(imgFilePath)
-
-                // only update UI on UI thread, hide the loadingPanel and show the others
-                loadingPanel.post{
-                    loadingPanel.visibility = GONE
-                }
-                printButton.post{
-                    printButton.visibility = VISIBLE
-                }
-                compute_button.post{
-                    compute_button.visibility = VISIBLE
-                }
-                imageView.post{
-                    imageView.setImageURI(newURI)
-                    imageView.visibility = VISIBLE
-                }
-
-            }).start()
-        }
+//        compute_button.setOnClickListener{
+//            Thread(Runnable {
+//
+//                // 轉換照片並存檔
+//                newFilename = "algorithm_"+filename
+//                var img_user: Mat = ImageGallery.internalImgRead(filename, this)
+//                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, crop_width, crop_height)
+//
+//                // start testing for algorithm ----
+//
+//                // put image for test
+//                ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
+//
+//                // do algorithm
+//                System.out.println("${ImageGallery.DIRPATH}")
+//                val image = ImageGallery.stdLoadImg("rex.jpg", this)
+//                val imageGallery = ImageGallery(image, 108, 108)
+//                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
+//                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+//                ImageGallery.printImageDir(this)    // For Debug
+//
+//                // end testing for algorithm ----
+//
+//                // Write computed img
+//                ImageGallery.internalImgWrite(newFilename, img_new,this)
+//
+//                // Prepare for the image show
+//                val internalEntryPoint: File = this.getFilesDir()
+//                val imgDir = File(internalEntryPoint.absolutePath, "Images")
+//                val imgFile: File = File(imgDir, newFilename)
+//                val imgFilePath = imgFile.absolutePath
+//                val newURI = Uri.parse(imgFilePath)
+//
+//                // only update UI on UI thread, hide the loadingPanel and show the others
+//                loadingPanel.post{
+//                    loadingPanel.visibility = GONE
+//                }
+//                printButton.post{
+//                    printButton.visibility = VISIBLE
+//                }
+//                compute_button.post{
+//                    compute_button.visibility = VISIBLE
+//                }
+//                imageView.post{
+//                    imageView.setImageURI(newURI)
+//                    imageView.visibility = VISIBLE
+//                }
+//
+//            }).start()
+//        }
 
         // Print Button
         printButton.setOnClickListener{
@@ -164,16 +164,16 @@ class EditActivity : AppCompatActivity() {
                 System.out.println("${ImageGallery.DIRPATH}")
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
-                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                ImageGallery.printImageDir(this)    // For Debug
 
                 // ==============================
 
                 var w: Int = imageGallery.get_ImageGallery_width()
                 var h: Int = imageGallery.get_ImageGallery_height()
-                val status = Array(h) { IntArray(w) }
 
+                val status = Array(h) { IntArray(w) }
+                val toPrintList: MutableList<Int> = ArrayList()
+
+                // Get status
                 if (!hasStatusFile()) {
                     initStatus(w, h, status)
                     createStatusFile()
@@ -182,7 +182,32 @@ class EditActivity : AppCompatActivity() {
                     readStatusFromTxt(w, h, status)
                 }
 
+                for (i in 0..h-1) {
+                    for (j in 0..w-1) {
+                        if (status[i][j] == 2) {    // USER_AVAILABLE
+                            toPrintList.add(w * i + j)
+                        }
+                    }
+                }
+
+                val randomIndex: Int = (0..toPrintList.size).random()
+                val x = randomIndex % w
+                val y = (randomIndex - x) / w
+                val baseImgName = "[$y][$x].jpg"
+                // val baseImgName = "[1][7].jpg"
+
+                // For testing
+                Log.d("Admin", baseImgName)
+
+                // Save back new status
+                status[y][x] = 1                // USER_PRINTED
+                saveStatusToTxt(w, h, status)
+
                 // ==============================
+
+                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
+                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                ImageGallery.printImageDir(this)    // For Debug
 
                 // end testing for algorithm ----
 
