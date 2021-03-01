@@ -837,7 +837,7 @@ public class ImageGallery{
             img = imread(imgfilePath);
             if(img.empty())
             {
-                Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.");
+                Log.d("Write", "ImageGallery.internalWrite: Unable to read into internal storage.");
             }
             else
             {
@@ -882,6 +882,13 @@ public class ImageGallery{
             System.exit(1);
         }
         return img;
+    }
+
+    public static File getImageDir(Context context)
+    {
+        File filesDir = context.getFilesDir();
+        File imgDir = new File(filesDir, "Images");
+        return imgDir;
     }
 
     public static void printImageDir(Context context)

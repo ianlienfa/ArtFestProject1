@@ -11,18 +11,41 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.print.PrintHelper
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityEditBinding
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.destination
+import id.zelory.compressor.constraint.resolution
+import kotlinx.coroutines.*
 import org.bytedeco.opencv.opencv_core.Mat
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Runnable
+import kotlin.system.exitProcess
 
 
 class EditActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // file parameters
+        var newFilename: String = ""
+        val baseImgName = "[1][7].jpg"
+
+        // Image parameters, htc: 3024 * 4032
+        val crop_x = 0
+        val crop_y = 0
+        val CROP_WIDTH = 3024
+        val CROP_HEIGHT = 3024
+        val expected_pixel_w = 108
+        val expected_pixel_h = 108
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
@@ -32,16 +55,6 @@ class EditActivity : AppCompatActivity() {
         val printButton = binding.printButton
         val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
-
-        // file parameters
-        var newFilename: String = ""
-        val baseImgName = "[1][7].jpg"
-
-        // Image parameters
-        val crop_x = 1500
-        val crop_y = 1500
-        val crop_width = 108
-        val crop_height = 108
 
         // Set Content view
         setContentView(rootview)
@@ -58,41 +71,49 @@ class EditActivity : AppCompatActivity() {
             filename = filename.substring(cut + 1)
         }
 
-        Thread(Runnable {
+        lifecycle.coroutineScope.launch {
+            // Pretreatment -- Crop to square
+            newFilename = doPhotoCrop(filename, baseContext, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
 
-            var mat: Mat = ImageGallery.internalImgRead(filename, this)
-            ImageGallery.internalImgWrite(filename, mat,this)
+            // Pretreatment -- Compress
+
+            runBlocking {
+                newFilename = doPhotoCompress(newFilename, baseContext, expected_pixel_w, expected_pixel_h)
+                Log.d("Thread", "1")
+            }
+
+            // Pretreatment -- Compress might leave some pixels, do some pruning
+            Log.d("Thread", "2")
+            newFilename = doPhotoCrop(newFilename, baseContext, crop_x, crop_y, expected_pixel_w, expected_pixel_h)
 
             // Prepare for the image show
-            val imgFile = File(ImageGallery.imageDirFile(this), filename)
+            val imgFile = File(ImageGallery.imageDirFile(baseContext), newFilename)
             val imgFilePath = imgFile.absolutePath
             val newURI = Uri.parse(imgFilePath)
 
             // only update UI on UI thread, hide the loadingPanel and show the others
-            loadingPanel.post{
-                loadingPanel.visibility = GONE
+            binding.loadingPanel.post {
+                binding.loadingPanel.visibility = GONE
             }
-            printButton.post{
-                printButton.visibility = VISIBLE
+            binding.printButton.post {
+                binding.printButton.visibility = VISIBLE
             }
-            compute_button.post{
-                compute_button.visibility = VISIBLE
+            binding.computeButton
+            binding.computeButton.post {
+                binding.computeButton.visibility = VISIBLE
             }
-            imageView.post{
-                imageView.setImageURI(newURI)
-                imageView.visibility = VISIBLE
+            binding.imageView.post {
+                binding.imageView.setImageURI(newURI)
+                binding.imageView.visibility = VISIBLE
             }
-        }).start()
+
+        }
 
         compute_button.setOnClickListener{
             Thread(Runnable {
 
-                // 轉換照片並存檔
-                newFilename = "algorithm_"+filename
-                var img_user: Mat = ImageGallery.internalImgRead(filename, this)
-                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, crop_width, crop_height)
-
-                // start testing for algorithm ----
+                // Load user photo
+                val img_user = ImageGallery.stdLoadImg(newFilename, this)
 
                 // put image for test
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
@@ -156,7 +177,7 @@ class EditActivity : AppCompatActivity() {
                 // 轉換照片並存檔
                 newFilename = "algorithm_"+filename
                 var img_user: Mat = ImageGallery.internalImgRead(filename, this)
-                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, crop_width, crop_height)
+                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_WIDTH)
 
                 // start testing for algorithm ----
 
@@ -212,6 +233,111 @@ class EditActivity : AppCompatActivity() {
 
         }
     }
+//
+//    private fun photoPretreatmentAndShow(binding: ActivityEditBinding, filename: String, w: Int, h: Int) {
+//        lifecycleScope.launch {
+//            // Crop Photo
+//            newFilename = "cp_"+filename
+//            var img_user: Mat = ImageGallery.internalImgRead(filename, baseContext)
+//            img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_WIDTH)
+//            ImageGallery.internalImgWrite(newFilename, img_user,baseContext)
+//            Log.d("name", newFilename)
+//
+//            // Compress photo
+//            val internalEntryPoint = baseContext.filesDir
+//            if(internalEntryPoint.canRead()){
+//                // Get into Images
+//                val imgDir = File(internalEntryPoint.absolutePath, "Images")
+//                if (!imgDir.exists()) {
+//                    Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.")
+//                }
+//                // Write Img
+//                val imgfile = File(imgDir, filename)
+//                val desFile = File(imgDir, "cmpr_"+filename)
+//                newFilename = "cmpr_"+filename
+//
+//                // Compress and save
+//                val compressedImageFile = Compressor.compress(baseContext, imgfile){
+//                    resolution(w, h)
+//                    destination(desFile)
+//                }
+//            }
+//
+//            // Compress might leave some pixels, do some pruning
+//            img_user = ImageGallery.internalImgRead(newFilename, baseContext)
+//            img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, w, h)
+//            ImageGallery.internalImgWrite(newFilename, img_user,baseContext)
+//
+//            Log.d("name", newFilename)
+//            // Prepare for the image show
+//            val imgFile = File(ImageGallery.imageDirFile(baseContext), newFilename)
+//            val imgFilePath = imgFile.absolutePath
+//            val newURI = Uri.parse(imgFilePath)
+//
+//            // only update UI on UI thread, hide the loadingPanel and show the others
+//            binding.loadingPanel.post{
+//                binding.loadingPanel.visibility = GONE
+//            }
+//            binding.printButton.post{
+//                binding.printButton.visibility = VISIBLE
+//            }
+//            binding.computeButton
+//            binding.computeButton.post{
+//                binding.computeButton.visibility = VISIBLE
+//            }
+//            binding.imageView.post{
+//                binding.imageView.setImageURI(newURI)
+//                binding.imageView.visibility = VISIBLE
+//            }
+//        }
+//    }
+//
+//
+
+    private fun doPhotoCrop(filename: String, context: Context, crop_x: Int, crop_y: Int, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
+        // Crop Photo
+        var newFilename = "cp_"+filename
+        while(!ImageGallery.getImageDir(context).canExecute())
+        {
+            Log.d("IO", "not yet")
+        }
+        if(ImageGallery.getImageDir(context).canExecute()) {
+            var img_user: Mat = ImageGallery.internalImgRead(filename, context)
+            img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
+            ImageGallery.internalImgWrite(newFilename, img_user, context)
+            Log.e("name", newFilename)
+        }
+        else{
+            Log.d("File", filename+"Not ready yet")
+            System.exit(1)
+        }
+        return newFilename
+    }
+
+    private suspend fun doPhotoCompress(filename: String, context: Context, w: Int, h: Int): String{
+        val internalEntryPoint = context.filesDir
+        var newFilename = ""
+        if(internalEntryPoint.canRead()){
+            // Get into Images
+            val imgDir = File(internalEntryPoint.absolutePath, "Images")
+            if (!imgDir.exists()) {
+                Log.d("Write", "ImageGallery.internalWrite: Unable to write into internal storage.")
+            }
+            // Write Img
+            val imgfile = File(imgDir, filename)
+            val desFile = File(imgDir, "cmpr_"+filename)
+            newFilename = "cmpr_"+filename
+
+            // Compress and save
+            val compressedImageFile = Compressor.compress(context, imgfile) {
+                resolution(w, h)
+                destination(desFile)
+            }
+
+        }
+        return newFilename
+    }
+
 
     private fun doPhotoPrint(filepath: String) {
         this.also { context ->

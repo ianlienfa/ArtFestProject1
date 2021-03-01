@@ -91,4 +91,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     // Print
     implementation "androidx.print:print:1.0.0"
+    // Compress
+    implementation 'id.zelory:compressor:3.0.0'
+
 }
