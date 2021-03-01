@@ -40,10 +40,10 @@ class EditActivity : AppCompatActivity() {
         val baseImgName = "[1][7].jpg"
 
         // Image parameters, htc: 3024 * 4032
-        val crop_x = 0
-        val crop_y = 0
-        val CROP_WIDTH = 3024
-        val CROP_HEIGHT = 3024
+        val crop_x = 32
+        val crop_y = 300
+        val CROP_WIDTH = 2500
+        val CROP_HEIGHT = 2500
         val expected_pixel_w = 108
         val expected_pixel_h = 108
 
@@ -84,7 +84,7 @@ class EditActivity : AppCompatActivity() {
 
             // Pretreatment -- Compress might leave some pixels, do some pruning
             Log.d("Thread", "2")
-            newFilename = doPhotoCrop(newFilename, baseContext, crop_x, crop_y, expected_pixel_w, expected_pixel_h)
+            newFilename = doPhotoCrop(newFilename, baseContext, 0, 0, expected_pixel_w, expected_pixel_h)
 
             // Prepare for the image show
             val imgFile = File(ImageGallery.imageDirFile(baseContext), newFilename)
@@ -304,7 +304,9 @@ class EditActivity : AppCompatActivity() {
         }
         if(ImageGallery.getImageDir(context).canExecute()) {
             var img_user: Mat = ImageGallery.internalImgRead(filename, context)
-            img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
+            if(img_user.cols() != CROP_WIDTH || img_user.rows() != CROP_HEIGHT) {
+                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
+            }
             ImageGallery.internalImgWrite(newFilename, img_user, context)
             Log.e("name", newFilename)
         }
