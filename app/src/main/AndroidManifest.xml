@@ -17,7 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ArtFestProject1">
-        <activity android:name=".AdminActivity"></activity>
+        <activity android:name=".StatusActivity"></activity>
+        <activity android:name=".GridViewActivity" />
+        <activity android:name=".AdminActivity" />
         <activity android:name=".LoginActivity" />
         <activity android:name=".EditActivity" />
         <activity android:name=".NfcActivity" />

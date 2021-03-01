@@ -1,5 +1,6 @@
 package com.example.artfestproject1
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -15,6 +16,11 @@ class AdminActivity : AppCompatActivity() {
         val binding = ActivityAdminBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
+
+        binding.gridViewOpen.setOnClickListener {
+            val intent_to_gridview = Intent(this, GridViewActivity::class.java)
+            startActivity(intent_to_gridview)
+        }
 
         binding.button.setOnClickListener {
             deleteUserPhotos()
