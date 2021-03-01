@@ -129,6 +129,7 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
+                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
