@@ -10,7 +10,7 @@ import android.widget.TextView
 
 internal class MainAdapter(
         private val context: Context,
-        private val numberImage: IntArray
+        private val numberImage: MutableList<Int>
 ) :
         BaseAdapter() {
     private var layoutInflater: LayoutInflater? = null

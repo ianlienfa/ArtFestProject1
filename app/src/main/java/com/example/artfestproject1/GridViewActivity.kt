@@ -2,10 +2,12 @@ package com.example.artfestproject1
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import java.util.*
+
 
 // ==============================
 //        Code reference
@@ -20,14 +22,22 @@ import java.util.*
 class GridViewActivity : AppCompatActivity() {
 
     lateinit var gridView: GridView
-    private var photoImages = intArrayOf(R.drawable.test1, R.drawable.test2, R.drawable.test3,
-            R.drawable.test4, R.drawable.test5, R.drawable.test6, R.drawable.test7, R.drawable.test8,
-        R.drawable.test9, R.drawable.test10)
+//    private var photoImages = intArrayOf(R.drawable.test1, R.drawable.test2, R.drawable.test3,
+//            R.drawable.test4, R.drawable.test5, R.drawable.test6, R.drawable.test7, R.drawable.test8,
+//        R.drawable.test9, R.drawable.test10)
+
+    private val photoImages: MutableList<Int> = ArrayList()
+
     // val bigImages: MutableList<Drawable> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grid_view)
+
+        // For testing
+        // Log.d("Admin", R.drawable.small_image0.toString())
+
+        initPhotoImages()
 
         gridView = findViewById(R.id.simpleGridView)
         // Create an object of CustomAdapter and set Adapter to GirdView
@@ -60,5 +70,13 @@ class GridViewActivity : AppCompatActivity() {
         Log.d("Admin", bigImages.toString())
 
          */
+    }
+
+    private fun initPhotoImages() {
+        for (i in 0..99) {
+            val filename = "small_image$i"
+            val id = resources.getIdentifier(filename, "drawable", packageName)
+            photoImages.add(id)
+        }
     }
 }
