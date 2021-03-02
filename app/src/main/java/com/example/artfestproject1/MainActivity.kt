@@ -28,14 +28,22 @@ class MainActivity : AppCompatActivity() {
 //            Log.d("button", "camera open clicked.")
 //            val intent_to_camera = Intent(this, ShowCamera::class.java)
 //            startActivity(intent_to_camera)
-            val intent_to_nfc = Intent(this, NfcActivity::class.java)
-            startActivity(intent_to_nfc)
+            // TODO:
+            // val intent_to_nfc = Intent(this, NfcActivity::class.java)
+            // startActivity(intent_to_nfc)
+            // For testing
+            val intent_to_camera = Intent(this, ShowCamera::class.java)
+            startActivity(intent_to_camera)
             // ==============================
         }
 
         binding.adminOpen.setOnClickListener {
-            val intent_to_login = Intent(this, LoginActivity::class.java)
-            startActivity(intent_to_login)
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intent_to_admin = Intent(this, AdminActivity::class.java)
+            startActivity(intent_to_admin)
         }
 
         Log.d("Write", "Start")

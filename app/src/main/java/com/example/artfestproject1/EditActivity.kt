@@ -23,15 +23,12 @@ import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.resolution
 import kotlinx.coroutines.*
 import org.bytedeco.opencv.opencv_core.Mat
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
+import java.io.*
+import java.util.*
 import java.lang.Runnable
 import kotlin.system.exitProcess
 
-
 class EditActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -189,6 +186,47 @@ class EditActivity : AppCompatActivity() {
                 System.out.println("${ImageGallery.DIRPATH}")
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
+
+                // ==============================
+
+                var w: Int = imageGallery.get_ImageGallery_width()
+                var h: Int = imageGallery.get_ImageGallery_height()
+
+                val status = Array(h) { IntArray(w) }
+                val toPrintList: MutableList<Int> = ArrayList()
+
+                // Get status
+                if (!hasStatusFile()) {
+                    initStatus(w, h, status)
+                    createStatusFile()
+                    saveStatusToTxt(w, h, status)
+                } else {
+                    readStatusFromTxt(w, h, status)
+                }
+
+                for (i in 0..h-1) {
+                    for (j in 0..w-1) {
+                        if (status[i][j] == 2) {    // USER_AVAILABLE
+                            toPrintList.add(w * i + j)
+                        }
+                    }
+                }
+
+                val randomIndex: Int = (0..toPrintList.size).random()
+                val x = randomIndex % w
+                val y = (randomIndex - x) / w
+                val baseImgName = "[$y][$x].jpg"
+                // val baseImgName = "[1][7].jpg"
+
+                // For testing
+                Log.d("Admin", baseImgName)
+
+                // Save back new status
+                status[y][x] = 1                // USER_PRINTED
+                saveStatusToTxt(w, h, status)
+
+                // ==============================
+
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
@@ -375,4 +413,87 @@ class EditActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun hasStatusFile(): Boolean {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun initStatus(w: Int, h: Int, status: Array<IntArray>) {
+
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                status[i][j] = 2    // USER_AVAILABLE
+            }
+        }
+
+    }
+
+    private fun createStatusFile() {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveStatusToTxt(w: Int, h: Int, status: Array<IntArray>) {
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                builder.append(status[i][j].toString());
+                if (j < status[i].size - 1) {
+                    builder.append(",")
+                }
+            }
+            builder.append("\n")
+        }
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+    // TODO: separate this function to several parts
+    private fun readStatusFromTxt(w: Int, h: Int, status: Array<IntArray>) {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+        for (line in reader.lineSequence()) {
+            val cols = line.split(",").toTypedArray()
+            var col: Int = 0
+            for (c in cols) {
+                status[row][col] = c.toInt()
+                col++
+            }
+            row++
+        }
+        reader.close()
+
+        // For testing
+        // Log.d("Admin", Arrays.deepToString(status))
+
+    }
+
 }
