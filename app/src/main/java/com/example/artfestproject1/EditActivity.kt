@@ -170,14 +170,11 @@ class EditActivity : AppCompatActivity() {
         // Compute & Print
         user_send_print_button.setOnClickListener {
 
+
             Thread(Runnable {
 
-                // 轉換照片並存檔
-                newFilename = "algorithm_"+filename
-                var img_user: Mat = ImageGallery.internalImgRead(filename, this)
-                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_WIDTH)
-
-                // start testing for algorithm ----
+                // Load user photo
+                val img_user = ImageGallery.stdLoadImg(newFilename, this)
 
                 // put image for test
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
@@ -187,6 +184,7 @@ class EditActivity : AppCompatActivity() {
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
 
+                // insert
                 // ==============================
 
                 var w: Int = imageGallery.get_ImageGallery_width()
@@ -225,8 +223,6 @@ class EditActivity : AppCompatActivity() {
                 status[y][x] = 1                // USER_PRINTED
                 saveStatusToTxt(w, h, status)
 
-                // ==============================
-
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
@@ -234,6 +230,7 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
+                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
