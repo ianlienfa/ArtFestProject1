@@ -29,11 +29,11 @@ class MainActivity : AppCompatActivity() {
 //            val intent_to_camera = Intent(this, ShowCamera::class.java)
 //            startActivity(intent_to_camera)
             // TODO:
-            // val intent_to_nfc = Intent(this, NfcActivity::class.java)
-            // startActivity(intent_to_nfc)
+             val intent_to_nfc = Intent(this, NfcActivity::class.java)
+             startActivity(intent_to_nfc)
             // For testing
-            val intent_to_camera = Intent(this, ShowCamera::class.java)
-            startActivity(intent_to_camera)
+           // val intent_to_camera = Intent(this, ShowCamera::class.java)
+            //startActivity(intent_to_camera)
             // ==============================
         }
 
@@ -44,6 +44,14 @@ class MainActivity : AppCompatActivity() {
             // For testing
             val intent_to_admin = Intent(this, AdminActivity::class.java)
             startActivity(intent_to_admin)
+        }
+        binding.sendOpen.setOnClickListener {
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intenttosend = Intent(this, SendMailActivity::class.java)
+            startActivity(intenttosend)
         }
 
         Log.d("Write", "Start")
