@@ -4,35 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/nfc"
     tools:context=".NfcActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.example.nfcreader.MainActivity">
 
-        <ImageView
-            android:id="@+id/logo"
-            android:layout_width="wrap_content"
-            android:layout_height="500dp"
-            android:layout_alignParentEnd="true"
-            android:gravity="center_horizontal"
-            android:src="@drawable/nfc" />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center_horizontal"
-            android:text="請將學生證靠在手機背面上感應"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
-    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
