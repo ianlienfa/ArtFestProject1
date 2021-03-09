@@ -10,7 +10,8 @@ import android.widget.ImageView
 
 internal class MainAdapter(
     private val context: Context,
-    private val numberImage: MutableList<Int>
+    private val numberImage: MutableList<Int>,
+    private val numberColor: MutableList<Int>
 ) :
         BaseAdapter() {
     private var layoutInflater: LayoutInflater? = null
@@ -44,7 +45,7 @@ internal class MainAdapter(
         statusColor = convertView!!.findViewById(R.id.statusColor)
 //        textView = convertView.findViewById(R.id.textView)
         imageView.setImageResource(numberImage[position])
-        statusColor.setBackgroundColor(0x5512ff52)
+        statusColor.setBackgroundColor(numberColor[position])
 //        textView.text = numbersInWords[position]
         return convertView
     }
