@@ -14,6 +14,7 @@ import java.io.*
 class StatusActivity : AppCompatActivity() {
 
     lateinit var selectedImage: ImageView
+    lateinit var statusColor: ImageView
     lateinit var textViewPosition: TextView
 
     lateinit var buttonSetTo1: Button
@@ -26,10 +27,12 @@ class StatusActivity : AppCompatActivity() {
         setContentView(R.layout.activity_status)
 
         selectedImage = findViewById(R.id.selectedImage)
+        statusColor = findViewById(R.id.statusColor)
         textViewPosition = findViewById(R.id.textViewPosition)
 
         val intent = intent
         selectedImage.setImageResource(intent.getIntExtra("image", 0))
+        statusColor.setBackgroundColor(intent.getIntExtra("color", 0))
         textViewPosition.text = intent.getIntExtra("position", 0).toString()
 
 
@@ -41,28 +44,33 @@ class StatusActivity : AppCompatActivity() {
         val w: Int = 10
         val position = intent.getIntExtra("position", 0)
         // The code is not quite clean...
+        // TODO: the color is hard coding
         buttonSetTo1.setOnClickListener {
             val col: Int = position % w
             val row: Int = (position - col) / w
             setStatus(col, row, 1)
+            statusColor.setBackgroundColor(0x3312ff52)
 //            Log.d("Admin", 1.toString())
         }
         buttonSetTo2.setOnClickListener {
             val col: Int = position % w
             val row: Int = (position - col) / w
             setStatus(col, row, 2)
+            statusColor.setBackgroundColor(0x33ffffff)
 //            Log.d("Admin", 2.toString())
         }
         buttonSetTo3.setOnClickListener {
             val col: Int = position % w
             val row: Int = (position - col) / w
             setStatus(col, row, 3)
+            statusColor.setBackgroundColor(0x33e3256b)
 //            Log.d("Admin", 3.toString())
         }
         buttonSetTo4.setOnClickListener {
             val col: Int = position % w
             val row: Int = (position - col) / w
             setStatus(col, row, 4)
+            statusColor.setBackgroundColor(0x33ffd90f)
 //            Log.d("Admin", 4.toString())
         }
     }

@@ -52,6 +52,7 @@ class GridViewActivity : AppCompatActivity() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val intent = Intent(this@GridViewActivity, StatusActivity::class.java)
             intent.putExtra("image", photoImages[position])
+            intent.putExtra("color", photoColors[position])
             intent.putExtra("position", position)
             startActivity(intent)
         }
@@ -95,6 +96,7 @@ class GridViewActivity : AppCompatActivity() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val intent = Intent(this@GridViewActivity, StatusActivity::class.java)
             intent.putExtra("image", photoImages[position])
+            intent.putExtra("color", photoColors[position])
             intent.putExtra("position", position)
             startActivity(intent)
         }
