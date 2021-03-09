@@ -52,6 +52,7 @@ class GridViewActivity : AppCompatActivity() {
         gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val intent = Intent(this@GridViewActivity, StatusActivity::class.java)
             intent.putExtra("image", photoImages[position])
+            intent.putExtra("position", position)
             startActivity(intent)
         }
 
@@ -77,7 +78,32 @@ class GridViewActivity : AppCompatActivity() {
          */
     }
 
+     override fun onRestart() {
+        super.onRestart()
+
+        // For testing
+        // Log.d("Admin", R.drawable.small_image0.toString())
+
+        initPhotoImages()
+        initPhotoColors()
+
+        gridView = findViewById(R.id.simpleGridView)
+        // Create an object of CustomAdapter and set Adapter to GirdView
+        val mainAdapter = MainAdapter(this@GridViewActivity, photoImages, photoColors)
+        gridView.adapter = mainAdapter
+        // Implement setOnItemClickListener event on GridView
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this@GridViewActivity, StatusActivity::class.java)
+            intent.putExtra("image", photoImages[position])
+            intent.putExtra("position", position)
+            startActivity(intent)
+        }
+    }
+
     private fun initPhotoImages() {
+
+        photoImages.clear()
+
         for (i in 0..99) {
             val filename = "small_image$i"
             val id = resources.getIdentifier(filename, "drawable", packageName)
@@ -86,6 +112,9 @@ class GridViewActivity : AppCompatActivity() {
     }
 
     private fun initPhotoColors() {
+
+        photoColors.clear()
+
         for (i in 0..99) {
             // TODO: change w & h
             val w = 10
