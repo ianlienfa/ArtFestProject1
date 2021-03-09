@@ -94,8 +94,8 @@ class GridViewActivity : AppCompatActivity() {
             val x = (i - y) / w
 
             // TODO: can change color
-            val USER_PRINTED: Int = 0x33ffffff      // black
-            val USER_AVAILABLE: Int = 0x3312ff52    // green
+            val USER_PRINTED: Int = 0x3312ff52      // green
+            val USER_AVAILABLE: Int = 0x33ffffff    // black
             val ADMIN_PRINTED: Int = 0x33e3256b     // purple
             val ADMIN_AVAILABLE: Int = 0x33ffd90f   // yellow
             when (getStatus(y, x)) {
