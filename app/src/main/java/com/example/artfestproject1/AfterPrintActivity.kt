@@ -1,8 +1,10 @@
 package com.example.artfestproject1
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import com.example.artfestproject1.databinding.ActivityAfterPrintBinding
 
@@ -20,5 +22,11 @@ class AfterPrintActivity : AppCompatActivity() {
         val textViewNumber: TextView = findViewById(R.id.textViewNumber)
         val c: Char = rowArray[row]
         textViewNumber.text = "$c$col"
+
+        val back_to_main_button:Button = findViewById(R.id.back_to_main_button)
+        back_to_main_button.setOnClickListener {
+            val intent_to_main = Intent(this, MainActivity::class.java)
+            startActivity(intent_to_main)
+        }
     }
 }
