@@ -37,6 +37,7 @@ class EditActivity : AppCompatActivity() {
         // file parameters
         var newFilename: String = ""
         val baseImgName = "[1][7].jpg"
+        var imgFilePath: String = ""
 
         // Image parameters, htc: 3024 * 4032
         val crop_x = 32
@@ -251,7 +252,7 @@ class EditActivity : AppCompatActivity() {
                 val internalEntryPoint: File = this.getFilesDir()
                 val imgDir = File(internalEntryPoint.absolutePath, "Images")
                 val imgFile: File = File(imgDir, newFilename)
-                val imgFilePath = imgFile.absolutePath
+                imgFilePath = imgFile.absolutePath
                 val newURI = Uri.parse(imgFilePath)
 
                 // only update UI on UI thread, hide the loadingPanel and show the others
@@ -285,6 +286,7 @@ class EditActivity : AppCompatActivity() {
             val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
             intent_to_after_print.putExtra("row", rowToSend)
             intent_to_after_print.putExtra("col", colToSend)
+            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
             startActivity(intent_to_after_print)
         }
     }
