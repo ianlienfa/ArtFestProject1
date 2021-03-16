@@ -213,11 +213,12 @@ class EditActivity : AppCompatActivity() {
                 val randomIndex: Int = (0..toPrintList.size).random()
                 val x = randomIndex % w
                 val y = (randomIndex - x) / w
-                val baseImgName = "[$y][$x].jpg"
+                val baseImgName = "[$x][$y].jpg"
+                val baseImgNameForDebug = "[$y][$x].jpg"
                 // val baseImgName = "[1][7].jpg"
 
                 // For testing
-                Log.d("Admin", baseImgName)
+                Log.d("Admin", baseImgNameForDebug)
 
                 // Save back new status
                 status[y][x] = 1                // USER_PRINTED
