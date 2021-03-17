@@ -1,18 +1,14 @@
 package com.example.artfestproject1
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityMainBinding
-import org.bytedeco.opencv.global.opencv_imgcodecs.imread
-import org.bytedeco.opencv.opencv_core.Mat
-import org.opencv.android.BaseLoaderCallback
-import org.opencv.android.LoaderCallbackInterface
-import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
 
 
 class MainActivity : AppCompatActivity() {
@@ -81,5 +77,27 @@ class MainActivity : AppCompatActivity() {
 //        mat = ImageGallery.colorToGray(mat)
 //        ImageGallery.internalImgWrite("test.jpg", mat, this)
         // ==============================
+    }
+
+    override fun onStart(){
+        super.onStart()
+        object : CountDownTimer(10000, 1000) {
+
+            override fun onTick(millisUntilFinished: Long) {
+//                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)
+                runOnUiThread { Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show() }
+            }
+
+            override fun onFinish() {
+                runOnUiThread {
+                    Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
+//                    val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+//                    startActivity(intent_to_admin)
+//                    val builder: AlertDialog.Builder = AlertDialog.Builder(applicationContext)
+//                    builder.setTitle("hi")
+//                    builder.show()
+                }
+            }
+        }.start()
     }
 }

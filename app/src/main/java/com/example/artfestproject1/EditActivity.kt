@@ -129,7 +129,20 @@ class EditActivity : AppCompatActivity() {
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                var img_new: Mat;
+                val rand = (Math.random()*3) as Int;
+                if(rand == 0)
+                {
+                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                }
+                else if(rand == 1)
+                {
+                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                }
+                else
+                {
+                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                }
                 ImageGallery.printImageDir(this)    // For Debug
 
                 // end testing for algorithm ----
