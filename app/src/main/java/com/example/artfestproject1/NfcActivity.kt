@@ -16,19 +16,22 @@ import java.io.*
 
 class NfcActivity : AppCompatActivity() {
 
+    protected var mMyApp: MyApp? = null
     private var nfcAdapter: NfcAdapter? = null
     private var pendingIntent: PendingIntent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nfc)
+        mMyApp = this.applicationContext as MyApp
 
         initNfcAdapter()
     }
 
     override fun onResume() {
         super.onResume()
-
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this)
         enableNfcForegroundDispatch()
     }
 

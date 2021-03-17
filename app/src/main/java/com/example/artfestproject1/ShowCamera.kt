@@ -1,11 +1,13 @@
 package com.example.artfestproject1
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class ShowCamera : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -31,6 +34,9 @@ class ShowCamera : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // app reference
+        mMyApp = this.applicationContext as MyApp
+
         binding = ActivityShowCameraBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
@@ -135,7 +141,7 @@ class ShowCamera : AppCompatActivity() {
                     .build()
 
             // Select back camera as default
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             // Bind to lifeCycle
             try {
@@ -200,5 +206,11 @@ class ShowCamera : AppCompatActivity() {
             println(f)
             Log.d("ImageDir", f!!)
         }
+    }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
     }
 }

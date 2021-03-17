@@ -23,7 +23,7 @@ import java.util.*
 // ==============================
 
 class GridViewActivity : AppCompatActivity() {
-
+    protected var mMyApp: MyApp? = null
     lateinit var gridView: GridView
 //    private var photoImages = intArrayOf(R.drawable.test1, R.drawable.test2, R.drawable.test3,
 //            R.drawable.test4, R.drawable.test5, R.drawable.test6, R.drawable.test7, R.drawable.test8,
@@ -37,6 +37,9 @@ class GridViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_grid_view)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
 
         // For testing
         // Log.d("Admin", R.drawable.small_image0.toString())
@@ -177,4 +180,11 @@ class GridViewActivity : AppCompatActivity() {
         // Log.d("Admin", Arrays.deepToString(status))
 
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 }

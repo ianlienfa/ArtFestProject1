@@ -26,8 +26,13 @@ import java.io.*
 import java.util.*
 
 class EditActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
 
         // file parameters
         var newFilename: String = ""
@@ -36,9 +41,9 @@ class EditActivity : AppCompatActivity() {
 
         // Image parameters, htc: 3024 * 4032
         val crop_x = 32
-        val crop_y = 300
-        val CROP_WIDTH = 2500
-        val CROP_HEIGHT = 2500
+        val crop_y = 200
+        val CROP_WIDTH = 2000
+        val CROP_HEIGHT = 2000
         val expected_pixel_w = 108
         val expected_pixel_h = 108
 
@@ -50,7 +55,7 @@ class EditActivity : AppCompatActivity() {
         val printButton = binding.printButton
         val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
-        val finish_print_button = binding.finishPrintButton
+//        val finish_print_button = binding.finishPrintButton
 
         // Will be sent to AfterPrintActivity
         var rowToSend: Int = -1
@@ -160,7 +165,20 @@ class EditActivity : AppCompatActivity() {
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                var img_new: Mat;
+                val rand = (Math.random()*3) as Int;
+                if(rand == 0)
+                {
+                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                }
+                else if(rand == 1)
+                {
+                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                }
+                else
+                {
+                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                }
                 ImageGallery.printImageDir(this)    // For Debug
 
                 // end testing for algorithm ----
@@ -311,25 +329,31 @@ class EditActivity : AppCompatActivity() {
                     imageView.visibility = VISIBLE
                 }
 
-                if(!newFilename.equals("")) {
-                    val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
-                    val imgFilePath = imgFile.absolutePath
-                    if(File(imgFilePath).exists()) {
-                        doPhotoPrint(imgFilePath)
-                    }
-                }
+//                if(!newFilename.equals("")) {
+//                    val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
+//                    val imgFilePath = imgFile.absolutePath
+//                    if(File(imgFilePath).exists()) {
+//                        doPhotoPrint(imgFilePath)
+//                    }
+//                }
+
+                val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+                intent_to_after_print.putExtra("row", rowToSend)
+                intent_to_after_print.putExtra("col", colToSend)
+                intent_to_after_print.putExtra("imgFilePath", imgFilePath)
+                startActivity(intent_to_after_print)
 
             }).start()
 
         }
 
-        finish_print_button.setOnClickListener {
-            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
-            intent_to_after_print.putExtra("row", rowToSend)
-            intent_to_after_print.putExtra("col", colToSend)
-            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
-            startActivity(intent_to_after_print)
-        }
+//        finish_print_button.setOnClickListener {
+//            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+//            intent_to_after_print.putExtra("row", rowToSend)
+//            intent_to_after_print.putExtra("col", colToSend)
+//            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
+//            startActivity(intent_to_after_print)
+//        }
     }
 //
 //    private fun photoPretreatmentAndShow(binding: ActivityEditBinding, filename: String, w: Int, h: Int) {
@@ -554,5 +578,12 @@ class EditActivity : AppCompatActivity() {
         // Log.d("Admin", Arrays.deepToString(status))
 
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 
 }

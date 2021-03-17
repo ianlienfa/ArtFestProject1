@@ -11,13 +11,18 @@ import javax.mail.internet.InternetAddress
 import javax.mail.internet.MimeMessage
 
 class SendMailActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
     private var mSession: Session? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_send)
         val binding: ActivitySendBinding = ActivitySendBinding.inflate(layoutInflater)
         setContentView(binding.root)
-       // val username="dh990922@gmail.com"
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
+
+        // val username="dh990922@gmail.com"
         //val password="qfxurezqtrmmvufl"
         binding.send.setOnClickListener{
             val mail="dh990922.dif07@nctu.edu.tw"
@@ -28,7 +33,10 @@ class SendMailActivity : AppCompatActivity() {
             javaMailAPI.execute()
 
         }
-
-
+    }
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
     }
 }

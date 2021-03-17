@@ -11,11 +11,17 @@ import com.example.artfestproject1.databinding.ActivityLoginBinding
 import java.io.*
 
 class AdminActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityAdminBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
+
 
         binding.gridViewOpen.setOnClickListener {
             val intent_to_gridview = Intent(this, GridViewActivity::class.java)
@@ -152,5 +158,12 @@ class AdminActivity : AppCompatActivity() {
         writer.close();
 
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 
 }
