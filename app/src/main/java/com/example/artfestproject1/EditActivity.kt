@@ -101,7 +101,7 @@ class EditActivity : AppCompatActivity() {
                 binding.progressBar.visibility = GONE
             }
             binding.printButton.post {
-                binding.printButton.visibility = VISIBLE
+                //binding.printButton.visibility = VISIBLE
             }
             binding.computeButton
             binding.computeButton.post {
@@ -117,7 +117,22 @@ class EditActivity : AppCompatActivity() {
 
             val intent_to_camera = Intent(this, ShowCamera::class.java)
             count+=1
-            if (count<=3) {
+            if (count==1){
+                val context = applicationContext
+                val text = "第二次拍攝開始"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+                intent_to_camera.putExtra("countback", count);
+                startActivity(intent_to_camera)
+
+            }
+            else if (count==2) {
+                val context = applicationContext
+                val text = "最後一次拍攝囉！"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
                 intent_to_camera.putExtra("countback", count);
                 startActivity(intent_to_camera)
             }
@@ -177,6 +192,16 @@ class EditActivity : AppCompatActivity() {
                     imageView.setImageURI(newURI)
                     imageView.visibility = VISIBLE
                 }
+
+                val intent_to_show = Intent(this, ShowActivity::class.java)
+                var bundle = Bundle()
+
+                bundle.putString("imagepath", imgFilePath.toString())
+                bundle.putString("newFilename", newFilename.toString())
+                intent_to_show.putExtras(bundle)
+                startActivity(intent_to_show)
+
+
 
             }).start()
         }

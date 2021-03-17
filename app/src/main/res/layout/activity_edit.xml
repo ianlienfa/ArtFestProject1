@@ -23,7 +23,7 @@
         android:id="@+id/compute_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:text="@string/compute"
+        android:text="滿意了！"
 
         />
 
@@ -31,6 +31,7 @@
         android:id="@+id/print_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="invisible"
         android:text="@string/print"
          />
 
@@ -38,24 +39,21 @@
         android:id="@+id/user_send_print_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="invisible"
         android:text="@string/usersendprint" />
 
     <Button
         android:id="@+id/finish_print_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:visibility="invisible"
         android:text="@string/finish" />
     <Button
         android:id="@+id/onemore_button"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/onemore" />
+        android:text="再拍一次" />
 
-    <TextView
-        android:id="@+id/count_num"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0" />
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"

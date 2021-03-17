@@ -147,8 +147,8 @@ class NfcActivity : AppCompatActivity() {
 //                    val intent_to_main = Intent(this, MainActivity::class.java)
 
                     // For Debug
-                    val intent_to_main = Intent(this, ShowCamera::class.java)
-                    startActivity(intent_to_main)
+                    val intent_to_explain = Intent(this, ExplainActivity::class.java)
+                    startActivity(intent_to_explain)
 
 
 
@@ -169,9 +169,8 @@ class NfcActivity : AppCompatActivity() {
                     bufferedWriter.close()
 
                     // 進到拍照的環節
-                    val intent_to_camera = Intent(this, ShowCamera::class.java)
-                    startActivity(intent_to_camera)
-
+                    val intent_to_explain = Intent(this, ExplainActivity::class.java)
+                    startActivity(intent_to_explain)
                 }
 
                 // ======== Check whether the ID has appeared ========
