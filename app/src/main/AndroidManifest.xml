@@ -25,6 +25,7 @@
         <activity android:name=".EditActivity" />
         <activity android:name=".NfcActivity" />
         <activity android:name=".ShowCamera" />
+        <activity android:name=".ExplainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
