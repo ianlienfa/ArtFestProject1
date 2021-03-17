@@ -12,8 +12,14 @@ import com.example.artfestproject1.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
@@ -79,8 +85,11 @@ class MainActivity : AppCompatActivity() {
         // ==============================
     }
 
-    override fun onStart(){
-        super.onStart()
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+
         object : CountDownTimer(10000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -91,11 +100,19 @@ class MainActivity : AppCompatActivity() {
             override fun onFinish() {
                 runOnUiThread {
                     Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
+                    if(applicationContext is MyApp) {
+                        val currentActivity = (applicationContext as MyApp).currentActivity
 //                    val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
 //                    startActivity(intent_to_admin)
-//                    val builder: AlertDialog.Builder = AlertDialog.Builder(applicationContext)
-//                    builder.setTitle("hi")
-//                    builder.show()
+                        val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
+                        builder.setTitle("hi")
+                        builder.show()
+                    }
+                    else{
+                        runOnUiThread {
+                            Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
+                        }
+                    }
                 }
             }
         }.start()
