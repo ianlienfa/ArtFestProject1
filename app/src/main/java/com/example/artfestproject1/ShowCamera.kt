@@ -5,11 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.nfc.tech.NfcA
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -35,6 +34,8 @@ class ShowCamera : AppCompatActivity() {
         binding = ActivityShowCameraBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
+        val previousIntent = this.intent
+        val count = previousIntent.getIntExtra("countback",0)
 
         if(allPermissionsGranted())
         {
@@ -47,7 +48,7 @@ class ShowCamera : AppCompatActivity() {
         }
 
         // set up listener for button
-        binding.cameraCaptureButton.setOnClickListener { takePhoto() }
+        binding.cameraCaptureButton.setOnClickListener { takePhoto(count) }
 
         outputDirectory = getimageDirFile(this)
 
@@ -67,7 +68,7 @@ class ShowCamera : AppCompatActivity() {
         }
     }
 
-    private fun takePhoto(){
+    private fun takePhoto(count:Int){
         Log.d("Camera", "Taking Photo.")
 
         // get imageCapture
@@ -94,9 +95,20 @@ class ShowCamera : AppCompatActivity() {
                 printImageDir(baseContext)
 
                 // 傳 savedURI 給 edit 頁面
+                /*原本的
                 val intent_to_edit = Intent(this@ShowCamera, EditActivity::class.java)
                 intent_to_edit.putExtra("imageURI", savedURI.toString());
                 startActivity(intent_to_edit)
+                */
+                //try bundle
+                val intent_to_edit = Intent(this@ShowCamera, EditActivity::class.java)
+                var bundle = Bundle()
+
+                bundle.putString("imageURI", savedURI.toString())
+                bundle.putInt("count", count)
+                intent_to_edit.putExtras(bundle)
+                startActivity(intent_to_edit)
+
             }
         })
 

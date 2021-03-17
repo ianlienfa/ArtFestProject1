@@ -2,7 +2,6 @@ package com.example.artfestproject1
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
@@ -10,25 +9,21 @@ import android.print.PrintManager
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.lifecycleScope
 import androidx.print.PrintHelper
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityEditBinding
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.default
 import id.zelory.compressor.constraint.destination
 import id.zelory.compressor.constraint.resolution
-import kotlinx.coroutines.*
+import kotlinx.android.synthetic.main.activity_edit.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.bytedeco.opencv.opencv_core.Mat
 import java.io.*
 import java.util.*
-import java.lang.Runnable
-import kotlin.system.exitProcess
 
 class EditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +46,7 @@ class EditActivity : AppCompatActivity() {
         val binding = ActivityEditBinding.inflate(layoutInflater)
         val rootview = binding.root
         val imageView = binding.imageView
-        val loadingPanel = binding.loadingPanel
+        val loadingPanel = binding.progressBar
         val printButton = binding.printButton
         val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
@@ -67,8 +62,12 @@ class EditActivity : AppCompatActivity() {
 
         // 取得傳遞過來的資料
         val previousIntent = this.intent
-        val imageURI = previousIntent.getStringExtra("imageURI")
+        val bundle = intent.extras
+        val imageURI  = bundle!!.getString("imageURI")
+        var count = bundle!!.getInt("count")
+        //val imageURI = previousIntent.getStringExtra("imageURI")
         val uri: Uri = Uri.parse(imageURI)
+        Log.d("Editcount", count.toString())
 
         // get filename from URI
         var filename: String = uri.path.toString()
@@ -98,8 +97,8 @@ class EditActivity : AppCompatActivity() {
             val newURI = Uri.parse(imgFilePath)
 
             // only update UI on UI thread, hide the loadingPanel and show the others
-            binding.loadingPanel.post {
-                binding.loadingPanel.visibility = GONE
+            binding.progressBar.post {
+                binding.progressBar.visibility = GONE
             }
             binding.printButton.post {
                 binding.printButton.visibility = VISIBLE
@@ -113,6 +112,23 @@ class EditActivity : AppCompatActivity() {
                 binding.imageView.visibility = VISIBLE
             }
 
+        }
+        onemore_button.setOnClickListener{
+
+            val intent_to_camera = Intent(this, ShowCamera::class.java)
+            count+=1
+            if (count<=3) {
+                intent_to_camera.putExtra("countback", count);
+                startActivity(intent_to_camera)
+            }
+            else
+            {
+                val context = applicationContext
+                val text = "已拍攝三次囉!請按滿意繼續"
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(context, text, duration)
+                toast.show()
+            }
         }
 
         compute_button.setOnClickListener{

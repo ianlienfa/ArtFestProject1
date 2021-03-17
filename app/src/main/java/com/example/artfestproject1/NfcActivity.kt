@@ -85,8 +85,8 @@ class NfcActivity : AppCompatActivity() {
         val action = intent.action
 
         if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-            || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
-            || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
             val rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES)
             if (rawMsgs != null) {
                 // Toast.makeText(this, "rawMsgs is not null", Toast.LENGTH_SHORT).show()

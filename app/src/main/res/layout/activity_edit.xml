@@ -1,80 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditActivity">
+    tools:context=".EditActivity"
+    android:orientation="vertical"
+    >
 
-    <RelativeLayout
-        style="@style/GenericProgressBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/loadingPanel"
-        >
-        <ProgressBar
-            style="@style/GenericProgressIndicator"/>
 
-    </RelativeLayout>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="433dp"
-        android:layout_height="328dp"
-        android:layout_marginTop="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:visibility="invisible"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:contentDescription="@string/todo"
+       />
 
     <Button
         android:id="@+id/compute_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="50dp"
-        android:scaleType="fitCenter"
-        android:text="Compute"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="invisible"
-        android:elevation="2dp" />
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="@string/compute"
+
+        />
 
     <Button
         android:id="@+id/print_button"
-        android:layout_width="50dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginBottom="50dp"
-        android:elevation="2dp"
-        android:scaleType="fitCenter"
-        android:text="Print"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/compute_button"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        android:text="@string/print"
+         />
 
     <Button
         android:id="@+id/user_send_print_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="550dp"
-        android:text="userSendPrint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/usersendprint" />
 
     <Button
         android:id="@+id/finish_print_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/finish" />
+    <Button
+        android:id="@+id/onemore_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/onemore" />
+
+    <TextView
+        android:id="@+id/count_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="0" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
-        android:layout_marginTop="450dp"
-        android:text="finish"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -42,7 +42,7 @@
         android:id="@+id/sendOpen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="23dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="52dp"
         android:text="@string/sendmail"
         app:layout_constraintBottom_toTopOf="@+id/camera_open"

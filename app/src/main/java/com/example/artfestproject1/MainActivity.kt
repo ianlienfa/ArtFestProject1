@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
-
+        val count=10
         // set up Intent
         binding.cameraOpen.setOnClickListener{
             // ==============================
@@ -29,11 +29,13 @@ class MainActivity : AppCompatActivity() {
 //            val intent_to_camera = Intent(this, ShowCamera::class.java)
 //            startActivity(intent_to_camera)
             // TODO:
-//             val intent_to_nfc = Intent(this, NfcActivity::class.java)
-//             startActivity(intent_to_nfc)
+            // val intent_to_nfc = Intent(this, NfcActivity::class.java)
+             //startActivity(intent_to_nfc)
             // For testing
-            val intent_to_camera = Intent(this, ShowCamera::class.java)
-            startActivity(intent_to_camera)
+     //       val intent_to_camera = Intent(this, ShowCamera::class.java)
+       //     startActivity(intent_to_camera)
+            val intent_to_camera = Intent(this, ExplainActivity::class.java)
+                 startActivity(intent_to_camera)
             // ==============================
         }
 
