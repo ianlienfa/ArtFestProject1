@@ -27,8 +27,14 @@ class AfterPrintActivity : AppCompatActivity() {
         val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
         val row = intent.getIntExtra("row", 0)
         val col = intent.getIntExtra("col", 0)
+        val imgFilePath = intent.getStringExtra("imgFilePath")
 //        Log.d("Admin", row.toString())
 //        Log.d("Admin", col.toString())
+
+        // 一進到這個 activity 就送印
+        if(File(imgFilePath).exists()) {
+            doPhotoPrint(imgFilePath.toString())
+        }
 
         val textViewNumber: TextView = findViewById(R.id.textViewNumber)
         val c: Char = rowArray[row]
@@ -42,7 +48,7 @@ class AfterPrintActivity : AppCompatActivity() {
 
         val print_again_button: Button = findViewById(R.id.print_again_button)
         print_again_button.setOnClickListener {
-            val imgFilePath = intent.getStringExtra("imgFilePath")
+//            val imgFilePath = intent.getStringExtra("imgFilePath")
 //            Log.d("Admin", imgFilePath.toString())
             if(File(imgFilePath).exists()) {
                 doPhotoPrint(imgFilePath.toString())

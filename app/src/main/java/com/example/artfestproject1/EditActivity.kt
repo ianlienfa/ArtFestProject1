@@ -60,7 +60,7 @@ class EditActivity : AppCompatActivity() {
         val printButton = binding.printButton
         val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
-        val finish_print_button = binding.finishPrintButton
+//        val finish_print_button = binding.finishPrintButton
 
         // Will be sent to AfterPrintActivity
         var rowToSend: Int = -1
@@ -288,25 +288,31 @@ class EditActivity : AppCompatActivity() {
                     imageView.visibility = VISIBLE
                 }
 
-                if(!newFilename.equals("")) {
-                    val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
-                    val imgFilePath = imgFile.absolutePath
-                    if(File(imgFilePath).exists()) {
-                        doPhotoPrint(imgFilePath)
-                    }
-                }
+//                if(!newFilename.equals("")) {
+//                    val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
+//                    val imgFilePath = imgFile.absolutePath
+//                    if(File(imgFilePath).exists()) {
+//                        doPhotoPrint(imgFilePath)
+//                    }
+//                }
+
+                val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+                intent_to_after_print.putExtra("row", rowToSend)
+                intent_to_after_print.putExtra("col", colToSend)
+                intent_to_after_print.putExtra("imgFilePath", imgFilePath)
+                startActivity(intent_to_after_print)
 
             }).start()
 
         }
 
-        finish_print_button.setOnClickListener {
-            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
-            intent_to_after_print.putExtra("row", rowToSend)
-            intent_to_after_print.putExtra("col", colToSend)
-            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
-            startActivity(intent_to_after_print)
-        }
+//        finish_print_button.setOnClickListener {
+//            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+//            intent_to_after_print.putExtra("row", rowToSend)
+//            intent_to_after_print.putExtra("col", colToSend)
+//            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
+//            startActivity(intent_to_after_print)
+//        }
     }
 //
 //    private fun photoPretreatmentAndShow(binding: ActivityEditBinding, filename: String, w: Int, h: Int) {
