@@ -1,6 +1,7 @@
 package com.example.artfestproject1.MyImage;
 
 import org.bytedeco.javacpp.indexer.UByteIndexer;
+import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.*;
 import org.opencv.imgproc.Imgproc;
@@ -427,6 +428,10 @@ public class ImageGallery{
 
         // set the affected pixels
 
+        // ==============================
+        image_in = colorToGray(image_in);
+        // ==============================
+
 
         // change every pixel of the image_in
         for(int w = 0; w < image_in.arrayWidth(); w++)
@@ -728,6 +733,7 @@ public class ImageGallery{
         Mat image_out = image_in;
         int width = image_out.arrayWidth();
         int height = image_out.arrayHeight();
+        int average_intensity = 0;
 
         UByteIndexer indexer = image_out.createIndexer();
 
@@ -740,8 +746,25 @@ public class ImageGallery{
                 indexer.put(y, x, 0, average);
                 indexer.put(y, x, 1, average);
                 indexer.put(y, x, 2, average);
+                average_intensity += average;
             }
         }
+        average_intensity /= (height * width);
+
+        // ==============================
+        // TODO: 調整整體亮度的數值
+        int target_intensity = 128;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int intensity = indexer.get(y, x, 0);
+                int new_intensity = intensity * target_intensity / average_intensity;
+                indexer.put(y, x, 0, new_intensity);
+                indexer.put(y, x, 1, new_intensity);
+                indexer.put(y, x, 2, new_intensity);
+            }
+        }
+        // ==============================
+
         indexer.release();
 
         return image_out;

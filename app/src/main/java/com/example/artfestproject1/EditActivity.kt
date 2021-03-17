@@ -1,6 +1,7 @@
 package com.example.artfestproject1
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -9,6 +10,7 @@ import android.print.PrintManager
 import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleCoroutineScope
@@ -35,6 +37,7 @@ class EditActivity : AppCompatActivity() {
         // file parameters
         var newFilename: String = ""
         val baseImgName = "[1][7].jpg"
+        var imgFilePath: String = ""
 
         // Image parameters, htc: 3024 * 4032
         val crop_x = 32
@@ -52,6 +55,12 @@ class EditActivity : AppCompatActivity() {
         val printButton = binding.printButton
         val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
+        val finish_print_button = binding.finishPrintButton
+
+        // Will be sent to AfterPrintActivity
+        var rowToSend: Int = -1
+        var colToSend: Int = -1
+
 
         // Set Content view
         setContentView(rootview)
@@ -213,11 +222,15 @@ class EditActivity : AppCompatActivity() {
                 val randomIndex: Int = (0..toPrintList.size).random()
                 val x = randomIndex % w
                 val y = (randomIndex - x) / w
-                val baseImgName = "[$y][$x].jpg"
+                val baseImgName = "[$x][$y].jpg"
+                val baseImgNameForDebug = "[$y][$x].jpg"
                 // val baseImgName = "[1][7].jpg"
 
+                rowToSend = y
+                colToSend = x
+
                 // For testing
-                Log.d("Admin", baseImgName)
+                Log.d("Admin", baseImgNameForDebug)
 
                 // Save back new status
                 status[y][x] = 1                // USER_PRINTED
@@ -239,7 +252,7 @@ class EditActivity : AppCompatActivity() {
                 val internalEntryPoint: File = this.getFilesDir()
                 val imgDir = File(internalEntryPoint.absolutePath, "Images")
                 val imgFile: File = File(imgDir, newFilename)
-                val imgFilePath = imgFile.absolutePath
+                imgFilePath = imgFile.absolutePath
                 val newURI = Uri.parse(imgFilePath)
 
                 // only update UI on UI thread, hide the loadingPanel and show the others
@@ -267,6 +280,14 @@ class EditActivity : AppCompatActivity() {
 
             }).start()
 
+        }
+
+        finish_print_button.setOnClickListener {
+            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+            intent_to_after_print.putExtra("row", rowToSend)
+            intent_to_after_print.putExtra("col", colToSend)
+            intent_to_after_print.putExtra("imgFilePath", imgFilePath)
+            startActivity(intent_to_after_print)
         }
     }
 //

@@ -3,7 +3,8 @@
     package="com.example.artfestproject1">
 
     <uses-feature android:name="android.hardware.camera.any" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" /> <!-- in order to access NFC hardware -->
     <uses-permission android:name="android.permission.NFC" /> <!-- show up the application only for devices with NFC hardware -->
     <uses-feature
@@ -17,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ArtFestProject1">
-        <activity android:name=".StatusActivity"></activity>
+        <activity android:name=".AfterPrintActivity"></activity>
+        <activity android:name=".StatusActivity" />
         <activity android:name=".GridViewActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".LoginActivity" />
