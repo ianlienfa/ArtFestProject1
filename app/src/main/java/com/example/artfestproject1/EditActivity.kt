@@ -211,6 +211,51 @@ class EditActivity : AppCompatActivity() {
                     imageView.visibility = VISIBLE
                 }
 
+
+            }).start()
+        }
+
+        // Print Button
+        printButton.setOnClickListener{
+            Thread(Runnable {
+                // Load user photo
+                val img_user = ImageGallery.stdLoadImg(newFilename, this)
+                // put image for test
+                ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
+                // do algorithm
+                System.out.println("${ImageGallery.DIRPATH}")
+                val image = ImageGallery.stdLoadImg("rex.jpg", this)
+                val imageGallery = ImageGallery(image, 108, 108)
+                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
+                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                ImageGallery.printImageDir(this)    // For Debug
+                // end testing for algorithm ----
+
+                // Write computed img
+                newFilename = "cmp_"+newFilename
+                ImageGallery.internalImgWrite(newFilename, img_new,this)
+                //TODO:
+                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
+                // Prepare for the image show
+                val internalEntryPoint: File = this.getFilesDir()
+                val imgDir = File(internalEntryPoint.absolutePath, "Images")
+                val imgFile: File = File(imgDir, newFilename)
+                val imgFilePath = imgFile.absolutePath
+                val newURI = Uri.parse(imgFilePath)
+                // only update UI on UI thread, hide the loadingPanel and show the others
+                loadingPanel.post{
+                    loadingPanel.visibility = GONE
+                }
+                printButton.post{
+                   // printButton.visibility = VISIBLE
+                }
+                compute_button.post{
+                   // compute_button.visibility = VISIBLE
+                }
+                imageView.post{
+                    imageView.setImageURI(newURI)
+                    imageView.visibility = VISIBLE
+                }
                 val intent_to_show = Intent(this, ShowActivity::class.java)
                 var bundle = Bundle()
 
@@ -218,21 +263,56 @@ class EditActivity : AppCompatActivity() {
                 bundle.putString("newFilename", newFilename.toString())
                 intent_to_show.putExtras(bundle)
                 startActivity(intent_to_show)
-
-
-
             }).start()
         }
+        show_button.setOnClickListener{
+            Thread(Runnable {
+                // Load user photo
+                val img_user = ImageGallery.stdLoadImg(newFilename, this)
+                // put image for test
+                ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
+                // do algorithm
+                System.out.println("${ImageGallery.DIRPATH}")
+                val image = ImageGallery.stdLoadImg("rex.jpg", this)
+                val imageGallery = ImageGallery(image, 108, 108)
+                val img_base = ImageGallery.stdLoadImg(baseImgName, this)
+                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                ImageGallery.printImageDir(this)    // For Debug
+                // end testing for algorithm ----
 
-        // Print Button
-        printButton.setOnClickListener{
-            if(!newFilename.equals("")) {
-                val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
+                // Write computed img
+                newFilename = "cmp_"+newFilename
+                ImageGallery.internalImgWrite(newFilename, img_new,this)
+                //TODO:
+                Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
+                // Prepare for the image show
+                val internalEntryPoint: File = this.getFilesDir()
+                val imgDir = File(internalEntryPoint.absolutePath, "Images")
+                val imgFile: File = File(imgDir, newFilename)
                 val imgFilePath = imgFile.absolutePath
-                if(File(imgFilePath).exists()) {
-                    doPhotoPrint(imgFilePath)
+                val newURI = Uri.parse(imgFilePath)
+                // only update UI on UI thread, hide the loadingPanel and show the others
+                loadingPanel.post{
+                    loadingPanel.visibility = GONE
                 }
-            }
+                printButton.post{
+                   // printButton.visibility = VISIBLE
+                }
+                compute_button.post{
+                    compute_button.visibility = VISIBLE
+                }
+                imageView.post{
+                    imageView.setImageURI(newURI)
+                    imageView.visibility = VISIBLE
+                }
+                val intent_to_show = Intent(this, ShowActivity::class.java)
+                var bundle = Bundle()
+
+                bundle.putString("imagepath", imgFilePath.toString())
+                bundle.putString("newFilename", newFilename.toString())
+                intent_to_show.putExtras(bundle)
+                startActivity(intent_to_show)
+            }).start()
         }
 
         // Compute & Print

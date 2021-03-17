@@ -93,7 +93,7 @@ class MainActivity : AppCompatActivity() {
         // app reference relink
         mMyApp!!.setCurrentActivity(this);
 
-        object : CountDownTimer(10000, 1000) {
+        object : CountDownTimer(100000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
 //                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)

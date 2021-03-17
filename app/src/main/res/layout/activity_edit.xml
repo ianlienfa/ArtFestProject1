@@ -23,6 +23,13 @@
         android:id="@+id/compute_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:text="compute"
+
+        />
+    <Button
+        android:id="@+id/show_button"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
         android:text="滿意了！"
 
         />
