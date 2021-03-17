@@ -15,9 +15,14 @@ import com.example.artfestproject1.databinding.ActivityAfterPrintBinding
 import java.io.File
 
 class AfterPrintActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_after_print)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
 
         val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
         val row = intent.getIntExtra("row", 0)
@@ -78,4 +83,11 @@ class AfterPrintActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 }

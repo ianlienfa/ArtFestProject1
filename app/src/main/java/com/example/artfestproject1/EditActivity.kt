@@ -31,8 +31,13 @@ import java.lang.Runnable
 import kotlin.system.exitProcess
 
 class EditActivity : AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
 
         // file parameters
         var newFilename: String = ""
@@ -41,9 +46,9 @@ class EditActivity : AppCompatActivity() {
 
         // Image parameters, htc: 3024 * 4032
         val crop_x = 32
-        val crop_y = 300
-        val CROP_WIDTH = 2500
-        val CROP_HEIGHT = 2500
+        val crop_y = 200
+        val CROP_WIDTH = 2000
+        val CROP_HEIGHT = 2000
         val expected_pixel_w = 108
         val expected_pixel_h = 108
 
@@ -526,5 +531,12 @@ class EditActivity : AppCompatActivity() {
         // Log.d("Admin", Arrays.deepToString(status))
 
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.artfestproject1
 
 import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -99,13 +100,20 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 runOnUiThread {
-                    Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
+//                    Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
                     if(applicationContext is MyApp) {
                         val currentActivity = (applicationContext as MyApp).currentActivity
-//                    val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
-//                    startActivity(intent_to_admin)
+//                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+//                      startActivity(intent_to_admin)
                         val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
                         builder.setTitle("hi")
+                        builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+
+                        })
+                        builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+                            val intent_to_main = Intent(applicationContext, MainActivity::class.java)
+                            startActivity(intent_to_main)
+                        })
                         builder.show()
                     }
                     else{

@@ -13,6 +13,7 @@ import java.io.*
 
 class StatusActivity : AppCompatActivity() {
 
+    protected var mMyApp: MyApp? = null
     lateinit var selectedImage: ImageView
     lateinit var statusColor: ImageView
     lateinit var textViewPosition: TextView
@@ -25,6 +26,9 @@ class StatusActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_status)
+
+        // app reference
+        mMyApp = this.applicationContext as MyApp
 
         selectedImage = findViewById(R.id.selectedImage)
         statusColor = findViewById(R.id.statusColor)
@@ -136,4 +140,11 @@ class StatusActivity : AppCompatActivity() {
         writer.close();
 
     }
+
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
+    }
+
 }
