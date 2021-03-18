@@ -69,7 +69,7 @@ class ShowCamera : AppCompatActivity() {
         }
         else
         {
-            Toast.makeText(this, "Permissions not granted by user.", Toast.LENGTH_SHORT).show()
+           // Toast.makeText(this, "Permissions not granted by user.", Toast.LENGTH_SHORT).show()
             finish()
         }
     }
@@ -96,7 +96,7 @@ class ShowCamera : AppCompatActivity() {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 val savedURI = Uri.fromFile(photoFile)
                 val msg = "Photo captured succeed ${savedURI}"
-                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+               // Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
                 Log.d(TAG, msg)
                 printImageDir(baseContext)
 

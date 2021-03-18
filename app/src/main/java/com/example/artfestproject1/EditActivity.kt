@@ -272,7 +272,7 @@ class EditActivity : AppCompatActivity() {
                 // put image for test
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
                 // do algorithm
-                System.out.println("${ImageGallery.DIRPATH}")
+                //System.out.println("${ImageGallery.DIRPATH}")
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
@@ -562,12 +562,12 @@ class EditActivity : AppCompatActivity() {
             if(job.equals("droids.jpg - test print"))
             {
                 if(job.isCompleted()){
-                    Toast.makeText(getApplicationContext(), "print_complete", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), "print_complete", Toast.LENGTH_LONG).show();
                     Log.d("Print", "print_complete.")
 
                 }
                 else if(job.isFailed()){
-                    Toast.makeText(getApplicationContext(), "print_failed", Toast.LENGTH_LONG).show();
+                   // Toast.makeText(getApplicationContext(), "print_failed", Toast.LENGTH_LONG).show();
                     Log.d("Print", "print_failed`b .")
                 }
                 else{
