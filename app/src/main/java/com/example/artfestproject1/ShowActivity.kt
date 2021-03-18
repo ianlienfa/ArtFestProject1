@@ -16,11 +16,13 @@ import com.example.artfestproject1.databinding.ActivityShowBinding
 import java.io.File
 
 class ShowActivity: AppCompatActivity() {
+    protected var mMyApp: MyApp? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityShowBinding.inflate(layoutInflater)
         val rootview = binding.root
         setContentView(rootview)
+        mMyApp = this.applicationContext as MyApp
         binding.imageView.setImageURI(null);
         val previousIntent = this.intent
         val bundle = intent.extras
@@ -74,5 +76,10 @@ class ShowActivity: AppCompatActivity() {
                 }
             }
         }
+    }
+    override fun onResume(){
+        super.onResume()
+        // app reference relink
+        mMyApp!!.setCurrentActivity(this);
     }
 }

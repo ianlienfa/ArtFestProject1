@@ -23,6 +23,7 @@
         android:id="@+id/compute_button"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:visibility="invisible"
         android:text="compute"
 
         />
