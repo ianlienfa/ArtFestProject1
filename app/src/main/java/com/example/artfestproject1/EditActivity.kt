@@ -36,7 +36,7 @@ class EditActivity : AppCompatActivity() {
 
         // file parameters
         var newFilename: String = ""
-        val baseImgName = "[1][7].jpg"
+        var baseImgName = "[1][7].jpg"
         var imgFilePath: String = ""
 
         // Image parameters, htc: 3024 * 4032
@@ -70,6 +70,10 @@ class EditActivity : AppCompatActivity() {
         val bundle = intent.extras
         val imageURI  = bundle!!.getString("imageURI")
         var count = bundle!!.getInt("count")
+        val smallImage = bundle!!.getString("smallImage")
+        val colAdmin = bundle!!.getInt("colAdmin")
+        val rowAdmin = bundle!!.getInt("rowAdmin")
+        val fromAdmin = bundle!!.getBoolean("fromAdmin")
         //val imageURI = previousIntent.getStringExtra("imageURI")
         val uri: Uri = Uri.parse(imageURI)
         Log.d("Editcount", count.toString())
@@ -118,6 +122,7 @@ class EditActivity : AppCompatActivity() {
             }
 
         }
+
         onemore_button.setOnClickListener{
 
             val intent_to_camera = Intent(this, ShowCamera::class.java)
@@ -294,20 +299,35 @@ class EditActivity : AppCompatActivity() {
                     readStatusFromTxt(w, h, status)
                 }
 
-                for (i in 0..h-1) {
-                    for (j in 0..w-1) {
-                        if (status[i][j] == 2) {    // USER_AVAILABLE
-                            toPrintList.add(w * i + j)
+                var x: Int = 0
+                var y: Int = 0
+                var baseImgNameForDebug: String = ""
+
+                if (fromAdmin) {
+
+                    x = colAdmin
+                    y = rowAdmin
+                    baseImgName = "[$x][$y].jpg"
+                    baseImgNameForDebug = "[$y][$x].jpg"
+
+                } else {
+
+                    for (i in 0..h-1) {
+                        for (j in 0..w-1) {
+                            if (status[i][j] == 2) {    // USER_AVAILABLE
+                                toPrintList.add(w * i + j)
+                            }
                         }
                     }
-                }
 
-                val randomIndex: Int = (0..toPrintList.size).random()
-                val x = randomIndex % w
-                val y = (randomIndex - x) / w
-                val baseImgName = "[$x][$y].jpg"
-                val baseImgNameForDebug = "[$y][$x].jpg"
-                // val baseImgName = "[1][7].jpg"
+                    val randomIndex: Int = (0..toPrintList.size).random()
+                    x = randomIndex % w
+                    y = (randomIndex - x) / w
+                    baseImgName = "[$x][$y].jpg"
+                    baseImgNameForDebug = "[$y][$x].jpg"
+                    // val baseImgName = "[1][7].jpg"
+
+                }
 
                 rowToSend = y
                 colToSend = x
@@ -316,7 +336,11 @@ class EditActivity : AppCompatActivity() {
                 Log.d("Admin", baseImgNameForDebug)
 
                 // Save back new status
-                status[y][x] = 1                // USER_PRINTED
+                if (fromAdmin) {
+                    status[y][x] = 3                // ADMIN_PRINTED
+                } else {
+                    status[y][x] = 1                // USER_PRINTED
+                }
                 saveStatusToTxt(w, h, status)
 
                 // ==============================
