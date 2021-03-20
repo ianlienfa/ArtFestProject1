@@ -28,19 +28,26 @@ class ShowActivity: AppCompatActivity() {
         val bundle = intent.extras
         val imageURI  = bundle!!.getString("imagepath")
         val newFilename  = bundle!!.getString("newFilename")
+        val rowToSend = bundle!!.getInt("row")
+        val colToSend = bundle!!.getInt("col")
         //val imageURI = previousIntent.getStringExtra("imageURI")
         val uri: Uri = Uri.parse(imageURI)
         binding.imageView.setImageURI(uri)
         binding.imageView.visibility = View.VISIBLE
         binding.print.setOnClickListener{
-            if(!newFilename.equals("")) {
-                val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
-                val imgFilePath = imgFile.absolutePath
-                if(File(imgFilePath).exists()) {
-                    doPhotoPrint(imgFilePath)
-                }
-            }
+//            if(!newFilename.equals("")) {
+//                val imgFile = File(ImageGallery.imageDirFile(this), newFilename)
+//                val imgFilePath = imgFile.absolutePath
+//                if(File(imgFilePath).exists()) {
+//                    doPhotoPrint(imgFilePath)
+//                }
+//            }
 
+            val intent_to_after_print = Intent(this, AfterPrintActivity::class.java)
+            intent_to_after_print.putExtra("row", rowToSend)
+            intent_to_after_print.putExtra("col", colToSend)
+            intent_to_after_print.putExtra("imgFilePath", imageURI)
+            startActivity(intent_to_after_print)
         }
 
     }

@@ -275,6 +275,52 @@ class EditActivity : AppCompatActivity() {
                 System.out.println("${ImageGallery.DIRPATH}")
                 val image = ImageGallery.stdLoadImg("rex.jpg", this)
                 val imageGallery = ImageGallery(image, 108, 108)
+
+                // insert
+                // ==============================
+
+                var w: Int = imageGallery.get_ImageGallery_width()
+                var h: Int = imageGallery.get_ImageGallery_height()
+
+                val status = Array(h) { IntArray(w) }
+                val toPrintList: MutableList<Int> = ArrayList()
+
+                // Get status
+                if (!hasStatusFile()) {
+                    initStatus(w, h, status)
+                    createStatusFile()
+                    saveStatusToTxt(w, h, status)
+                } else {
+                    readStatusFromTxt(w, h, status)
+                }
+
+                for (i in 0..h-1) {
+                    for (j in 0..w-1) {
+                        if (status[i][j] == 2) {    // USER_AVAILABLE
+                            toPrintList.add(w * i + j)
+                        }
+                    }
+                }
+
+                val randomIndex: Int = (0..toPrintList.size).random()
+                val x = randomIndex % w
+                val y = (randomIndex - x) / w
+                val baseImgName = "[$x][$y].jpg"
+                val baseImgNameForDebug = "[$y][$x].jpg"
+                // val baseImgName = "[1][7].jpg"
+
+                rowToSend = y
+                colToSend = x
+
+                // For testing
+                Log.d("Admin", baseImgNameForDebug)
+
+                // Save back new status
+                status[y][x] = 1                // USER_PRINTED
+                saveStatusToTxt(w, h, status)
+
+                // ==============================
+
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
@@ -308,10 +354,14 @@ class EditActivity : AppCompatActivity() {
                 val intent_to_show = Intent(this, ShowActivity::class.java)
                 var bundle = Bundle()
 
+//                intent_to_after_print.putExtra("imgFilePath", imgFilePath)
                 bundle.putString("imagepath", imgFilePath.toString())
                 bundle.putString("newFilename", newFilename.toString())
+                bundle.putInt("row", rowToSend)
+                bundle.putInt("col", colToSend)
                 intent_to_show.putExtras(bundle)
                 startActivity(intent_to_show)
+
             }).start()
         }
 
