@@ -1,6 +1,7 @@
 package com.example.artfestproject1
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +11,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityMainBinding
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
 
 
 class MainActivity : AppCompatActivity() {
     protected var mMyApp: MyApp? = null
+
+    var h: Int = 0
+    var w: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +81,16 @@ class MainActivity : AppCompatActivity() {
         val image = ImageGallery.stdLoadImg("rex.jpg", this)
         val imageGallery = ImageGallery(image, 108, 108)
 
+        // create status.txt here
+        w = imageGallery.get_ImageGallery_width()
+        h = imageGallery.get_ImageGallery_height()
+        val status = Array(h) { IntArray(w) }
+        if (!hasStatusFile()) {
+            initStatus(w, h, status)
+            createStatusFile()
+            saveStatusToTxt(w, h, status)
+        }
+
 //
 //        val img_user = ImageGallery.stdLoadImg("[4][7].jpg")
 //        val img_base = ImageGallery.stdLoadImg("[1][7].jpg")
@@ -127,4 +144,63 @@ class MainActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    private fun hasStatusFile(): Boolean {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun initStatus(w: Int, h: Int, status: Array<IntArray>) {
+
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                status[i][j] = 2    // USER_AVAILABLE
+            }
+        }
+
+    }
+
+    private fun createStatusFile() {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveStatusToTxt(w: Int, h: Int, status: Array<IntArray>) {
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                builder.append(status[i][j].toString());
+                if (j < status[i].size - 1) {
+                    builder.append(",")
+                }
+            }
+            builder.append("\n")
+        }
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
 }
