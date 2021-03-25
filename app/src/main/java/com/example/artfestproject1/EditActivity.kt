@@ -37,6 +37,7 @@ class EditActivity : AppCompatActivity() {
         // file parameters
         var newFilename: String = ""
         var baseImgName = "[1][7].jpg"
+        val bigImgName = "test_image.jpg"
         var imgFilePath: String = ""
 
         // Image parameters, htc: 2448 * 3264
@@ -44,8 +45,8 @@ class EditActivity : AppCompatActivity() {
         val crop_y = 500
         val CROP_WIDTH = 2000
         val CROP_HEIGHT = 2000
-        val expected_pixel_w = 108
-        val expected_pixel_h = 108
+        val expected_pixel_w = 1080
+        val expected_pixel_h = 1560
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
@@ -167,8 +168,8 @@ class EditActivity : AppCompatActivity() {
 
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image, expected_pixel_w, expected_pixel_h)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 var img_new: Mat;
                 val rand = (Math.random()*3) as Int;
@@ -229,8 +230,8 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image,expected_pixel_w, expected_pixel_h)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
@@ -278,8 +279,8 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image, expected_pixel_w, expected_pixel_h)
 
                 // insert
                 // ==============================
@@ -403,8 +404,8 @@ class EditActivity : AppCompatActivity() {
 
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image,expected_pixel_w, expected_pixel_h)
 
                 // insert
                 // ==============================
