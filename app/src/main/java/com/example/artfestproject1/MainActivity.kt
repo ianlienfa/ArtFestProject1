@@ -22,6 +22,11 @@ class MainActivity : AppCompatActivity() {
     var h: Int = 0
     var w: Int = 0
 
+    private val messageIntervalmin: Long = 2;
+    private val messageFuturemin: Long = 10;
+    private val messageInterval: Long = messageIntervalmin * 1000L * 60L;
+    private val messageFuture: Long = messageFuturemin * 1000L * 60L;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -110,11 +115,39 @@ class MainActivity : AppCompatActivity() {
         // app reference relink
         mMyApp!!.setCurrentActivity(this);
 
-        object : CountDownTimer(100000, 1000) {
+        object : CountDownTimer(messageFuture, messageInterval) {
 
             override fun onTick(millisUntilFinished: Long) {
 //                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)
-                runOnUiThread { Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show() }
+                if(millisUntilFinished < messageFuture - 100L)
+                {
+                    runOnUiThread {
+                        if (applicationContext is MyApp) {
+                            val currentActivity = (applicationContext as MyApp).currentActivity
+//                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+//                      startActivity(intent_to_admin)
+                            val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
+                            builder.setTitle("已經超時，是否回到主頁面？")
+                            builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+
+                            })
+                            builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+                                cancel()
+                                val intent_to_main = Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent_to_main)
+                            })
+                            builder.show()
+                        } else {
+                            runOnUiThread {
+                                Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+
+//                runOnUiThread {
+//                    Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show()
+//                }
             }
 
             override fun onFinish() {
@@ -125,10 +158,7 @@ class MainActivity : AppCompatActivity() {
 //                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
 //                      startActivity(intent_to_admin)
                         val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
-                        builder.setTitle("hi")
-                        builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
-
-                        })
+                        builder.setTitle("已經超時，正在導回主頁面")
                         builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
                             val intent_to_main = Intent(applicationContext, MainActivity::class.java)
                             startActivity(intent_to_main)

@@ -39,9 +39,9 @@ class EditActivity : AppCompatActivity() {
         var baseImgName = "[1][7].jpg"
         var imgFilePath: String = ""
 
-        // Image parameters, htc: 3024 * 4032
-        val crop_x = 32
-        val crop_y = 200
+        // Image parameters, htc: 2448 * 3264
+        val crop_x = 200
+        val crop_y = 500
         val CROP_WIDTH = 2000
         val CROP_HEIGHT = 2000
         val expected_pixel_w = 108
