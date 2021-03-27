@@ -633,8 +633,8 @@ public class ImageGallery{
         int width = image_out.arrayWidth();
         int height = image_out.arrayHeight();
         // TODO: 值可以更改
-        int gridWidth = 30;
-        int gridHeight = 30;
+        int gridWidth = 3;
+        int gridHeight = 3;
         int numCol = width / gridWidth;
         int numRow = height / gridHeight;
         int[][] newR = new int[numRow][numCol];
