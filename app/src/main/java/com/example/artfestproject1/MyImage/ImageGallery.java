@@ -113,7 +113,7 @@ public class ImageGallery{
             for(int j = 0; j < imageGallery_height; j++)
             {
                 // System.out.print("i: "+String.valueOf(i)+" j: "+String.valueOf(j));
-                int image_start_x = small_img_width * i, image_start_y = small_img_width * j;
+                int image_start_x = small_img_width * i, image_start_y = small_img_height * j;
                 Rect rect = new Rect(image_start_x, image_start_y, small_img_width, small_img_height);
                 Mat sub = new Mat(image, rect);
                 imageGallery[i][j] = sub;
