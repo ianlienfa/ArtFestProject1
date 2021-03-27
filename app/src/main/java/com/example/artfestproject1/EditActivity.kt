@@ -45,8 +45,8 @@ class EditActivity : AppCompatActivity() {
         val crop_y = 500
         val CROP_WIDTH = 2000
         val CROP_HEIGHT = 2000
-        val expected_pixel_w = 1080
-        val expected_pixel_h = 1560
+        val expected_pixel_w = 108
+        val expected_pixel_h = 156
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
