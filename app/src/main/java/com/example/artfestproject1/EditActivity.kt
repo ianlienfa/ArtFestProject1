@@ -347,8 +347,10 @@ class EditActivity : AppCompatActivity() {
                 // ==============================
 
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                var img_new = imageGallery.algorithm_BAI(img_user, img_base)
+//                var img_new = imageGallery.algorithm_BAI(img_user, img_base)
 //                val img_new = imageGallery.algorithm_Tim(img_user, img_base)
+//                var img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                var img_new: Mat
                 val rand = (Math.random()*3).toInt();
                 if(rand == 0)
                 {

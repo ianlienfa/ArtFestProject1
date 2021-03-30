@@ -570,6 +570,11 @@ public class ImageGallery{
 ////
     public Mat algorithm_shiuan(Mat image_in, Mat image_base)
     {
+
+        // ==============================
+        image_in = colorToGray(image_in);
+        // ==============================
+
         Mat image_out, image_black;
         opencv_imgproc.cvtColor(image_in, image_in, opencv_imgproc.COLOR_BGR2GRAY);
         opencv_imgproc.cvtColor(image_base, image_base, opencv_imgproc.COLOR_BGR2GRAY);
@@ -633,8 +638,8 @@ public class ImageGallery{
         int width = image_out.arrayWidth();
         int height = image_out.arrayHeight();
         // TODO: 值可以更改
-        int gridWidth = 3;
-        int gridHeight = 3;
+        int gridWidth = 1;
+        int gridHeight = 1;
         int numCol = width / gridWidth;
         int numRow = height / gridHeight;
         int[][] newR = new int[numRow][numCol];
@@ -644,7 +649,8 @@ public class ImageGallery{
         int[][] oldG = new int[height][width];
         int[][] oldB = new int[height][width];
 
-        image_out = colorToGray(image_out);
+//        image_out = colorToGray(image_out);
+        image_in = colorToGray(image_in);
 
         // 先把 pixel 資訊存到一個 2D array
 
@@ -708,7 +714,7 @@ public class ImageGallery{
             for (int i = 0; i < width; i++) {
                 double alpha = indexer.get(j, i, 2) / 255.0;
                 // TODO:
-                alpha = alpha * 0.6 + 0.4;
+                alpha = alpha * 0.8 + 0.2;
                 int r = (int)(indexer_in.get(j, i, 2) * alpha);
                 int g = (int)(indexer_in.get(j, i, 1) * alpha);
                 int b = (int)(indexer_in.get(j, i, 0) * alpha);
@@ -753,11 +759,18 @@ public class ImageGallery{
 
         // ==============================
         // TODO: 調整整體亮度的數值
-        int target_intensity = 128;
+        int target_intensity = 180;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int intensity = indexer.get(y, x, 0);
-                int new_intensity = intensity * target_intensity / average_intensity;
+                int new_intensity = intensity * target_intensity / average_intensity + 30;
+                new_intensity = new_intensity * 120 / 255 + 30;
+                if (new_intensity > 255) {
+                    new_intensity = 255;
+                }
+//                indexer.put(y, x, 0, 255);
+//                indexer.put(y, x, 1, 255);
+//                indexer.put(y, x, 2, 255);
                 indexer.put(y, x, 0, new_intensity);
                 indexer.put(y, x, 1, new_intensity);
                 indexer.put(y, x, 2, new_intensity);
