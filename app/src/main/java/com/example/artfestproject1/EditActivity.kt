@@ -54,7 +54,7 @@ class EditActivity : AppCompatActivity() {
         val imageView = binding.imageView
         val loadingPanel = binding.progressBar
         val printButton = binding.printButton
-        val compute_button = binding.computeButton
+       // val compute_button = binding.computeButton
         val user_send_print_button = binding.userSendPrintButton
 //        val finish_print_button = binding.finishPrintButton
 
@@ -113,10 +113,9 @@ class EditActivity : AppCompatActivity() {
             binding.printButton.post {
                 //binding.printButton.visibility = VISIBLE
             }
-            binding.computeButton
-            binding.computeButton.post {
-                binding.computeButton.visibility = VISIBLE
-            }
+           /* binding.computeButton.post {
+               // binding.computeButton.visibility = VISIBLE
+            }*/
             binding.imageView.post {
                 binding.imageView.setImageURI(newURI)
                 binding.imageView.visibility = VISIBLE
@@ -156,7 +155,7 @@ class EditActivity : AppCompatActivity() {
                 toast.show()
             }
         }
-
+/*
         compute_button.setOnClickListener{
             Thread(Runnable {
 
@@ -210,7 +209,7 @@ class EditActivity : AppCompatActivity() {
                     printButton.visibility = VISIBLE
                 }
                 compute_button.post{
-                    compute_button.visibility = VISIBLE
+                  //  compute_button.visibility = VISIBLE
                 }
                 imageView.post{
                     imageView.setImageURI(newURI)
@@ -220,6 +219,8 @@ class EditActivity : AppCompatActivity() {
 
             }).start()
         }
+
+ */
 
         // Print Button
         printButton.setOnClickListener{
@@ -255,9 +256,10 @@ class EditActivity : AppCompatActivity() {
                 printButton.post{
                    // printButton.visibility = VISIBLE
                 }
+                /*
                 compute_button.post{
                    // compute_button.visibility = VISIBLE
-                }
+                }*/
                 imageView.post{
                     imageView.setImageURI(newURI)
                     imageView.visibility = VISIBLE
@@ -384,10 +386,10 @@ class EditActivity : AppCompatActivity() {
                 }
                 printButton.post{
                    // printButton.visibility = VISIBLE
-                }
+                }/*
                 compute_button.post{
-                    compute_button.visibility = VISIBLE
-                }
+                    //compute_button.visibility = VISIBLE
+                }*/
                 imageView.post{
                     imageView.setImageURI(newURI)
                     imageView.visibility = VISIBLE
@@ -491,10 +493,10 @@ class EditActivity : AppCompatActivity() {
                 }
                 printButton.post{
                     printButton.visibility = VISIBLE
-                }
+                }/*
                 compute_button.post{
-                    compute_button.visibility = VISIBLE
-                }
+                    // compute_button.visibility = VISIBLE
+                }*/
                 imageView.post{
                     imageView.setImageURI(newURI)
                     imageView.visibility = VISIBLE
