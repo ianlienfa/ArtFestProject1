@@ -1,6 +1,7 @@
 package com.example.artfestproject1
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -10,10 +11,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityMainBinding
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
 
 
 class MainActivity : AppCompatActivity() {
     protected var mMyApp: MyApp? = null
+
+    var h: Int = 0
+    var w: Int = 0
+
+    private val messageIntervalmin: Long = 2;
+    private val messageFuturemin: Long = 10;
+    private val messageInterval: Long = messageIntervalmin * 1000L * 60L;
+    private val messageFuture: Long = messageFuturemin * 1000L * 60L;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,19 +72,35 @@ class MainActivity : AppCompatActivity() {
         }
 
         Log.d("Write", "Start")
-        val img = ImageGallery.assetsRead("rex.jpg", this)  // Load source img from apk's assets Directory
-        ImageGallery.internalImgWrite("rex.jpg", img, this) // Save source img into internal Directory
+//        val img = ImageGallery.assetsRead("rex.jpg", this)  // Load source img from apk's assets Directory
+//        ImageGallery.internalImgWrite("rex.jpg", img, this) // Save source img into internal Directory
+        val img = ImageGallery.assetsRead("test_image.jpg", this)  // Load source img from apk's assets Directory
+        ImageGallery.internalImgWrite("test_image.jpg", img, this) // Save source img into internal Directory
         ImageGallery.printImageDir(this)    // For Debug
 
         // put image for test
         ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
-        val image_load = ImageGallery.stdLoadImg("rex.jpg", this)
-        ImageGallery.stdSaveImg(image_load, "rex.jpg", this)
+//        val image_load = ImageGallery.stdLoadImg("rex.jpg", this)
+//        ImageGallery.stdSaveImg(image_load, "rex.jpg", this)
+        val image_load = ImageGallery.stdLoadImg("test_image.jpg", this)
+        ImageGallery.stdSaveImg(image_load, "test_image.jpg", this)
 
         // do algorithm
         System.out.println("${ImageGallery.DIRPATH}")
-        val image = ImageGallery.stdLoadImg("rex.jpg", this)
-        val imageGallery = ImageGallery(image, 108, 108)
+//        val image = ImageGallery.stdLoadImg("rex.jpg", this)
+//        val imageGallery = ImageGallery(image, 108, 108)
+        val image = ImageGallery.stdLoadImg("test_image.jpg", this)
+        val imageGallery = ImageGallery(image, 108, 156)
+
+        // create status.txt here
+        w = imageGallery.get_ImageGallery_width()
+        h = imageGallery.get_ImageGallery_height()
+        val status = Array(h) { IntArray(w) }
+        if (!hasStatusFile()) {
+            initStatus(w, h, status)
+            createStatusFile()
+            saveStatusToTxt(w, h, status)
+        }
 
 //
 //        val img_user = ImageGallery.stdLoadImg("[4][7].jpg")
@@ -93,11 +121,39 @@ class MainActivity : AppCompatActivity() {
         // app reference relink
         mMyApp!!.setCurrentActivity(this);
 
-        object : CountDownTimer(100000, 1000) {
+        object : CountDownTimer(messageFuture, messageInterval) {
 
             override fun onTick(millisUntilFinished: Long) {
 //                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)
-                runOnUiThread { Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show() }
+                if(millisUntilFinished < messageFuture - 100L)
+                {
+                    runOnUiThread {
+                        if (applicationContext is MyApp) {
+                            val currentActivity = (applicationContext as MyApp).currentActivity
+//                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+//                      startActivity(intent_to_admin)
+                            val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
+                            builder.setTitle("已經超時，是否回到主頁面？")
+                            builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+
+                            })
+                            builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+                                cancel()
+                                val intent_to_main = Intent(applicationContext, MainActivity::class.java)
+                                startActivity(intent_to_main)
+                            })
+                            builder.show()
+                        } else {
+                            runOnUiThread {
+                                Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    }
+                }
+
+//                runOnUiThread {
+//                    Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show()
+//                }
             }
 
             override fun onFinish() {
@@ -108,10 +164,7 @@ class MainActivity : AppCompatActivity() {
 //                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
 //                      startActivity(intent_to_admin)
                         val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
-                        builder.setTitle("hi")
-                        builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
-
-                        })
+                        builder.setTitle("已經超時，正在導回主頁面")
                         builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
                             val intent_to_main = Intent(applicationContext, MainActivity::class.java)
                             startActivity(intent_to_main)
@@ -127,4 +180,63 @@ class MainActivity : AppCompatActivity() {
             }
         }.start()
     }
+
+    private fun hasStatusFile(): Boolean {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun initStatus(w: Int, h: Int, status: Array<IntArray>) {
+
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                status[i][j] = 2    // USER_AVAILABLE
+            }
+        }
+
+    }
+
+    private fun createStatusFile() {
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveStatusToTxt(w: Int, h: Int, status: Array<IntArray>) {
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        for (i in 0..h-1) {
+            for (j in 0..w-1) {
+                builder.append(status[i][j].toString());
+                if (j < status[i].size - 1) {
+                    builder.append(",")
+                }
+            }
+            builder.append("\n")
+        }
+
+        val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
 }

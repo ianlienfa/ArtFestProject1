@@ -1,5 +1,6 @@
 package com.example.artfestproject1
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.artfestproject1.databinding.ActivityAdminBinding
 import com.example.artfestproject1.databinding.ActivityStatusBinding
+import kotlinx.android.synthetic.main.activity_status.*
 import java.io.*
 
 
@@ -18,6 +20,7 @@ class StatusActivity : AppCompatActivity() {
     lateinit var statusColor: ImageView
     lateinit var textViewPosition: TextView
 
+    lateinit var buttonPrintThis: Button
     lateinit var buttonSetTo1: Button
     lateinit var buttonSetTo2: Button
     lateinit var buttonSetTo3: Button
@@ -35,18 +38,31 @@ class StatusActivity : AppCompatActivity() {
         textViewPosition = findViewById(R.id.textViewPosition)
 
         val intent = intent
-        selectedImage.setImageResource(intent.getIntExtra("image", 0))
+        val smallImage = intent.getIntExtra("image", 0)
+        selectedImage.setImageResource(smallImage)
         statusColor.setBackgroundColor(intent.getIntExtra("color", 0))
         textViewPosition.text = intent.getIntExtra("position", 0).toString()
 
-
+        buttonPrintThis = findViewById(R.id.buttonPrintThis)
         buttonSetTo1 = findViewById(R.id.buttonSetTo1)
         buttonSetTo2 = findViewById(R.id.buttonSetTo2)
         buttonSetTo3 = findViewById(R.id.buttonSetTo3)
         buttonSetTo4 = findViewById(R.id.buttonSetTo4)
         // TODO: need to change
-        val w: Int = 10
+        val w: Int = 5
         val position = intent.getIntExtra("position", 0)
+
+        buttonPrintThis.setOnClickListener {
+            val intent_to_show_camera = Intent(this, ShowCamera::class.java)
+            val col: Int = position % w
+            val row: Int = (position - col) / w
+            intent_to_show_camera.putExtra("smallImage", "[$col][$row].jpg")
+            intent_to_show_camera.putExtra("rowAdmin", row)
+            intent_to_show_camera.putExtra("colAdmin", col)
+            intent_to_show_camera.putExtra("fromAdmin", true)
+            startActivity(intent_to_show_camera)
+        }
+
         // The code is not quite clean...
         // TODO: the color is hard coding
         buttonSetTo1.setOnClickListener {
@@ -83,8 +99,8 @@ class StatusActivity : AppCompatActivity() {
 
     private fun setStatus(row: Int, col: Int, newStatus: Int) {
         // TODO: Remove hardcoding
-        val w: Int = 10
-        val h: Int = 10
+        val w: Int = 5
+        val h: Int = 5
         val status = Array(h) { IntArray(w) }
         readStatusFromTxt(w, h, status)
         // Don't know why currently...

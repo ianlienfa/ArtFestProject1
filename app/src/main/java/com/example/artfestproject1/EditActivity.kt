@@ -36,16 +36,17 @@ class EditActivity : AppCompatActivity() {
 
         // file parameters
         var newFilename: String = ""
-        val baseImgName = "[1][7].jpg"
+        var baseImgName = "[1][7].jpg"
+        val bigImgName = "test_image.jpg"
         var imgFilePath: String = ""
 
-        // Image parameters, htc: 3024 * 4032
-        val crop_x = 32
-        val crop_y = 200
+        // Image parameters, htc: 2448 * 3264
+        val crop_x = 200
+        val crop_y = 500
         val CROP_WIDTH = 2000
         val CROP_HEIGHT = 2000
         val expected_pixel_w = 108
-        val expected_pixel_h = 108
+        val expected_pixel_h = 156
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
@@ -70,6 +71,10 @@ class EditActivity : AppCompatActivity() {
         val bundle = intent.extras
         val imageURI  = bundle!!.getString("imageURI")
         var count = bundle!!.getInt("count")
+        val smallImage = bundle!!.getString("smallImage")
+        val colAdmin = bundle!!.getInt("colAdmin")
+        val rowAdmin = bundle!!.getInt("rowAdmin")
+        val fromAdmin = bundle!!.getBoolean("fromAdmin")
         //val imageURI = previousIntent.getStringExtra("imageURI")
         val uri: Uri = Uri.parse(imageURI)
         Log.d("Editcount", count.toString())
@@ -118,6 +123,7 @@ class EditActivity : AppCompatActivity() {
             }
 
         }
+
         onemore_button.setOnClickListener{
 
             val intent_to_camera = Intent(this, ShowCamera::class.java)
@@ -162,8 +168,8 @@ class EditActivity : AppCompatActivity() {
 
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image, expected_pixel_w, expected_pixel_h)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 var img_new: Mat;
                 val rand = (Math.random()*3) as Int;
@@ -224,8 +230,8 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image,expected_pixel_w, expected_pixel_h)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
                 val img_new = imageGallery.algorithm_BAI(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
@@ -272,11 +278,92 @@ class EditActivity : AppCompatActivity() {
                 // put image for test
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
                 // do algorithm
-                //System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                System.out.println("${ImageGallery.DIRPATH}")
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image, expected_pixel_w, expected_pixel_h)
+
+                // insert
+                // ==============================
+
+                var w: Int = imageGallery.get_ImageGallery_width()
+                var h: Int = imageGallery.get_ImageGallery_height()
+
+                val status = Array(h) { IntArray(w) }
+                val toPrintList: MutableList<Int> = ArrayList()
+
+                // Get status
+                if (!hasStatusFile()) {
+                    initStatus(w, h, status)
+                    createStatusFile()
+                    saveStatusToTxt(w, h, status)
+                } else {
+                    readStatusFromTxt(w, h, status)
+                }
+
+                var x: Int = 0
+                var y: Int = 0
+                var baseImgNameForDebug: String = ""
+
+                if (fromAdmin) {
+
+                    x = colAdmin
+                    y = rowAdmin
+                    baseImgName = "[$x][$y].jpg"
+                    baseImgNameForDebug = "[$y][$x].jpg"
+
+                } else {
+
+                    for (i in 0..h-1) {
+                        for (j in 0..w-1) {
+                            if (status[i][j] == 2) {    // USER_AVAILABLE
+                                toPrintList.add(w * i + j)
+                            }
+                        }
+                    }
+
+                    val randomIndex: Int = (0..toPrintList.size).random()
+                    x = randomIndex % w
+                    y = (randomIndex - x) / w
+                    baseImgName = "[$x][$y].jpg"
+                    baseImgNameForDebug = "[$y][$x].jpg"
+                    // val baseImgName = "[1][7].jpg"
+
+                }
+
+                rowToSend = y
+                colToSend = x
+
+                // For testing
+                Log.d("Admin", baseImgNameForDebug)
+
+                // Save back new status
+                if (fromAdmin) {
+                    status[y][x] = 3                // ADMIN_PRINTED
+                } else {
+                    status[y][x] = 1                // USER_PRINTED
+                }
+                saveStatusToTxt(w, h, status)
+
+                // ==============================
+
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+//                var img_new = imageGallery.algorithm_BAI(img_user, img_base)
+//                val img_new = imageGallery.algorithm_Tim(img_user, img_base)
+//                var img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                var img_new: Mat
+                val rand = (Math.random()*3).toInt();
+                if(rand == 0)
+                {
+                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                }
+                else if(rand == 1)
+                {
+                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                }
+                else
+                {
+                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                }
                 ImageGallery.printImageDir(this)    // For Debug
                 // end testing for algorithm ----
 
@@ -308,10 +395,14 @@ class EditActivity : AppCompatActivity() {
                 val intent_to_show = Intent(this, ShowActivity::class.java)
                 var bundle = Bundle()
 
+//                intent_to_after_print.putExtra("imgFilePath", imgFilePath)
                 bundle.putString("imagepath", imgFilePath.toString())
                 bundle.putString("newFilename", newFilename.toString())
+                bundle.putInt("row", rowToSend)
+                bundle.putInt("col", colToSend)
                 intent_to_show.putExtras(bundle)
                 startActivity(intent_to_show)
+
             }).start()
         }
 
@@ -329,8 +420,8 @@ class EditActivity : AppCompatActivity() {
 
                 // do algorithm
                 System.out.println("${ImageGallery.DIRPATH}")
-                val image = ImageGallery.stdLoadImg("rex.jpg", this)
-                val imageGallery = ImageGallery(image, 108, 108)
+                val image = ImageGallery.stdLoadImg(bigImgName, this)
+                val imageGallery = ImageGallery(image,expected_pixel_w, expected_pixel_h)
 
                 // insert
                 // ==============================
@@ -562,12 +653,12 @@ class EditActivity : AppCompatActivity() {
             if(job.equals("droids.jpg - test print"))
             {
                 if(job.isCompleted()){
-                   // Toast.makeText(getApplicationContext(), "print_complete", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "print_complete", Toast.LENGTH_LONG).show();
                     Log.d("Print", "print_complete.")
 
                 }
                 else if(job.isFailed()){
-                   // Toast.makeText(getApplicationContext(), "print_failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "print_failed", Toast.LENGTH_LONG).show();
                     Log.d("Print", "print_failed`b .")
                 }
                 else{

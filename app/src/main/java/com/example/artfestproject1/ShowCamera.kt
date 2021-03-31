@@ -32,6 +32,11 @@ class ShowCamera : AppCompatActivity() {
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var binding: ActivityShowCameraBinding
 
+    var smallImage: String = ""
+    var rowAdmin: Int = 0
+    var colAdmin: Int = 0
+    var fromAdmin: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // app reference
@@ -42,6 +47,10 @@ class ShowCamera : AppCompatActivity() {
         setContentView(rootview)
         val previousIntent = this.intent
         val count = previousIntent.getIntExtra("countback",0)
+        smallImage = previousIntent.getStringExtra("smallImage").toString()
+        colAdmin = previousIntent.getIntExtra("colAdmin", 0)
+        rowAdmin = previousIntent.getIntExtra("rowAdmin", 0)
+        fromAdmin = previousIntent.getBooleanExtra("fromAdmin", false)
 
         if(allPermissionsGranted())
         {
@@ -107,6 +116,10 @@ class ShowCamera : AppCompatActivity() {
 
                 bundle.putString("imageURI", savedURI.toString())
                 bundle.putInt("count", count)
+                bundle.putString("smallImage", smallImage)
+                bundle.putInt("colAdmin", colAdmin)
+                bundle.putInt("rowAdmin", rowAdmin)
+                bundle.putBoolean("fromAdmin", fromAdmin)
                 intent_to_edit.putExtras(bundle)
                 startActivity(intent_to_edit)
 
