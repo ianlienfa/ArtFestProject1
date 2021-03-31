@@ -41,10 +41,10 @@ class EditActivity : AppCompatActivity() {
         var imgFilePath: String = ""
 
         // Image parameters, htc: 2448 * 3264
-        val crop_x = 200
-        val crop_y = 500
-        val CROP_WIDTH = 2000
-        val CROP_HEIGHT = 2000
+        val crop_x = 0
+        val crop_y = 0
+        val CROP_WIDTH = 2150
+        val CROP_HEIGHT = 3100
         val expected_pixel_w = 108
         val expected_pixel_h = 156
 
@@ -598,6 +598,7 @@ class EditActivity : AppCompatActivity() {
         }
         if(ImageGallery.getImageDir(context).canExecute()) {
             var img_user: Mat = ImageGallery.internalImgRead(filename, context)
+            Log.d("size",img_user.cols().toString()+ "  " + img_user.rows().toString())
             if(img_user.cols() != CROP_WIDTH || img_user.rows() != CROP_HEIGHT) {
                 img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
             }
