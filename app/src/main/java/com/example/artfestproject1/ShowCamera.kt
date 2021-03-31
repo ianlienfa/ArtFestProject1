@@ -101,11 +101,6 @@ class ShowCamera : AppCompatActivity() {
                 printImageDir(baseContext)
 
                 // 傳 savedURI 給 edit 頁面
-                /*原本的
-                val intent_to_edit = Intent(this@ShowCamera, EditActivity::class.java)
-                intent_to_edit.putExtra("imageURI", savedURI.toString());
-                startActivity(intent_to_edit)
-                */
                 //try bundle
                 val intent_to_edit = Intent(this@ShowCamera, EditActivity::class.java)
                 var bundle = Bundle()
