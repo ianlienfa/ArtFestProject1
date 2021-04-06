@@ -324,8 +324,9 @@ class EditActivity : AppCompatActivity() {
                     }
 
                     val randomIndex: Int = (0..toPrintList.size).random()
-                    x = randomIndex % w
-                    y = (randomIndex - x) / w
+                    val theIndex = toPrintList[randomIndex]
+                    x = theIndex % w
+                    y = (theIndex - x) / w
                     baseImgName = "[$x][$y].jpg"
                     baseImgNameForDebug = "[$y][$x].jpg"
                     // val baseImgName = "[1][7].jpg"
