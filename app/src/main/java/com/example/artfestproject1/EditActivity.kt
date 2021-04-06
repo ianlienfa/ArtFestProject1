@@ -352,20 +352,61 @@ class EditActivity : AppCompatActivity() {
 //                var img_new = imageGallery.algorithm_BAI(img_user, img_base)
 //                val img_new = imageGallery.algorithm_Tim(img_user, img_base)
 //                var img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+
+
+
+                // 演算法 random 區塊化
+                // Log.d("Admin", "row: $y")
+                // Log.d("Admin", "col: $x")
                 var img_new: Mat
-                val rand = (Math.random()*3).toInt();
-                if(rand == 0)
-                {
-                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                val rand1 = (Math.random()*30).toInt();
+                if (rand1 % 5 == 0) {
+                    // 五分之一的機率，隨機挑選演算法
+                    val rand = (Math.random()*3).toInt();
+                    if (rand == 0) {
+                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                    } else if (rand == 1) {
+                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                    } else {
+                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                    }
+                } else {
+                    // 其他就是直接照位置來決定用哪個演算法
+                    // 一個小區塊的長＆寬
+                    val heightBlock = 3
+                    val widthBLock = 3
+                    // 區塊位置
+                    val rowBlock = y / heightBlock
+                    val colBLock = x / widthBLock
+                    // 確認是否為 integer division
+                    // Log.d("Admin", "rowBlock: $rowBlock")
+                    // Log.d("Admin", "colBLock: $colBLock")
+                    val chooseAlgorithm = (rowBlock + colBLock) % 3
+                    if (chooseAlgorithm == 0) {
+                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                    } else if (chooseAlgorithm == 1) {
+                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                    } else {
+                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                    }
                 }
-                else if(rand == 1)
-                {
-                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
-                }
-                else
-                {
-                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
-                }
+
+
+
+//                var img_new: Mat
+//                val rand = (Math.random()*3).toInt();
+//                if(rand == 0)
+//                {
+//                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
+//                }
+//                else if(rand == 1)
+//                {
+//                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+//                }
+//                else
+//                {
+//                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+//                }
                 ImageGallery.printImageDir(this)    // For Debug
                 // end testing for algorithm ----
 
