@@ -15,7 +15,7 @@
         android:backgroundTint="@color/purple_200"
         android:gravity="center"
         android:text="Number"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
