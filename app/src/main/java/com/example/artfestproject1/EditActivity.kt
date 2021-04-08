@@ -43,8 +43,8 @@ class EditActivity : AppCompatActivity() {
         // Image parameters, htc: 2448 * 3264
         val crop_x = 0
         val crop_y = 0
-        val CROP_WIDTH = 2150
-        val CROP_HEIGHT = 3100
+        val CROP_WIDTH = 2448
+        val CROP_HEIGHT = 3264
         val expected_pixel_w = 108
         val expected_pixel_h = 156
 
@@ -88,18 +88,20 @@ class EditActivity : AppCompatActivity() {
 
         lifecycle.coroutineScope.launch {
             // Pretreatment -- Crop to square
-            newFilename = doPhotoCrop(filename, baseContext, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
+//            newFilename = doPhotoCrop(filename, baseContext, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
 
             // Pretreatment -- Compress
 
             runBlocking {
-                newFilename = doPhotoCompress(newFilename, baseContext, expected_pixel_w, expected_pixel_h)
+                newFilename = doPhotoCompress(filename, baseContext, expected_pixel_w, expected_pixel_h)
                 Log.d("Thread", "1")
             }
 
             // Pretreatment -- Compress might leave some pixels, do some pruning
             Log.d("Thread", "2")
-            newFilename = doPhotoCrop(newFilename, baseContext, 0, 0, expected_pixel_w, expected_pixel_h)
+//            val suitable_crop_x = crop_x
+            newFilename = doSuitablePhotoCrop(newFilename, baseContext, expected_pixel_w, expected_pixel_h)
+//            newFilename = doPhotoCrop(newFilename, baseContext, 0, 0, expected_pixel_w, expected_pixel_h)
 
             // Prepare for the image show
             val imgFile = File(ImageGallery.imageDirFile(baseContext), newFilename)
@@ -642,6 +644,31 @@ class EditActivity : AppCompatActivity() {
             var img_user: Mat = ImageGallery.internalImgRead(filename, context)
             Log.d("size",img_user.cols().toString()+ "  " + img_user.rows().toString())
             if(img_user.cols() != CROP_WIDTH || img_user.rows() != CROP_HEIGHT) {
+                img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
+            }
+            ImageGallery.internalImgWrite(newFilename, img_user, context)
+            Log.e("name", newFilename)
+        }
+        else{
+            Log.d("File", filename+"Not ready yet")
+            System.exit(1)
+        }
+        return newFilename
+    }
+
+    private fun doSuitablePhotoCrop(filename: String, context: Context, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
+        // Crop Photo
+        var newFilename = "cp_"+filename
+        while(!ImageGallery.getImageDir(context).canExecute())
+        {
+            Log.d("IO", "not yet")
+        }
+        if(ImageGallery.getImageDir(context).canExecute()) {
+            var img_user: Mat = ImageGallery.internalImgRead(filename, context)
+            Log.d("size",img_user.cols().toString()+ "  " + img_user.rows().toString())
+            if(img_user.cols() != CROP_WIDTH || img_user.rows() != CROP_HEIGHT) {
+                val crop_x: Int = (img_user.cols() - CROP_WIDTH)/2
+                val crop_y: Int = (img_user.rows() - CROP_HEIGHT)/2
                 img_user = ImageGallery.matCrop(img_user, crop_x, crop_y, CROP_WIDTH, CROP_HEIGHT)
             }
             ImageGallery.internalImgWrite(newFilename, img_user, context)

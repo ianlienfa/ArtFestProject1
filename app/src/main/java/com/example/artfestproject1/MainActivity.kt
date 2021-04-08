@@ -22,8 +22,8 @@ class MainActivity : AppCompatActivity() {
     var h: Int = 0
     var w: Int = 0
 
-    private val messageIntervalmin: Long = 2;
-    private val messageFuturemin: Long = 10;
+    private val messageIntervalmin: Long = 10;
+    private val messageFuturemin: Long = 30;
     private val messageInterval: Long = messageIntervalmin * 1000L * 60L;
     private val messageFuture: Long = messageFuturemin * 1000L * 60L;
 
