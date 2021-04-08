@@ -756,10 +756,25 @@ public class ImageGallery{
             }
         }
         average_intensity /= (height * width);
-
+        //將照片限制在min100 max200
+        int min = 200;
+        int max=255;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int intensity = indexer.get(y, x, 0);
+                int new_intensity = (int)(((intensity-0)/255.0)*(max-min)+min);
+//                indexer.put(y, x, 0, 255);
+//                indexer.put(y, x, 1, 255);
+//                indexer.put(y, x, 2, 255);
+                indexer.put(y, x, 0, new_intensity);
+                indexer.put(y, x, 1, new_intensity);
+                indexer.put(y, x, 2, new_intensity);
+            }
+        }
+        /*
         // ==============================
         // TODO: 調整整體亮度的數值
-        int target_intensity = 180;
+        int target_intensity = 200;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int intensity = indexer.get(y, x, 0);
@@ -777,7 +792,7 @@ public class ImageGallery{
             }
         }
         // ==============================
-
+*/
         indexer.release();
 
         return image_out;

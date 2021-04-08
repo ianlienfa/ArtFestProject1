@@ -165,7 +165,7 @@ class EditActivity : AppCompatActivity() {
                 // put image for test
                 ImageGallery.DIRPATH = ImageGallery.imageDirPath(this)+'/'
 
-                // do algorithm
+                // do hm
                 System.out.println("${ImageGallery.DIRPATH}")
                 val image = ImageGallery.stdLoadImg(bigImgName, this)
                 val imageGallery = ImageGallery(image, expected_pixel_w, expected_pixel_h)
