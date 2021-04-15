@@ -20,6 +20,7 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
+import static com.example.artfestproject1.MyImage.ImageGallery.testSaveImg;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imwrite;
 import static org.opencv.imgproc.Imgproc.cvtColor;
@@ -127,6 +128,40 @@ public class ImageGallery{
             }
         }
     }
+    public static Mat testLoadImg(String filename)
+    {
+//        File Images = new File("MyImage");
+//        if(!Images.exists())
+//        {
+//            Images.mkdir();
+//        }
+        String temp = "/Users/linenyan/Coding/ArtFestProject1/app/src/main/java/com/example/artfestproject1/MyImage";
+        String from = (temp+File.separator+filename);
+        System.out.println("from: "+from);
+//        Log.d("Destination", from);
+        Mat image = imread(from);
+        if(image == null)
+        {
+            System.out.println("stdLoadImg error: img is null.");
+            System.exit(-1);
+        }
+        return image;
+    }
+
+    public static void testSaveImg(String filename, Mat mat)
+    {
+//        File Images = new File("MyImage");
+//        if(!Images.exists())
+//        {
+//            Images.mkdir();
+//        }
+        String temp = "/Users/linenyan/Coding/ArtFestProject1/app/src/main/java/com/example/artfestproject1/MyImage";
+        String to = (temp+File.separator+filename);
+        System.out.println("to: "+to);
+//        Log.d("Destination", from);
+        imwrite(to, mat);
+    }
+
     public static Mat stdLoadImg(String filename, Context context)
     {
         File Images = imageDirFile(context);
@@ -757,7 +792,7 @@ public class ImageGallery{
         }
         average_intensity /= (height * width);
         //將照片限制在min100 max200
-        int min = 200;
+        int min = 100;
         int max=255;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -968,6 +1003,34 @@ public class ImageGallery{
         return cropImage;
     }
 
+    public static Mat matDuplicate(Mat image)
+    {
+        Mat dst = new Mat(image.rows(), image.cols()*2, image.type());
+//        image.setTo(0);
+        UByteIndexer indexer_dst = dst.createIndexer();
+        UByteIndexer indexer_src = image.createIndexer();
+        // imageBuffer.put(row, col, (b: 0, g:0, r:0), rgb量)
+        for(int i = 0; i < image.rows(); i++)
+        {
+            for(int j = 0; j < image.cols(); j++)
+            {
+                int cols = image.cols();
+                int r = indexer_src.get(i, j, 2);
+                int g = indexer_src.get(i, j, 1);
+                int b = indexer_src.get(i, j, 0);
+                indexer_dst.put(i, j, 2, r);
+                indexer_dst.put(i, j, 1, g);
+                indexer_dst.put(i, j, 0, b);
+                indexer_dst.put(i, j+cols, 2, r);
+                indexer_dst.put(i, j+cols, 1, g);
+                indexer_dst.put(i, j+cols, 0, b);
+            }
+
+        }
+        indexer_src.release();
+        indexer_dst.release();
+        return dst;
+    }
 
 
 //
