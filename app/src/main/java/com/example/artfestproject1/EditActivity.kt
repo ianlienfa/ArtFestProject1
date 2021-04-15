@@ -413,6 +413,9 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.printImageDir(this)    // For Debug
                 // end testing for algorithm ----
 
+                // duplicate the photo
+                img_new = ImageGallery.matDuplicate(img_new);
+
                 // Write computed img
                 newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
