@@ -31,6 +31,7 @@
         <activity android:name=".ShowCamera" />
         <activity android:name=".ExplainActivity" />
         <activity android:name=".ShowActivity"/>
+        <activity android:name=".DetailActivity"/>
         <activity android:name=".MainActivity">
 
             <intent-filter>

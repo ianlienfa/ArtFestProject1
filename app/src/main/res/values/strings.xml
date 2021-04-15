@@ -17,5 +17,7 @@
     <string name="explain_activity">Explain Activity</string>
     <string name="go_go_camera">Go Go Camera</string>
     <string name="textview">TextView</string>
+    <string name="camera">開始拍攝</string>
     <string name="button">Button</string>
+    <string name="肖像權">肖像權</string>
 </resources>

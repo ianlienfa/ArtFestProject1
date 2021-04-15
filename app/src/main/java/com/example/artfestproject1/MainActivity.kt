@@ -44,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 //            val intent_to_camera = Intent(this, ShowCamera::class.java)
 //            startActivity(intent_to_camera)
             // TODO:
-               val intent_to_nfc = Intent(this, NfcActivity::class.java)
-               startActivity(intent_to_nfc)
+               val intent_to_detail = Intent(this, DetailActivity::class.java)
+               startActivity(intent_to_detail)
             // For testing
      //       val intent_to_camera = Intent(this, ShowCamera::class.java)
        //     startActivity(intent_to_camera)
