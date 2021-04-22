@@ -1046,6 +1046,40 @@ public class ImageGallery{
 //        return (a << 24) | (r << 16) | (g << 8) | (b << 0);
 //    }
 //
+public static Mat matDuplicateWithPadding(Mat image, int pad)
+{
+    Mat dst = new Mat(image.rows(), image.cols()*2 + pad, image.type());
+//        image.setTo(0);
+    UByteIndexer indexer_dst = dst.createIndexer();
+    UByteIndexer indexer_src = image.createIndexer();
+    // imageBuffer.put(row, col, (b: 0, g:0, r:0), rgb量)
+    for(int i = 0; i < image.rows(); i++)
+    {
+        for(int j = 0; j < image.cols(); j++)
+        {
+            int cols = image.cols();
+            int r = indexer_src.get(i, j, 2);
+            int g = indexer_src.get(i, j, 1);
+            int b = indexer_src.get(i, j, 0);
+            indexer_dst.put(i, j, 2, r);
+            indexer_dst.put(i, j, 1, g);
+            indexer_dst.put(i, j, 0, b);
+            indexer_dst.put(i, j+cols+pad, 2, r);
+            indexer_dst.put(i, j+cols+pad, 1, g);
+            indexer_dst.put(i, j+cols+pad, 0, b);
+        }
+        for(int j = image.cols(); j <= image.cols()+pad; j++)
+        {
+            indexer_dst.put(i, j, 2, 1000);
+            indexer_dst.put(i, j, 1, 1000);
+            indexer_dst.put(i, j, 0, 1000);
+        }
+    }
+    indexer_src.release();
+    indexer_dst.release();
+    return dst;
+}
+
 
 
 // ==============================
