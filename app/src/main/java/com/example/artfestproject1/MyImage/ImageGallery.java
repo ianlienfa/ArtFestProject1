@@ -758,7 +758,7 @@ public class ImageGallery{
             for (int i = 0; i < width; i++) {
                 double alpha = indexer.get(j, i, 2) / 255.0;
                 // TODO:
-                alpha = alpha * 0.8 + 0.2;
+                alpha = alpha * 0.9 + 0.1;
                 int r = (int)(indexer_in.get(j, i, 2) * alpha);
                 int g = (int)(indexer_in.get(j, i, 1) * alpha);
                 int b = (int)(indexer_in.get(j, i, 0) * alpha);

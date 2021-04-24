@@ -367,7 +367,7 @@ class EditActivity : AppCompatActivity() {
                 if (rand1 % 5 == 0) {
                     // 五分之一的機率，隨機挑選演算法
                     var rand = (Math.random()*3).toInt();
-                    rand = 0;
+                    rand = 2;
                     if (rand == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (rand == 1) {
@@ -387,7 +387,7 @@ class EditActivity : AppCompatActivity() {
                     // Log.d("Admin", "rowBlock: $rowBlock")
                     // Log.d("Admin", "colBLock: $colBLock")
                     var chooseAlgorithm = (rowBlock + colBLock) % 3
-                    chooseAlgorithm = 0
+                    chooseAlgorithm = 2
                     if (chooseAlgorithm == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (chooseAlgorithm == 1) {
