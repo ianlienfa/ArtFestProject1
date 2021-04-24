@@ -356,7 +356,8 @@ class EditActivity : AppCompatActivity() {
 //                val img_new = imageGallery.algorithm_Tim(img_user, img_base)
 //                var img_new = imageGallery.algorithm_shiuan(img_user, img_base)
 
-
+                ImageGallery.stdSaveImg(img_user, "img_user.jpg", this);
+                ImageGallery.stdSaveImg(img_base, "img_base.jpg", this);
 
                 // 演算法 random 區塊化
                 // Log.d("Admin", "row: $y")
@@ -365,7 +366,8 @@ class EditActivity : AppCompatActivity() {
                 val rand1 = (Math.random()*30).toInt();
                 if (rand1 % 5 == 0) {
                     // 五分之一的機率，隨機挑選演算法
-                    val rand = (Math.random()*3).toInt();
+                    var rand = (Math.random()*3).toInt();
+                    rand = 0;
                     if (rand == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (rand == 1) {
@@ -384,7 +386,8 @@ class EditActivity : AppCompatActivity() {
                     // 確認是否為 integer division
                     // Log.d("Admin", "rowBlock: $rowBlock")
                     // Log.d("Admin", "colBLock: $colBLock")
-                    val chooseAlgorithm = (rowBlock + colBLock) % 3
+                    var chooseAlgorithm = (rowBlock + colBLock) % 3
+                    chooseAlgorithm = 0
                     if (chooseAlgorithm == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (chooseAlgorithm == 1) {
@@ -414,7 +417,7 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // duplicate the photo
-                img_new = ImageGallery.matDuplicate(img_new);
+                img_new = ImageGallery.matDuplicateWithPadding(img_new, 10);
 
                 // Write computed img
                 newFilename = "cmp_"+newFilename

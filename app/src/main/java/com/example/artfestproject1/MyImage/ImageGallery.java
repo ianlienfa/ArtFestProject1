@@ -446,11 +446,13 @@ public class ImageGallery{
 
     public Mat algorithm_BAI(Mat image_in, Mat image_base)
     {
-        double lottery_brightness = 0.5;
-        double win_prob = 0.2;
+//        Log.d("size", "in, cols: " + Integer.toString(image_in.cols()) + "rows: " + Integer.toString(image_in.rows()));
+//        Log.d("size", "base, cols: " + Integer.toString(image_base.cols()) + "rows: " + Integer.toString(image_base.cols()));
+        double lottery_brightness = 0.3;
+        double win_prob = 0.1;
         int breed_radius = 10;
         boolean infection_effect_on = true;
-        boolean breed_effect_on = false;
+        boolean breed_effect_on = true;
 
         // width, height check
         if(image_in.arrayWidth() != image_base.arrayWidth() || image_in.arrayHeight() != image_base.arrayHeight())
@@ -467,30 +469,33 @@ public class ImageGallery{
         image_in = colorToGray(image_in);
         // ==============================
 
+//        System.out.println("image_in -- w:" + image_in.arrayWidth() + " h: " + image_in.arrayHeight());
+//        System.out.println("image_base -- w:" + image_base.arrayWidth() + " h: " + image_base.arrayHeight());
 
         // change every pixel of the image_in
-        for(int w = 0; w < image_in.arrayWidth(); w++)
+        for(int col = 0; col < image_in.arrayWidth(); col++)
         {
-            for(int h = 0; h < image_in.arrayHeight(); h++)
+            for(int row = 0; row < image_in.arrayHeight(); row++)
             {
                 // get the brightness of base_image
                 UByteIndexer indexer_base = image_base.createIndexer();
-                float hsb_base[] = RGBtoHSB(indexer_base.get(w, h, 2),indexer_base.get(w, h, 1),indexer_base.get(w, h, 0), null);
+                // get(row, col
+//                System.out.println("col, row: (" + Integer.toString(col)+", " + Integer.toString(row) + ")"+ Integer.toString(indexer_base.get(row, col , 2))+ Integer.toString(indexer_base.get(row, col , 1)) + Integer.toString(indexer_base.get(row, col , 0)));
+                float hsb_base[] = RGBtoHSB(indexer_base.get(row, col, 2),indexer_base.get(row, col, 1),indexer_base.get(row, col , 0), null);
                 float brightness = hsb_base[2];
-
-                // Debug
-                // System.out.print(String.valueOf(brightness)+ " ");;
 
                 // set this pixel to gray scale and tune its brightness to match the pixel_base
                 UByteIndexer indexer_in = image_in.createIndexer();
-                float hsb_in[] = RGBtoHSB(indexer_in.get(w, h, 2),indexer_in.get(w, h, 1),indexer_in.get(w, h, 0), null);
+                float hsb_in[] = RGBtoHSB(indexer_in.get(row, col, 2),indexer_in.get(row, col, 1),indexer_in.get(row, col, 0), null);
+                hsb_in[2] = hsb_in[2] * (float)0.2;
                 // 修改！！
-                brightness = (float)(brightness * 0.2 + hsb_in[2]*0.8);
+                brightness = (float)((brightness * 0.8 + hsb_in[2] > 1.0 || brightness * 0.8 + hsb_in[2] < 0.3) ? (brightness) : (brightness * 0.8 + hsb_in[2]));
+//                System.out.println(brightness);
                 int rgb_val = HSBtoRGB(hsb_in[0], hsb_in[1], brightness);
                 int r = getR(rgb_val); int g = getG(rgb_val); int b = getB(rgb_val);
-                indexer_in.put(w, h, 0, b);
-                indexer_in.put(w, h, 1, g);
-                indexer_in.put(w, h, 2, r);
+                indexer_in.put(row, col, 0, b);
+                indexer_in.put(row, col, 1, g);
+                indexer_in.put(row, col, 2, r);
 
                 //---- lottery breed ----//
                 if(breed_effect_on && brightness < lottery_brightness)
@@ -501,17 +506,17 @@ public class ImageGallery{
                     while(Math.random() > win_prob && breed_ct < breed_radius)
                     {
                         breed_ct++;
-                        breed_w = direction_w + w;
-                        breed_h = direction_h + h;
+                        breed_w = direction_w + col;
+                        breed_h = direction_h + row;
                         int w0 = 0, w1 = image_base.arrayWidth()-1;
                         int h0 = 0, h1 = image_base.arrayHeight()-1;
-                        if(breed_w > w1 || breed_w < w0) breed_w = w;
-                        if(breed_h > h1 || breed_h < h0) breed_h = h;
+                        if(breed_w > w1 || breed_w < w0) breed_w = col;
+                        if(breed_h > h1 || breed_h < h0) breed_h = row;
 
                         // set this pixel to gray scale and tune its brightness to match the pixel_base
-                        indexer_in.put(breed_w, breed_h, 0, b);
-                        indexer_in.put(breed_w, breed_h, 1, g);
-                        indexer_in.put(breed_w, breed_h, 2, r);
+                        indexer_in.put(breed_h, breed_w, 0, b);
+                        indexer_in.put(breed_h, breed_w, 1, g);
+                        indexer_in.put(breed_h, breed_w, 2, r);
                     }
                 }
                 indexer_in.release();
@@ -519,15 +524,18 @@ public class ImageGallery{
             }
         }
 
+//        System.out.println("pixel_count" + Integer.valueOf(pixel_ct).toString());
+
         if(infection_effect_on)
-        { for(int w = 0; w < image_in.arrayWidth(); w++)
         {
-            for(int h = 0; h < image_in.arrayHeight(); h++)
+            for(int col = 0; col < image_in.arrayWidth(); col++)
             {
+                for(int row = 0; row < image_in.arrayHeight(); row++)
+                {
                 // get base pixel HSB
                 UByteIndexer indexer_base = image_base.createIndexer();
                 UByteIndexer indexer_in = image_in.createIndexer();
-                float hsb_base[] = RGBtoHSB(indexer_base.get(w, h, 2),indexer_base.get(w, h, 1),indexer_base.get(w, h, 0), null);
+                float hsb_base[] = RGBtoHSB(indexer_base.get(row, col, 2),indexer_base.get(row, col, 1),indexer_base.get(row, col, 0), null);
                 float brightness = hsb_base[2];
 
                 // set affect_degree
@@ -536,13 +544,13 @@ public class ImageGallery{
                 // affect_table: 0~20: C, 20~30: B, 30~70: A, 70~80: B, 80~100:C
                 if(brightness <= 0.3)
                     affect_degree = degreeEnum.C.value;
-                else if(brightness > 0.3 && brightness < 0.5)
-                    affect_degree = degreeEnum.A.value;
+//                else if(brightness > 0.1 && brightness < 0.5)
+//                    affect_degree = degreeEnum.A.value;
                 else
                     affect_degree = 0;
 
                 // get infection_region
-                ImageIndex[] infection_region = infectionRegion(image_base, w, h, affect_degree);
+                ImageIndex[] infection_region = infectionRegion(image_base, col, row, affect_degree);
 
                 // set the affected pixels
                 for(int i = 0; i < infection_region.length; i++)
@@ -552,9 +560,9 @@ public class ImageGallery{
                     float hsb_in[] = RGBtoHSB(indexer_in.get(inf_w, inf_h, 2),indexer_in.get(inf_w, inf_h, 1),indexer_in.get(inf_w, inf_h, 0), null);
                     int inf_rgb = HSBtoRGB(hsb_in[0], hsb_in[1], (brightness+hsb_in[2])/2);
                     int r = getR(inf_rgb), g = getG(inf_rgb), b = getB(inf_rgb);
-                    indexer_in.put(inf_w, inf_h, 0, b);
-                    indexer_in.put(inf_w, inf_h, 1, g);
-                    indexer_in.put(inf_w, inf_h, 2, r);
+                    indexer_in.put(inf_h, inf_w, 0, b);
+                    indexer_in.put(inf_h, inf_w, 1, g);
+                    indexer_in.put(inf_h, inf_w, 2, r);
                 }
                 indexer_base.release();
                 indexer_in.release();
@@ -562,19 +570,20 @@ public class ImageGallery{
         }
         }
 
-        for(int w = 0; w < image_in.arrayWidth(); w++) {
-            for (int h = 0; h < image_in.arrayHeight(); h++) {
+        for(int col = 0; col < image_in.arrayWidth(); col++)
+        {
+            for(int row = 0; row < image_in.arrayHeight(); row++)
+            {
                 UByteIndexer indexer_in = image_in.createIndexer();
-                float hsb_in[] = RGBtoHSB(indexer_in.get(w, h, 2),indexer_in.get(w, h, 1),indexer_in.get(w, h, 0), null);
+                float hsb_in[] = RGBtoHSB(indexer_in.get(row, col, 2),indexer_in.get(row, col, 1),indexer_in.get(row, col, 0), null);
                 int rgb_val = HSBtoRGB(0, 0, hsb_in[2]);
                 int r = getR(rgb_val); int g = getG(rgb_val); int b = getB(rgb_val);
-                indexer_in.put(w, h, 0, b);
-                indexer_in.put(w, h, 1, g);
-                indexer_in.put(w, h, 2, r);
+                indexer_in.put(row, col, 0, b);
+                indexer_in.put(row, col, 1, g);
+                indexer_in.put(row, col, 2, r);
                 indexer_in.release();
             }
         }
-
         return image_in;
     }
 
@@ -792,7 +801,7 @@ public class ImageGallery{
         }
         average_intensity /= (height * width);
         //將照片限制在min100 max200
-        int min = 100;
+        int min = 150;
         int max=255;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

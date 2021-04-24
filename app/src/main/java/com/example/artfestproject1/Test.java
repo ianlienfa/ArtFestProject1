@@ -1,4 +1,6 @@
 package com.example.artfestproject1;
+import android.provider.ContactsContract;
+
 import com.example.artfestproject1.MyImage.*;
 
 import org.bytedeco.javacpp.indexer.UByteIndexer;
@@ -14,34 +16,22 @@ public class Test {
 //        ImageGallery.DIRPATH="/Users/Administrator/AndroidStudioProjects/ArtFestProject0/app/src/main/java/com/example/artfestproject0/MyImage/output.jpg";
 //          System.out.println("hello!");
         Mat image = ImageGallery.testLoadImg("rex.jpg");
-        System.out.println(image.cols() + " " + image.rows());
+//        System.out.println(image.cols() + " " + image.rows());
+        ImageGallery imageGallery = new ImageGallery(image, 10, 10);
+        Mat img_user = ImageGallery.testLoadImg("img_user.jpg");
+        Mat img_base = ImageGallery.testLoadImg("img_base.jpg");
+        Mat img_new = imageGallery.algorithm_BAI(img_user, img_base);
+        imageGallery.testSaveImg("out.jpg", img_new);
+//        Mat image = ImageGallery.testLoadImg("bw.jpg");
+//        ImageGallery imageGallery = new ImageGallery(image, 1, 1);
+//        System.out.println(Integer.toString(image.cols()) + " " + Integer.toString(image.rows()));
+//        UByteIndexer indexer_base = image.createIndexer();
+//        int w = 0, h = 0;
 
-        Mat dst = new Mat(image.rows(), image.cols()*2, image.type());
-//        image.setTo(0);
-        UByteIndexer indexer_dst = dst.createIndexer();
-        UByteIndexer indexer_src = image.createIndexer();
-        // imageBuffer.put(row, col, (b: 0, g:0, r:0), rgb量)
-        for(int i = 0; i < image.rows(); i++)
-        {
-            for(int j = 0; j < image.cols(); j++)
-            {
-                int cols = image.cols();
-                int r = indexer_src.get(i, j, 2);
-                int g = indexer_src.get(i, j, 1);
-                int b = indexer_src.get(i, j, 0);
-                indexer_dst.put(i, j, 2, r);
-                indexer_dst.put(i, j, 1, g);
-                indexer_dst.put(i, j, 0, b);
-                indexer_dst.put(i, j+cols, 2, r);
-                indexer_dst.put(i, j+cols, 1, g);
-                indexer_dst.put(i, j+cols, 0, b);
-            }
-
-        }
-        indexer_src.release();
-        indexer_dst.release();
-        testSaveImg("rex_db.jpg", dst);
-
+        // get(row, col)
+//        System.out.println("w, h: (" + Integer.toString(w)+", " + Integer.toString(h) + ")"+ Integer.toString(indexer_base.get(w, h, 2))+ " " + Integer.toString(indexer_base.get(w, h, 1)) + " " +Integer.toString(indexer_base.get(w, h, 0)));
+//        w = 0; h = 1;
+//        System.out.println("w, h: (" + Integer.toString(w)+", " + Integer.toString(h) + ")"+ Integer.toString(indexer_base.get(w, h, 2))+ " " + Integer.toString(indexer_base.get(w, h, 1)) + " " +Integer.toString(indexer_base.get(w, h, 0)));
 
 //        ImageGallery imageGallery = new ImageGallery(image, 108, 108);
 //
