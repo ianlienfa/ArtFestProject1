@@ -637,13 +637,17 @@ public class ImageGallery{
                     UByteIndexer indexer_black =image_black.createIndexer();
                     UByteIndexer indexer_out =image_out.createIndexer();
                     double alpha = (indexer_black.get(j, i,1))/255.0;
+                    //double alpha = (indexer_black.get(j, i,1));
                     if (j==10 &&i<50)
                     {
                         System.out.println(indexer_black.get(j, i,3));
                     }
-                    int b=(int)((indexer_in.get(j, i,0))* alpha);
-                    int g=(int)((indexer_in.get(j, i,1))* alpha);
-                    int r=(int)((indexer_in.get(j, i,2))* alpha);
+                    //int b=(int)((indexer_in.get(j, i,0))* alpha);
+                    //int g=(int)((indexer_in.get(j, i,1))* alpha);
+                    //int r=(int)((indexer_in.get(j, i,2))* alpha);
+                    int b=(int)((indexer_in.get(j, i,0))* 0.3+indexer_black.get(j, i,1)*0.7);
+                    int g=(int)((indexer_in.get(j, i,1))* 0.3+indexer_black.get(j, i,1)*0.7);
+                    int r=(int)((indexer_in.get(j, i,2))* 0.3+indexer_black.get(j, i,1)*0.7);
                     indexer_out.put(j, i, 0, b);
                     indexer_out.put(j, i, 1, g);
                     indexer_out.put(j, i, 2, r);

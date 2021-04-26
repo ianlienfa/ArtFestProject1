@@ -236,7 +236,8 @@ class EditActivity : AppCompatActivity() {
                 val image = ImageGallery.stdLoadImg(bigImgName, this)
                 val imageGallery = ImageGallery(image,expected_pixel_w, expected_pixel_h)
                 val img_base = ImageGallery.stdLoadImg(baseImgName, this)
-                val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                //val img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                val img_new = imageGallery.algorithm_shiuan(img_user, img_base)
                 ImageGallery.printImageDir(this)    // For Debug
                 // end testing for algorithm ----
 
@@ -367,7 +368,7 @@ class EditActivity : AppCompatActivity() {
                 if (rand1 % 5 == 0) {
                     // 五分之一的機率，隨機挑選演算法
                     var rand = (Math.random()*3).toInt();
-                    rand = 2;
+                    //rand = 1;
                     if (rand == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (rand == 1) {
@@ -386,8 +387,12 @@ class EditActivity : AppCompatActivity() {
                     // 確認是否為 integer division
                     // Log.d("Admin", "rowBlock: $rowBlock")
                     // Log.d("Admin", "colBLock: $colBLock")
+
                     var chooseAlgorithm = (rowBlock + colBLock) % 3
-                    chooseAlgorithm = 2
+
+                    //chooseAlgorithm = 2
+                    // chooseAlgorithm = 1
+
                     if (chooseAlgorithm == 0) {
                         img_new = imageGallery.algorithm_BAI(img_user, img_base)
                     } else if (chooseAlgorithm == 1) {
