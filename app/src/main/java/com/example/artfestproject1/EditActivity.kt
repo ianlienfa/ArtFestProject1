@@ -276,6 +276,9 @@ class EditActivity : AppCompatActivity() {
                 startActivity(intent_to_show)
             }).start()
         }
+
+        var flag_finish = 0
+
         show_button.setOnClickListener{
             Thread(Runnable {
                 // Load user photo
@@ -318,12 +321,21 @@ class EditActivity : AppCompatActivity() {
 
                 } else {
 
+                    var temp = 0
+
                     for (i in 0..h-1) {
                         for (j in 0..w-1) {
                             if (status[i][j] == 2) {    // USER_AVAILABLE
                                 toPrintList.add(w * i + j)
+                                temp += 1
                             }
                         }
+                    }
+
+                    if (temp == 0) {
+                        Log.d("Admin", "here!")
+                        flag_finish = 1
+                        return@Runnable
                     }
 
                     val randomIndex: Int = (0..toPrintList.size).random()
@@ -461,6 +473,13 @@ class EditActivity : AppCompatActivity() {
                 startActivity(intent_to_show)
 
             }).start()
+
+            if (flag_finish == 1) {
+                Toast.makeText(this, "照片都拍完囉！", Toast.LENGTH_LONG).show()
+                val intent_to_main = Intent(this, MainActivity::class.java)
+                startActivity(intent_to_main)
+            }
+
         }
 
         // Compute & Print
