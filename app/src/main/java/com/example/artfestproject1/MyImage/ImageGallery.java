@@ -4,12 +4,15 @@ import org.bytedeco.javacpp.indexer.UByteIndexer;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.opencv.global.opencv_imgproc;
 import org.bytedeco.opencv.opencv_core.*;
+import org.opencv.core.Core;
 import org.opencv.imgproc.Imgproc;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.Math;
+import java.math.BigDecimal;
 import java.util.*;
 import android.content.*;
 import android.content.Context;
@@ -467,6 +470,8 @@ public class ImageGallery{
 
         // ==============================
         image_in = colorToGray(image_in);
+//        image_in = anotherDoSomeMagic(image_in);
+        image_in = doSomeMagic(image_in);
         // ==============================
 
 //        System.out.println("image_in -- w:" + image_in.arrayWidth() + " h: " + image_in.arrayHeight());
@@ -617,6 +622,8 @@ public class ImageGallery{
 
         // ==============================
         image_in = colorToGray(image_in);
+//        image_in = anotherDoSomeMagic(image_in);
+        image_in = doSomeMagic(image_in);
         // ==============================
 
         Mat image_out, image_black;
@@ -699,6 +706,8 @@ public class ImageGallery{
 
 //        image_out = colorToGray(image_out);
         image_in = colorToGray(image_in);
+//        image_in = anotherDoSomeMagic(image_in);
+        image_in = doSomeMagic(image_in);
 
         // 先把 pixel 資訊存到一個 2D array
 
@@ -777,6 +786,139 @@ public class ImageGallery{
 
         return image_out;
 
+    }
+
+    public static Mat doSomeMagic(Mat image_in)
+    {
+        Mat image_out = image_in;
+        int width = image_out.arrayWidth();
+        int height = image_out.arrayHeight();
+
+        UByteIndexer indexer = image_out.createIndexer();
+
+        int average_intensity = 0;
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int intensity = indexer.get(y, x, 2);
+                average_intensity += intensity;
+            }
+        }
+        average_intensity /= (height * width);
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width-1; x++) {
+                double left = indexer.get(y, x, 2);
+//                int right = indexer.get(y, x+1, 2);
+//                int threshold = 5;
+                double threshold = average_intensity * 0.9;
+                Log.d("left", String.valueOf(left));
+//                Log.d("threshold", String.valueOf(threshold));
+                if (left <= threshold) {
+                    double magic = left / threshold * 130;
+                    indexer.put(y, x, 0, (int)magic);
+                    indexer.put(y, x, 1, (int)magic);
+                    indexer.put(y, x, 2, (int)magic);
+                } else {
+//                    indexer.put(y, x, 0, 255);
+//                    indexer.put(y, x, 1, 255);
+//                    indexer.put(y, x, 2, 255);
+                }
+//                if (left-right > threshold || left-right < -threshold) {
+//                    indexer.put(y, x, 0, 100);
+//                    indexer.put(y, x, 1, 100);
+//                    indexer.put(y, x, 2, 100);
+//                } else {
+////                    indexer.put(y, x, 0, 255);
+////                    indexer.put(y, x, 1, 255);
+////                    indexer.put(y, x, 2, 255);
+//                }
+
+            }
+        }
+
+        indexer.release();
+
+        return image_out;
+
+    }
+
+    // https://www.youtube.com/watch?v=vS2ubdiAXvg
+    // (failed.....)
+    public static Mat anotherDoSomeMagic(Mat image_in)
+    {
+        Mat image_out = image_in;
+        int width = image_out.arrayWidth();
+        int height = image_out.arrayHeight();
+
+        UByteIndexer indexer = image_out.createIndexer();
+
+        // Invert the image
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int intensity = indexer.get(y, x, 2);
+                indexer.put(y, x, 0, 255 - intensity);
+                indexer.put(y, x, 1, 255 - intensity);
+                indexer.put(y, x, 2, 255 - intensity);
+            }
+        }
+
+        // Blur the image by Gaussian function
+        // https://stackoverflow.com/questions/20753130/opencvandroid-imgproc-gaussianblur-application-stopped
+        opencv_imgproc.GaussianBlur(image_out, image_out, new Size(3, 3), 0);
+
+        // Invert the blurred iamge
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int intensity = indexer.get(y, x, 2);
+                indexer.put(y, x, 0, 255 - intensity);
+                indexer.put(y, x, 1, 255 - intensity);
+                indexer.put(y, x, 2, 255 - intensity);
+            }
+        }
+
+        // Create the pencil sketch image
+//        Mat output = new Mat();
+//        Core.divide(image_in, image_out);
+        UByteIndexer indexer0 = image_in.createIndexer();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+//                float threshold = 5;
+                double intensity0 = (double)indexer0.get(y, x, 2)*1.0;
+                double intensity = (double)indexer.get(y, x, 2)*1.0;
+//                if (intensity0-intensity > threshold || intensity0-intensity < -threshold) {
+//                    indexer.put(y, x, 0, 0);
+//                    indexer.put(y, x, 1, 0);
+//                    indexer.put(y, x, 2, 0);
+//                } else {
+//                    indexer.put(y, x, 0, 255);
+//                    indexer.put(y, x, 1, 255);
+//                    indexer.put(y, x, 2, 255);
+//                }
+//                indexer.put(y, x, 0, 200);
+//                indexer.put(y, x, 1, 200);
+//                indexer.put(y, x, 2, 200);
+                double wow = intensity / intensity0 * 256.0;
+                indexer.put(y, x, 0, (int)wow);
+                indexer.put(y, x, 1, (int)wow);
+                indexer.put(y, x, 2, (int)wow);
+//                Log.d("image", String.valueOf(((int) (intensity0 * 256.0 / intensity))));
+//                Log.d("image", String.valueOf(( (intensity0 * 256.0 / intensity))));
+                Log.d("image", String.valueOf(intensity));
+                Log.d("image0", String.valueOf(intensity0));
+                Log.d("image1", String.valueOf(intensity/intensity0));
+//                Log.d("image0", String.valueOf(intensity0));
+//                Log.d("image0", String.valueOf(intensity-intensity0));
+//                float a = intensity-intensity0;
+//                float test = (float) a/intensity;
+//                Log.d("image1", String.valueOf(test));
+            }
+        }
+
+        indexer0.release();
+        indexer.release();
+
+        return image_out;
     }
 
     public static Mat colorToGray(Mat image_in)
