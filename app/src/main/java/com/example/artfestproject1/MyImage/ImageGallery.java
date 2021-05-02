@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;  // Import this class to handle errors
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.Math;
 import java.math.BigDecimal;
@@ -22,6 +23,8 @@ import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import androidx.core.content.ContextCompat;
+
+import com.devs.sketchimage.SketchImage;
 
 import static com.example.artfestproject1.MyImage.ImageGallery.testSaveImg;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
@@ -1128,6 +1131,20 @@ public class ImageGallery{
         return img;
     }
 
+    public static void InternalBitMapWrite(Bitmap img, String filename, Context context) throws FileNotFoundException, IOException
+    {
+        File ImageFile = new File(context.getFilesDir(), "Images");
+        File file = new File(ImageFile, filename);
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            img.compress(Bitmap.CompressFormat.JPEG, 100, out); // bmp is your Bitmap instance
+            // PNG is a lossless format, the compression factor (100) is ignored
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static File getImageDir(Context context)
     {
         File filesDir = context.getFilesDir();
@@ -1234,6 +1251,7 @@ public static Mat matDuplicateWithPadding(Mat image, int pad)
     indexer_dst.release();
     return dst;
 }
+
 
 
 
