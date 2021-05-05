@@ -106,7 +106,7 @@ public class ImageGallery{
         // space allocation -- index starts from 1
         imageGallery = new Mat[imageGallery_width][];
         trackingGallery = new ImageStatus[imageGallery_width][];
-        for(int i = 0; i < imageGallery_height; i++)
+        for(int i = 0; i < imageGallery_width; i++)
         {
             imageGallery[i] = new Mat[imageGallery_height];
             trackingGallery[i] = new ImageStatus[imageGallery_height];

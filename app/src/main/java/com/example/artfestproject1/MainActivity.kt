@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 //        val image = ImageGallery.stdLoadImg("rex.jpg", this)
 //        val imageGallery = ImageGallery(image, 108, 108)
         val image = ImageGallery.stdLoadImg("test_image.jpg", this)
-        val imageGallery = ImageGallery(image, 108, 156)
+        val imageGallery = ImageGallery(image, 95, 125)
 
         // create status.txt here
         w = imageGallery.get_ImageGallery_width()

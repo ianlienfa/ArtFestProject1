@@ -24,7 +24,7 @@ class AfterPrintActivity : AppCompatActivity() {
         // app reference
         mMyApp = this.applicationContext as MyApp
 
-        val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
+        val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
         val row = intent.getIntExtra("row", 0)
         val col = intent.getIntExtra("col", 0) + 1
         val imgFilePath = intent.getStringExtra("imgFilePath")

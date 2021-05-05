@@ -80,8 +80,8 @@ class AdminActivity : AppCompatActivity() {
 
     private fun getStatus(row: Int, col: Int): Int {
         // TODO: Remove hardcoding
-        val w: Int = 5
-        val h: Int = 5
+        val w: Int = 33
+        val h: Int = 12
         val status = Array(h) { IntArray(w) }
         readStatusFromTxt(w, h, status)
         // Don't know why currently...
@@ -91,8 +91,8 @@ class AdminActivity : AppCompatActivity() {
 
     private fun setStatus(row: Int, col: Int, newStatus: Int) {
         // TODO: Remove hardcoding
-        val w: Int = 5
-        val h: Int = 5
+        val w: Int = 33
+        val h: Int = 12
         val status = Array(h) { IntArray(w) }
         readStatusFromTxt(w, h, status)
         // Don't know why currently...

@@ -49,7 +49,7 @@ class StatusActivity : AppCompatActivity() {
         buttonSetTo3 = findViewById(R.id.buttonSetTo3)
         buttonSetTo4 = findViewById(R.id.buttonSetTo4)
         // TODO: need to change
-        val w: Int = 5
+        val w: Int = 33
         val position = intent.getIntExtra("position", 0)
 
         buttonPrintThis.setOnClickListener {
@@ -99,8 +99,8 @@ class StatusActivity : AppCompatActivity() {
 
     private fun setStatus(row: Int, col: Int, newStatus: Int) {
         // TODO: Remove hardcoding
-        val w: Int = 5
-        val h: Int = 5
+        val w: Int = 33
+        val h: Int = 12
         val status = Array(h) { IntArray(w) }
         readStatusFromTxt(w, h, status)
         // Don't know why currently...
