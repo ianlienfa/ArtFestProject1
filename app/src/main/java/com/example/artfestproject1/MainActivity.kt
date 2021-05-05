@@ -56,11 +56,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.adminOpen.setOnClickListener {
             // TODO:
-            // val intent_to_login = Intent(this, LoginActivity::class.java)
-            // startActivity(intent_to_login)
+            val intent_to_login = Intent(this, LoginActivity::class.java)
+            startActivity(intent_to_login)
             // For testing
-            val intent_to_admin = Intent(this, AdminActivity::class.java)
-            startActivity(intent_to_admin)
+//            val intent_to_admin = Intent(this, AdminActivity::class.java)
+//            startActivity(intent_to_admin)
         }
         binding.sendOpen.setOnClickListener {
             // TODO:

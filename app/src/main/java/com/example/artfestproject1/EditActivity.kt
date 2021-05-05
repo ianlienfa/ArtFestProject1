@@ -338,7 +338,7 @@ class EditActivity : AppCompatActivity() {
                         return@Runnable
                     }
 
-                    val randomIndex: Int = (0..toPrintList.size).random()
+                    val randomIndex: Int = (0..toPrintList.size-1).random()
                     val theIndex = toPrintList[randomIndex]
                     x = theIndex % w
                     y = (theIndex - x) / w
