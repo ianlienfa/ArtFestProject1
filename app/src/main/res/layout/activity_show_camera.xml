@@ -8,29 +8,34 @@
 
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp"
+        android:id="@+id/view"
+        android:layout_width="540dp"
+        android:layout_height="1000dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/rectangle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/camera_capture_button"
+        style="@style/Widget.AppCompat.Button"
         android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/bg_round_button"
         android:elevation="2dp"
         android:scaleType="fitCenter"
         android:text="Take Photo"
+        app:iconTint="#673AB7"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
