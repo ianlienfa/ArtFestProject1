@@ -1,6 +1,9 @@
 package com.example.artfestproject1;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 
+import com.devs.sketchimage.SketchImage;
 import com.example.artfestproject1.MyImage.*;
 
 import org.bytedeco.javacpp.indexer.UByteIndexer;
