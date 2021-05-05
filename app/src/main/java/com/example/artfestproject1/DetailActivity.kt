@@ -22,5 +22,11 @@ class DetailActivity : AppCompatActivity() {
             startActivity(intent_to_nfc)
 
         }
+        binding.tomain.setOnClickListener {
+
+            val intent_to_main = Intent(this, MainActivity::class.java)
+            startActivity(intent_to_main)
+
+        }
     }
 }
