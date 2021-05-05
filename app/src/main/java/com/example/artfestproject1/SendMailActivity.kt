@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
 import android.text.InputType
+import android.widget.Button
 import android.widget.Toast
 import com.example.artfestproject1.databinding.ActivitySendBinding
 import java.util.*
@@ -40,6 +41,11 @@ class SendMailActivity : AppCompatActivity() {
             javaMailAPI2.execute()
 
 
+        }
+        val back_to_main_button: Button = findViewById(R.id.back_to_main)
+        back_to_main_button.setOnClickListener {
+            val intent_to_main = Intent(this, MainActivity::class.java)
+            startActivity(intent_to_main)
         }
     }
     override fun onResume(){

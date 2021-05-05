@@ -1,45 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="30dp"
+    android:background="@drawable/send"
     tools:context=".SendMailActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="To 藝趣節技術部"
-        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/mail_title"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
+        android:layout_width="225dp"
+        android:layout_height="100dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="@string/title"
+        android:text="問題主旨"
+        android:textColor="@color/white"
+        android:layout_marginTop="180dp"
+        android:layout_marginLeft="40dp"
         android:autofillHints="" />
 
     <EditText
         android:id="@+id/mail_content"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_width="225dp"
+        android:layout_height="100dp"
+        android:autofillHints=""
         android:ems="10"
+        android:textColor="@color/white"
         android:inputType="textPersonName"
-        android:text="@string/what_s_your_problem"
-        android:autofillHints="" />
+        android:layout_marginTop="320dp"
+        android:layout_marginLeft="40dp"
+        android:text="問題主要內容" />
 
     <Button
         android:id="@+id/send"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/send_the_mail"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="442dp"
+        android:layout_marginLeft="105dp"
+        android:background="@android:color/transparent"
         />
 
+    <Button
+        android:id="@+id/back_to_main"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="260dp"
+        android:background="@android:color/transparent"
+        />
 
-</LinearLayout>
+</RelativeLayout>
