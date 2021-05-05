@@ -109,7 +109,7 @@ class GridViewActivity : AppCompatActivity() {
 
         photoImages.clear()
 
-        for (i in 0..24) {
+        for (i in 0..395) {
             val filename = "small_image$i"
             val id = resources.getIdentifier(filename, "drawable", packageName)
             photoImages.add(id)
@@ -120,10 +120,10 @@ class GridViewActivity : AppCompatActivity() {
 
         photoColors.clear()
 
-        for (i in 0..24) {
+        for (i in 0..395) {
             // TODO: change w & h
-            val w = 5
-            val h = 5
+            val w = 33
+            val h = 12
             val y = i % w
             val x = (i - y) / w
 
@@ -148,8 +148,8 @@ class GridViewActivity : AppCompatActivity() {
 
     private fun getStatus(row: Int, col: Int): Int {
         // TODO: Remove hardcoding
-        val w: Int = 5
-        val h: Int = 5
+        val w: Int = 33
+        val h: Int = 12
         val status = Array(h) { IntArray(w) }
         readStatusFromTxt(w, h, status)
         // Don't know why currently...

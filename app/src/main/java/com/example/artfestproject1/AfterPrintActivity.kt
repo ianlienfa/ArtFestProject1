@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.print.PrintHelper
-import com.example.artfestproject1.databinding.ActivityAfterPrintBinding
 import java.io.File
 
 class AfterPrintActivity : AppCompatActivity() {
@@ -24,7 +23,7 @@ class AfterPrintActivity : AppCompatActivity() {
         // app reference
         mMyApp = this.applicationContext as MyApp
 
-        val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J')
+        val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
         val row = intent.getIntExtra("row", 0)
         val col = intent.getIntExtra("col", 0) + 1
         val imgFilePath = intent.getStringExtra("imgFilePath")
@@ -40,7 +39,7 @@ class AfterPrintActivity : AppCompatActivity() {
         val c: Char = rowArray[row]
         textViewNumber.text = "$c$col"
 
-        val back_to_main_button: Button = findViewById(R.id.back_to_main_button)
+        val back_to_main_button: Button = findViewById(R.id.back_to_main)
         back_to_main_button.setOnClickListener {
             val intent_to_main = Intent(this, MainActivity::class.java)
             startActivity(intent_to_main)

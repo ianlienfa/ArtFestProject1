@@ -46,8 +46,8 @@ class EditActivity : AppCompatActivity() {
         val crop_y = 0
         val CROP_WIDTH = 2448
         val CROP_HEIGHT = 3264
-        val expected_pixel_w = 108
-        val expected_pixel_h = 156
+        val expected_pixel_w = 95
+        val expected_pixel_h = 125
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
@@ -346,7 +346,7 @@ class EditActivity : AppCompatActivity() {
                         return@Runnable
                     }
 
-                    val randomIndex: Int = (0..toPrintList.size).random()
+                    val randomIndex: Int = (0..toPrintList.size-1).random()
                     val theIndex = toPrintList[randomIndex]
                     x = theIndex % w
                     y = (theIndex - x) / w

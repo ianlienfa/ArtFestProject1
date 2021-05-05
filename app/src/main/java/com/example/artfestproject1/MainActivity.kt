@@ -56,11 +56,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.adminOpen.setOnClickListener {
             // TODO:
-            // val intent_to_login = Intent(this, LoginActivity::class.java)
-            // startActivity(intent_to_login)
+            val intent_to_login = Intent(this, LoginActivity::class.java)
+            startActivity(intent_to_login)
             // For testing
-            val intent_to_admin = Intent(this, AdminActivity::class.java)
-            startActivity(intent_to_admin)
+//            val intent_to_admin = Intent(this, AdminActivity::class.java)
+//            startActivity(intent_to_admin)
         }
         binding.sendOpen.setOnClickListener {
             // TODO:
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 //        val image = ImageGallery.stdLoadImg("rex.jpg", this)
 //        val imageGallery = ImageGallery(image, 108, 108)
         val image = ImageGallery.stdLoadImg("test_image.jpg", this)
-        val imageGallery = ImageGallery(image, 108, 156)
+        val imageGallery = ImageGallery(image, 95, 125)
 
         // create status.txt here
         w = imageGallery.get_ImageGallery_width()
