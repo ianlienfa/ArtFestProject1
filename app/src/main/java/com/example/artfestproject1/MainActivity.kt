@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0..h-1) {
             for (j in 0..w-1) {
-                status[i][j] = 2    // USER_AVAILABLE
+                status[i][j] = 4    // ADMIN_AVAILABLE
             }
         }
 
