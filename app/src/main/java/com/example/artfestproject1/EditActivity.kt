@@ -44,8 +44,10 @@ class EditActivity : AppCompatActivity() {
         // Image parameters, htc: 2448 * 3264
         val crop_x = 0
         val crop_y = 0
-        val CROP_WIDTH = 2448
-        val CROP_HEIGHT = 3264
+//        val CROP_WIDTH = 2448
+//        val CROP_HEIGHT = 3264
+        val CROP_WIDTH = 2470
+        val CROP_HEIGHT = 3536
         val expected_pixel_w = 95
         val expected_pixel_h = 136
 

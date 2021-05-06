@@ -24,7 +24,7 @@ import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
-import com.devs.sketchimage.SketchImage;
+//import com.devs.sketchimage.SketchImage;
 
 import static com.example.artfestproject1.MyImage.ImageGallery.testSaveImg;
 import static org.bytedeco.opencv.global.opencv_imgcodecs.imread;
@@ -818,7 +818,7 @@ public class ImageGallery{
                 Log.d("left", String.valueOf(left));
 //                Log.d("threshold", String.valueOf(threshold));
                 if (left <= threshold) {
-                    double magic = left / threshold * 130;
+                    double magic = left / threshold * 170;
                     indexer.put(y, x, 0, (int)magic);
                     indexer.put(y, x, 1, (int)magic);
                     indexer.put(y, x, 2, (int)magic);
