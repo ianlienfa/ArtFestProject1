@@ -11,8 +11,17 @@
         android:id="@+id/nfcOpen"
         android:layout_width="100dp"
         android:layout_height="50dp"
-        android:layout_marginTop="455dp"
         android:layout_marginLeft="130dp"
+        android:layout_marginTop="455dp"
         android:background="@android:color/transparent" />
+
+    <Button
+        android:id="@+id/tomain"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="290dp"
+        android:layout_marginTop="90dp"
+        android:background="@android:color/transparent"
+         />
 
 </RelativeLayout>

@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 //        val image = ImageGallery.stdLoadImg("rex.jpg", this)
 //        val imageGallery = ImageGallery(image, 108, 108)
         val image = ImageGallery.stdLoadImg("test_image.jpg", this)
-        val imageGallery = ImageGallery(image, 95, 125)
+        val imageGallery = ImageGallery(image, 95, 136)
 
         // create status.txt here
         w = imageGallery.get_ImageGallery_width()
@@ -193,7 +193,7 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0..h-1) {
             for (j in 0..w-1) {
-                status[i][j] = 2    // USER_AVAILABLE
+                status[i][j] = 4    // ADMIN_AVAILABLE
             }
         }
 

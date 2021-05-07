@@ -37,7 +37,13 @@ class AfterPrintActivity : AppCompatActivity() {
 
         val textViewNumber: TextView = findViewById(R.id.textViewNumber)
         val c: Char = rowArray[row]
-        textViewNumber.text = "$c$col"
+
+//        textViewNumber.text = "$c$col"
+        if (col > 11) {
+            textViewNumber.text = "右 $c${col-11}"
+        } else {
+            textViewNumber.text = "左 $c$col"
+        }
 
         val back_to_main_button: Button = findViewById(R.id.back_to_main)
         back_to_main_button.setOnClickListener {
