@@ -22,6 +22,9 @@ class AdminActivity : AppCompatActivity() {
         // app reference
         mMyApp = this.applicationContext as MyApp
 
+        val mode: Int = readModeFromTxt()
+        binding.textViewMode.text = textMode(mode)
+
 
         binding.gridViewOpen.setOnClickListener {
             val intent_to_gridview = Intent(this, GridViewActivity::class.java)
@@ -74,6 +77,24 @@ class AdminActivity : AppCompatActivity() {
 //            setStatus(row, col, 4)
 //            binding.textViewStatus.text = textStatus(4)
 //        }
+
+        binding.buttonSetTo0.setOnClickListener {
+            setMode(0)
+            binding.textViewMode.text = textMode(0)
+        }
+        binding.buttonSetTo1.setOnClickListener {
+            setMode(1)
+            binding.textViewMode.text = textMode(1)
+        }
+        binding.buttonSetTo2.setOnClickListener {
+            setMode(2)
+            binding.textViewMode.text = textMode(2)
+        }
+        binding.buttonSetTo3.setOnClickListener {
+            setMode(3)
+            binding.textViewMode.text = textMode(3)
+        }
+
     }
 
     private fun deleteUserPhotos() {
@@ -167,6 +188,72 @@ class AdminActivity : AppCompatActivity() {
         writer.close();
 
     }
+
+
+//    ==================================================
+
+    private fun setMode(newMode: Int) {
+        saveModeToTxt(newMode)
+    }
+
+    private fun textMode(s: Int): String {
+        when (s) {
+            0 -> return "random algorithm"
+            1 -> return "BAI's algorithm"
+            2 -> return "shiuan's algorithm"
+            3 -> return "Tim's algorithm"
+        }
+        return "ERROR"
+    }
+
+    private fun readModeFromTxt(): Int {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+//        for (line in reader.lineSequence()) {
+////            val cols = line.split(",").toTypedArray()
+////            var col: Int = 0
+////            for (c in cols) {
+////                mode = c.toInt()
+////                col++
+////            }
+////            row++
+//            Log.d("Admin", line.toString())
+//            reader.close()
+//        }
+
+        // For testing
+//        Log.d("Admin", reader.readLine().toString())
+
+        return reader.readLine().toInt()
+
+    }
+
+    private fun saveModeToTxt(mode: Int) {
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        builder.append(mode.toString());
+        builder.append("\n")
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
+//    ==================================================
+
 
     override fun onResume(){
         super.onResume()

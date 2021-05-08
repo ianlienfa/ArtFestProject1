@@ -102,6 +102,14 @@ class MainActivity : AppCompatActivity() {
             saveStatusToTxt(w, h, status)
         }
 
+        // create mode.txt (compute algorithm)
+        val mode: Int
+        if (!hasModeFile()) {
+            mode = 0    // 0: random,  1: BAI,  2: shiuan,  3: Tim
+            createModeFile()
+            saveModeToTxt(mode)
+        }
+
 //
 //        val img_user = ImageGallery.stdLoadImg("[4][7].jpg")
 //        val img_base = ImageGallery.stdLoadImg("[1][7].jpg")
@@ -228,6 +236,49 @@ class MainActivity : AppCompatActivity() {
         }
 
         val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
+//    ==================================================
+
+
+    private fun hasModeFile(): Boolean {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun createModeFile() {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveModeToTxt(mode: Int) {
+
+        val builder = StringBuilder()
+        builder.append(mode.toString())
+        builder.append("\n")
+
+        val filename = "mode.txt"
         val file = File(this.getFilesDir(), filename)
 
         // write the 2D-array string to status file

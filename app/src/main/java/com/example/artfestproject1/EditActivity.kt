@@ -41,6 +41,8 @@ class EditActivity : AppCompatActivity() {
         val bigImgName = "test_image.jpg"
         var imgFilePath: String = ""
 
+        var mode: Int = readModeFromTxt()
+
         // Image parameters, htc: 2448 * 3264
         val crop_x = 0
         val crop_y = 0
@@ -382,46 +384,68 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.stdSaveImg(img_user, "img_user.jpg", this);
                 ImageGallery.stdSaveImg(img_base, "img_base.jpg", this);
 
-                // 演算法 random 區塊化
-                // Log.d("Admin", "row: $y")
-                // Log.d("Admin", "col: $x")
-                var img_new: Mat
-                val rand1 = (Math.random()*30).toInt();
-                if (rand1 % 5 == 0) {
-                    // 五分之一的機率，隨機挑選演算法
-                    var rand = (Math.random()*3).toInt();
-                    //rand = 1;
-                    if (rand == 0) {
-                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                    } else if (rand == 1) {
-                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                var img_new: Mat = ImageGallery.stdLoadImg(baseImgName, this)
+
+                if (mode == 0) {
+
+                    Log.d("Edit", "random")
+
+                    // 演算法 random 區塊化
+                    // Log.d("Admin", "row: $y")
+                    // Log.d("Admin", "col: $x")
+                    val rand1 = (Math.random()*30).toInt();
+                    if (rand1 % 5 == 0) {
+                        // 五分之一的機率，隨機挑選演算法
+                        var rand = (Math.random()*3).toInt();
+                        //rand = 1;
+                        if (rand == 0) {
+                            img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                        } else if (rand == 1) {
+                            img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                        } else {
+                            img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        }
                     } else {
-                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        // 其他就是直接照位置來決定用哪個演算法
+                        // 一個小區塊的長＆寬
+                        val heightBlock = 3
+                        val widthBLock = 3
+                        // 區塊位置
+                        val rowBlock = y / heightBlock
+                        val colBLock = x / widthBLock
+                        // 確認是否為 integer division
+                        // Log.d("Admin", "rowBlock: $rowBlock")
+                        // Log.d("Admin", "colBLock: $colBLock")
+
+                        var chooseAlgorithm = (rowBlock + colBLock) % 3
+
+                        //chooseAlgorithm = 2
+                        // chooseAlgorithm = 1
+
+                        if (chooseAlgorithm == 0) {
+                            img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                        } else if (chooseAlgorithm == 1) {
+                            img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                        } else {
+                            img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        }
                     }
-                } else {
-                    // 其他就是直接照位置來決定用哪個演算法
-                    // 一個小區塊的長＆寬
-                    val heightBlock = 3
-                    val widthBLock = 3
-                    // 區塊位置
-                    val rowBlock = y / heightBlock
-                    val colBLock = x / widthBLock
-                    // 確認是否為 integer division
-                    // Log.d("Admin", "rowBlock: $rowBlock")
-                    // Log.d("Admin", "colBLock: $colBLock")
 
-                    var chooseAlgorithm = (rowBlock + colBLock) % 3
+                } else if (mode == 1) {
 
-                    //chooseAlgorithm = 2
-                    // chooseAlgorithm = 1
+                    Log.d("Edit", "BAI")
+                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
 
-                    if (chooseAlgorithm == 0) {
-                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                    } else if (chooseAlgorithm == 1) {
-                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
-                    } else {
-                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
-                    }
+                } else if (mode == 2) {
+
+                    Log.d("Edit", "shiuan")
+                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+
+                } else if (mode == 3) {
+
+                    Log.d("Edit", "Tim")
+                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+
                 }
 
 
@@ -861,6 +885,21 @@ class EditActivity : AppCompatActivity() {
         // Log.d("Admin", Arrays.deepToString(status))
 
     }
+
+
+    private fun readModeFromTxt(): Int {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+
+        return reader.readLine().toInt()
+
+    }
+
 
 //    @Throws(FileNotFoundException::class, IOException::class)
 //    private fun toSketch(filename: String, context: Context?): String? {
