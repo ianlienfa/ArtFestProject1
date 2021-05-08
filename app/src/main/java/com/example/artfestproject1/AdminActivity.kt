@@ -37,10 +37,10 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent_to_nfc)
         }
 
-        binding.button.setOnClickListener {
-            deleteUserPhotos()
-            Toast.makeText(this, "Success delete user photos!", Toast.LENGTH_SHORT).show()
-        }
+//        binding.button.setOnClickListener {
+//            deleteUserPhotos()
+//            Toast.makeText(this, "Success delete user photos!", Toast.LENGTH_SHORT).show()
+//        }
 
 //        binding.button2.setOnClickListener {
 //            val row: Int = binding.editTextRow.text.toString().toInt()
