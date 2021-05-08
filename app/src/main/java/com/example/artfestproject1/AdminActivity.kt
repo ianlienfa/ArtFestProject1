@@ -28,43 +28,52 @@ class AdminActivity : AppCompatActivity() {
             startActivity(intent_to_gridview)
         }
 
+        binding.vipOpen.setOnClickListener {
+//            val intent_to_vip_list = Intent(this, VipListActivity::class.java)
+//            startActivity(intent_to_vip_list)
+            val intent_to_nfc = Intent(this, NfcActivity::class.java)
+            intent_to_nfc.putExtra("fromWhere", "admin")
+            Toast.makeText(this, "靠卡感應以新增至VIP！", Toast.LENGTH_LONG).show()
+            startActivity(intent_to_nfc)
+        }
+
         binding.button.setOnClickListener {
             deleteUserPhotos()
             Toast.makeText(this, "Success delete user photos!", Toast.LENGTH_SHORT).show()
         }
 
-        binding.button2.setOnClickListener {
-            val row: Int = binding.editTextRow.text.toString().toInt()
-            val col: Int = binding.editTextCol.text.toString().toInt()
-            val s: Int = getStatus(row, col)
-            binding.textViewStatus.text = textStatus(s)
-        }
+//        binding.button2.setOnClickListener {
+//            val row: Int = binding.editTextRow.text.toString().toInt()
+//            val col: Int = binding.editTextCol.text.toString().toInt()
+//            val s: Int = getStatus(row, col)
+//            binding.textViewStatus.text = textStatus(s)
+//        }
 
         // The code is not quite clean...
-        binding.buttonSetTo1.setOnClickListener {
-            val row: Int = binding.editTextRow.text.toString().toInt()
-            val col: Int = binding.editTextCol.text.toString().toInt()
-            setStatus(row, col, 1)
-            binding.textViewStatus.text = textStatus(1)
-        }
-        binding.buttonSetTo2.setOnClickListener {
-            val row: Int = binding.editTextRow.text.toString().toInt()
-            val col: Int = binding.editTextCol.text.toString().toInt()
-            setStatus(row, col, 2)
-            binding.textViewStatus.text = textStatus(2)
-        }
-        binding.buttonSetTo3.setOnClickListener {
-            val row: Int = binding.editTextRow.text.toString().toInt()
-            val col: Int = binding.editTextCol.text.toString().toInt()
-            setStatus(row, col, 3)
-            binding.textViewStatus.text = textStatus(3)
-        }
-        binding.buttonSetTo4.setOnClickListener {
-            val row: Int = binding.editTextRow.text.toString().toInt()
-            val col: Int = binding.editTextCol.text.toString().toInt()
-            setStatus(row, col, 4)
-            binding.textViewStatus.text = textStatus(4)
-        }
+//        binding.buttonSetTo1.setOnClickListener {
+//            val row: Int = binding.editTextRow.text.toString().toInt()
+//            val col: Int = binding.editTextCol.text.toString().toInt()
+//            setStatus(row, col, 1)
+//            binding.textViewStatus.text = textStatus(1)
+//        }
+//        binding.buttonSetTo2.setOnClickListener {
+//            val row: Int = binding.editTextRow.text.toString().toInt()
+//            val col: Int = binding.editTextCol.text.toString().toInt()
+//            setStatus(row, col, 2)
+//            binding.textViewStatus.text = textStatus(2)
+//        }
+//        binding.buttonSetTo3.setOnClickListener {
+//            val row: Int = binding.editTextRow.text.toString().toInt()
+//            val col: Int = binding.editTextCol.text.toString().toInt()
+//            setStatus(row, col, 3)
+//            binding.textViewStatus.text = textStatus(3)
+//        }
+//        binding.buttonSetTo4.setOnClickListener {
+//            val row: Int = binding.editTextRow.text.toString().toInt()
+//            val col: Int = binding.editTextCol.text.toString().toInt()
+//            setStatus(row, col, 4)
+//            binding.textViewStatus.text = textStatus(4)
+//        }
     }
 
     private fun deleteUserPhotos() {
