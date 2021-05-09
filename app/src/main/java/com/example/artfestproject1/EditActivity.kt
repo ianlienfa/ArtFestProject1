@@ -250,7 +250,6 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -471,7 +470,14 @@ class EditActivity : AppCompatActivity() {
                 img_new = ImageGallery.matDuplicateWithPadding(img_new, 10);
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
+                val rowArray =  arrayOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
+                var newFileNamePrefix: String = ""
+                if (colToSend > 11) {
+                    newFileNamePrefix = "R_" + rowArray[rowToSend] + "${colToSend-11}"
+                } else {
+                    newFileNamePrefix = "L_" + rowArray[rowToSend] + "$colToSend"
+                }
+                newFilename = newFileNamePrefix + "_" +newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -583,7 +589,6 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -699,7 +704,7 @@ class EditActivity : AppCompatActivity() {
 
     private fun doPhotoCrop(filename: String, context: Context, crop_x: Int, crop_y: Int, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
         // Crop Photo
-        var newFilename = "cp_"+filename
+        var newFilename = filename
         while(!ImageGallery.getImageDir(context).canExecute())
         {
             Log.d("IO", "not yet")
@@ -722,7 +727,7 @@ class EditActivity : AppCompatActivity() {
 
     private fun doSuitablePhotoCrop(filename: String, context: Context, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
         // Crop Photo
-        var newFilename = "cp_"+filename
+        var newFilename = filename
         while(!ImageGallery.getImageDir(context).canExecute())
         {
             Log.d("IO", "not yet")
@@ -756,8 +761,8 @@ class EditActivity : AppCompatActivity() {
             }
             // Write Img
             val imgfile = File(imgDir, filename)
-            val desFile = File(imgDir, "cmpr_"+filename)
-            newFilename = "cmpr_"+filename
+            val desFile = File(imgDir, filename)
+            newFilename = filename
 
             // Compress and save
             val compressedImageFile = Compressor.compress(context, imgfile) {
