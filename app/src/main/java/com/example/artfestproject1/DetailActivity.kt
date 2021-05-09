@@ -19,6 +19,7 @@ class DetailActivity : AppCompatActivity() {
         binding.nfcOpen.setOnClickListener {
 
             val intent_to_nfc = Intent(this, NfcActivity::class.java)
+            intent_to_nfc.putExtra("fromWhere", "detail")
             startActivity(intent_to_nfc)
 
         }
