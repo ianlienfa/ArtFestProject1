@@ -25,7 +25,7 @@
         android:layout_width="45dp"
         android:layout_height="55dp"
         android:layout_marginTop="11dp"
-        android:layout_marginLeft="298dp"
+        android:layout_marginLeft="300dp"
         android:background="@android:color/transparent"
         tools:layout_editor_absoluteX="345dp"
         tools:layout_editor_absoluteY="210dp" />

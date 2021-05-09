@@ -50,6 +50,15 @@ class AfterPrintActivity : AppCompatActivity() {
             val intent_to_main = Intent(this, MainActivity::class.java)
             startActivity(intent_to_main)
         }
+        val sendOpen: Button = findViewById(R.id.sendOpen)
+        sendOpen.setOnClickListener {
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intenttosend = Intent(this, SendMailActivity::class.java)
+            startActivity(intenttosend)
+        }
 
         val print_again_button: Button = findViewById(R.id.print_again_button)
         print_again_button.setOnClickListener {

@@ -38,8 +38,8 @@
         android:id="@+id/send"
         android:layout_width="80dp"
         android:layout_height="50dp"
-        android:layout_marginTop="442dp"
-        android:layout_marginLeft="105dp"
+        android:layout_marginTop="470dp"
+        android:layout_marginLeft="110dp"
         android:background="@android:color/transparent"
         />
 
@@ -47,10 +47,10 @@
         android:id="@+id/back_to_main"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="260dp"
-        android:text="問題主旨"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="270dp"
         android:background="@android:color/transparent"
+
         />
 
 </RelativeLayout>

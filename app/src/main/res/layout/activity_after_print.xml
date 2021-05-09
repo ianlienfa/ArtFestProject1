@@ -11,8 +11,8 @@
         android:id="@+id/textViewNumber"
         android:layout_width="300dp"
         android:layout_height="200dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="300dp"
         android:backgroundTint="@color/purple_200"
         android:fontFamily="serif"
         android:gravity="center"
@@ -25,21 +25,30 @@
     <Button
         android:id="@+id/back_to_main"
         android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="480dp"
-        android:layout_marginLeft="130dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="510dp"
+        android:layout_marginLeft="200dp"
         android:background="@android:color/transparent"
         android:textSize="30dp" />
 
     <Button
         android:id="@+id/print_again_button"
         android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="380dp"
-        android:layout_marginLeft="130dp"
-        android:text="重新送印"
+        android:layout_height="80dp"
+        android:layout_marginTop="510dp"
+        android:layout_marginLeft="50dp"
         android:textSize="30dp"
+        android:background="@android:color/transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/sendOpen"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginLeft="300dp"
+        android:background="@android:color/transparent"
+        tools:layout_editor_absoluteX="345dp"
+        tools:layout_editor_absoluteY="210dp" />
 
 </RelativeLayout>

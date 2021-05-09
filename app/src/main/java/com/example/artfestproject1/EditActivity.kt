@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.coroutineScope
 import androidx.print.PrintHelper
+import com.devs.sketchimage.SketchImage
 //import com.devs.sketchimage.SketchImage
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityEditBinding
@@ -131,6 +132,14 @@ class EditActivity : AppCompatActivity() {
                 binding.imageView.visibility = VISIBLE
             }
 
+        }
+        binding.sendOpen.setOnClickListener {
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intenttosend = Intent(this, SendMailActivity::class.java)
+            startActivity(intenttosend)
         }
 
         onemore_button.setOnClickListener{
@@ -906,21 +915,21 @@ class EditActivity : AppCompatActivity() {
     }
 
 
-//    @Throws(FileNotFoundException::class, IOException::class)
-//    private fun toSketch(filename: String, context: Context?): String? {
-//        val bmOriginal = ImageGallery.internalBitMapRead(filename, context)
-//        val sketchImage = SketchImage.Builder(context, bmOriginal).build()
-//        val bmProcessed = sketchImage.getImageAs(
-//            SketchImage.ORIGINAL_TO_SKETCH, 80 // value 0 - 100
-//            // Other options
-//            // SketchImage.ORIGINAL_TO_GRAY
-//            // SketchImage.ORIGINAL_TO_COLORED_SKETCH
-//            // SketchImage.ORIGINAL_TO_SOFT_SKETCH
-//            // And many more.....
-//        )
-//        ImageGallery.InternalBitMapWrite(bmProcessed, "skt_$filename", context)
-//        return "skt_$filename"
-//    }
+   @Throws(FileNotFoundException::class, IOException::class)
+    private fun toSketch(filename: String, context: Context?): String? {
+        val bmOriginal = ImageGallery.internalBitMapRead(filename, context)
+        val sketchImage = SketchImage.Builder(context, bmOriginal).build()
+        val bmProcessed = sketchImage.getImageAs(
+            SketchImage.ORIGINAL_TO_SKETCH, 80 // value 0 - 100
+            // Other options
+            // SketchImage.ORIGINAL_TO_GRAY
+                // SketchImage.ORIGINAL_TO_COLORED_SKETCH
+            // SketchImage.ORIGINAL_TO_SOFT_SKETCH
+          // And many more.....
+       )
+        ImageGallery.InternalBitMapWrite(bmProcessed, "skt_$filename", context)
+       return "skt_$filename"
+   }
 
     override fun onResume(){
         super.onResume()
