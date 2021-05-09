@@ -495,9 +495,9 @@ public class ImageGallery{
                 // set this pixel to gray scale and tune its brightness to match the pixel_base
                 UByteIndexer indexer_in = image_in.createIndexer();
                 float hsb_in[] = RGBtoHSB(indexer_in.get(row, col, 2),indexer_in.get(row, col, 1),indexer_in.get(row, col, 0), null);
-                hsb_in[2] = hsb_in[2] * (float)0.2;
+                hsb_in[2] = hsb_in[2] * (float)0.4;
                 // 修改！！
-                brightness = (float)((brightness * 0.8 + hsb_in[2] > 1.0 || brightness * 0.8 + hsb_in[2] < 0.3) ? (brightness) : (brightness * 0.8 + hsb_in[2]));
+                brightness = (float)((brightness * 0.6 + hsb_in[2] > 1.0 || brightness * 0.6 + hsb_in[2] < 0.3) ? (brightness) : (brightness * 0.6 + hsb_in[2]));
 //                System.out.println(brightness);
                 int rgb_val = HSBtoRGB(hsb_in[0], hsb_in[1], brightness);
                 int r = getR(rgb_val); int g = getG(rgb_val); int b = getB(rgb_val);
@@ -655,9 +655,9 @@ public class ImageGallery{
                     //int b=(int)((indexer_in.get(j, i,0))* alpha);
                     //int g=(int)((indexer_in.get(j, i,1))* alpha);
                     //int r=(int)((indexer_in.get(j, i,2))* alpha);
-                    int b=(int)((indexer_in.get(j, i,0))* 0.3+indexer_black.get(j, i,1)*0.7);
-                    int g=(int)((indexer_in.get(j, i,1))* 0.3+indexer_black.get(j, i,1)*0.7);
-                    int r=(int)((indexer_in.get(j, i,2))* 0.3+indexer_black.get(j, i,1)*0.7);
+                    int b=(int)((indexer_in.get(j, i,0))* 0.1+indexer_black.get(j, i,1)*0.9);
+                    int g=(int)((indexer_in.get(j, i,1))* 0.1+indexer_black.get(j, i,1)*0.9);
+                    int r=(int)((indexer_in.get(j, i,2))* 0.1+indexer_black.get(j, i,1)*0.9);
                     indexer_out.put(j, i, 0, b);
                     indexer_out.put(j, i, 1, g);
                     indexer_out.put(j, i, 2, r);
@@ -818,7 +818,7 @@ public class ImageGallery{
                 Log.d("left", String.valueOf(left));
 //                Log.d("threshold", String.valueOf(threshold));
                 if (left <= threshold) {
-                    double magic = left / threshold * 130;
+                    double magic = left / threshold * 150;
                     indexer.put(y, x, 0, (int)magic);
                     indexer.put(y, x, 1, (int)magic);
                     indexer.put(y, x, 2, (int)magic);

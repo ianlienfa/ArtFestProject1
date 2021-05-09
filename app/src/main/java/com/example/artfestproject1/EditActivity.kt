@@ -286,9 +286,9 @@ class EditActivity : AppCompatActivity() {
         show_button.setOnClickListener{
             Thread(Runnable {
 
-//                runBlocking{
-//                    newFilename = toSketch(newFilename, baseContext)!!;
-//                }
+                runBlocking{
+                    newFilename = toSketch(newFilename, baseContext)!!;
+                }
                 // Load user photo
                 val img_user = ImageGallery.stdLoadImg(newFilename, this)
                 // put image for test

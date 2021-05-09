@@ -32,8 +32,8 @@
     <Button
         android:id="@+id/show_button"
         android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="470dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="480dp"
         android:layout_marginLeft="210dp"
         android:background="@android:color/transparent"
 
@@ -64,8 +64,8 @@
     <Button
         android:id="@+id/onemore_button"
         android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="470dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="480dp"
         android:layout_marginLeft="50dp"
         android:background="@android:color/transparent"/>
 
