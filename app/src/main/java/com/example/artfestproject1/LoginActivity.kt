@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
 
         binding.button.setOnClickListener {
 
-            if (binding.textAccount.text.toString().equals("admin") && binding.textPassword.text.toString().equals("artfest2021")) {
+            if (binding.textAccount.text.toString().equals("a") && binding.textPassword.text.toString().equals("s")) {
                 Toast.makeText(this, "水啦！", Toast.LENGTH_SHORT).show()
                 val intent_to_admin = Intent(this, AdminActivity::class.java)
                 startActivity(intent_to_admin)

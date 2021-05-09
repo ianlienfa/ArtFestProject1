@@ -16,11 +16,12 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
         android:theme="@style/Theme.ArtFestProject1">
-        <activity android:name=".AfterPrintActivity"></activity>
+        <activity android:name=".VipListActivity"></activity>
+        <activity android:name=".AfterPrintActivity" />
         <activity android:name=".StatusActivity" />
         <activity android:name=".GridViewActivity" />
         <activity android:name=".AdminActivity" />
@@ -30,10 +31,9 @@
         <activity android:name=".NfcActivity" />
         <activity android:name=".ShowCamera" />
         <activity android:name=".ExplainActivity" />
-        <activity android:name=".ShowActivity"/>
-        <activity android:name=".DetailActivity"/>
+        <activity android:name=".ShowActivity" />
+        <activity android:name=".DetailActivity" />
         <activity android:name=".MainActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

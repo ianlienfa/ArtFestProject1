@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     var h: Int = 0
     var w: Int = 0
 
-    private val messageIntervalmin: Long = 10;
+    private val messageIntervalmin: Long = 15;
     private val messageFuturemin: Long = 30;
     private val messageInterval: Long = messageIntervalmin * 1000L * 60L;
     private val messageFuture: Long = messageFuturemin * 1000L * 60L;
@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 //        val image = ImageGallery.stdLoadImg("rex.jpg", this)
 //        val imageGallery = ImageGallery(image, 108, 108)
         val image = ImageGallery.stdLoadImg("test_image.jpg", this)
-        val imageGallery = ImageGallery(image, 95, 125)
+        val imageGallery = ImageGallery(image, 95, 136)
 
         // create status.txt here
         w = imageGallery.get_ImageGallery_width()
@@ -100,6 +100,14 @@ class MainActivity : AppCompatActivity() {
             initStatus(w, h, status)
             createStatusFile()
             saveStatusToTxt(w, h, status)
+        }
+
+        // create mode.txt (compute algorithm)
+        val mode: Int
+        if (!hasModeFile()) {
+            mode = 0    // 0: random,  1: BAI,  2: shiuan,  3: Tim
+            createModeFile()
+            saveModeToTxt(mode)
         }
 
 //
@@ -121,64 +129,64 @@ class MainActivity : AppCompatActivity() {
         // app reference relink
         mMyApp!!.setCurrentActivity(this);
 
-        object : CountDownTimer(messageFuture, messageInterval) {
-
-            override fun onTick(millisUntilFinished: Long) {
-//                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)
-                if(millisUntilFinished < messageFuture - 100L)
-                {
-                    runOnUiThread {
-                        if (applicationContext is MyApp) {
-                            val currentActivity = (applicationContext as MyApp).currentActivity
-//                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
-//                      startActivity(intent_to_admin)
-                            val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
-                            builder.setTitle("已經超時，是否回到主頁面？")
-                            builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
-
-                            })
-                            builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
-                                cancel()
-                                val intent_to_main = Intent(applicationContext, MainActivity::class.java)
-                                startActivity(intent_to_main)
-                            })
-                            builder.show()
-                        } else {
-                            runOnUiThread {
-                                Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
-                            }
-                        }
-                    }
-                }
-
-//                runOnUiThread {
-//                    Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show()
+//        object : CountDownTimer(messageFuture, messageInterval) {
+//
+//            override fun onTick(millisUntilFinished: Long) {
+////                Toast.setText("seconds remaining: " + millisUntilFinished / 1000)
+//                if(millisUntilFinished < messageFuture - 100L)
+//                {
+//                    runOnUiThread {
+//                        if (applicationContext is MyApp) {
+//                            val currentActivity = (applicationContext as MyApp).currentActivity
+////                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+////                      startActivity(intent_to_admin)
+//                            val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
+//                            builder.setTitle("已經超時，是否回到主頁面？")
+//                            builder.setNegativeButton("NO", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+//
+//                            })
+//                            builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+//                                cancel()
+//                                val intent_to_main = Intent(applicationContext, MainActivity::class.java)
+//                                startActivity(intent_to_main)
+//                            })
+//                            builder.show()
+//                        } else {
+//                            runOnUiThread {
+//                                Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
+//                            }
+//                        }
+//                    }
 //                }
-            }
-
-            override fun onFinish() {
-                runOnUiThread {
-//                    Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
-                    if(applicationContext is MyApp) {
-                        val currentActivity = (applicationContext as MyApp).currentActivity
-//                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
-//                      startActivity(intent_to_admin)
-                        val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
-                        builder.setTitle("已經超時，正在導回主頁面")
-                        builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
-                            val intent_to_main = Intent(applicationContext, MainActivity::class.java)
-                            startActivity(intent_to_main)
-                        })
-                        builder.show()
-                    }
-                    else{
-                        runOnUiThread {
-                            Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                }
-            }
-        }.start()
+//
+////                runOnUiThread {
+////                    Toast.makeText(applicationContext, millisUntilFinished.toString(), Toast.LENGTH_LONG).show()
+////                }
+//            }
+//
+//            override fun onFinish() {
+//                runOnUiThread {
+////                    Toast.makeText(applicationContext, "done!", Toast.LENGTH_LONG).show()
+//                    if(applicationContext is MyApp) {
+//                        val currentActivity = (applicationContext as MyApp).currentActivity
+////                      val intent_to_admin = Intent(applicationContext, AdminActivity::class.java)
+////                      startActivity(intent_to_admin)
+//                        val builder: AlertDialog.Builder = AlertDialog.Builder(currentActivity)
+//                        builder.setTitle("已經超時，正在導回主頁面")
+//                        builder.setPositiveButton("YES", DialogInterface.OnClickListener { arg0, arg1 -> // TODO Auto-generated method stub
+//                            val intent_to_main = Intent(applicationContext, MainActivity::class.java)
+//                            startActivity(intent_to_main)
+//                        })
+//                        builder.show()
+//                    }
+//                    else{
+//                        runOnUiThread {
+//                            Toast.makeText(applicationContext, "error showing dialog", Toast.LENGTH_LONG).show()
+//                        }
+//                    }
+//                }
+//            }
+//        }.start()
     }
 
     private fun hasStatusFile(): Boolean {
@@ -193,7 +201,7 @@ class MainActivity : AppCompatActivity() {
 
         for (i in 0..h-1) {
             for (j in 0..w-1) {
-                status[i][j] = 2    // USER_AVAILABLE
+                status[i][j] = 4    // ADMIN_AVAILABLE
             }
         }
 
@@ -228,6 +236,49 @@ class MainActivity : AppCompatActivity() {
         }
 
         val filename = "status.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
+//    ==================================================
+
+
+    private fun hasModeFile(): Boolean {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun createModeFile() {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveModeToTxt(mode: Int) {
+
+        val builder = StringBuilder()
+        builder.append(mode.toString())
+        builder.append("\n")
+
+        val filename = "mode.txt"
         val file = File(this.getFilesDir(), filename)
 
         // write the 2D-array string to status file

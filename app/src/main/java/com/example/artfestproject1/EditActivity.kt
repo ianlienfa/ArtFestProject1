@@ -13,7 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.coroutineScope
 import androidx.print.PrintHelper
-import com.devs.sketchimage.SketchImage
+//import com.devs.sketchimage.SketchImage
 import com.example.artfestproject1.MyImage.ImageGallery
 import com.example.artfestproject1.databinding.ActivityEditBinding
 import id.zelory.compressor.Compressor
@@ -41,13 +41,17 @@ class EditActivity : AppCompatActivity() {
         val bigImgName = "test_image.jpg"
         var imgFilePath: String = ""
 
+        var mode: Int = readModeFromTxt()
+
         // Image parameters, htc: 2448 * 3264
         val crop_x = 0
         val crop_y = 0
-        val CROP_WIDTH = 2448
-        val CROP_HEIGHT = 3264
+//        val CROP_WIDTH = 2448
+//        val CROP_HEIGHT = 3264
+        val CROP_WIDTH = 2470
+        val CROP_HEIGHT = 3536
         val expected_pixel_w = 95
-        val expected_pixel_h = 125
+        val expected_pixel_h = 136
 
         // View binding
         val binding = ActivityEditBinding.inflate(layoutInflater)
@@ -246,7 +250,6 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -380,46 +383,68 @@ class EditActivity : AppCompatActivity() {
                 ImageGallery.stdSaveImg(img_user, "img_user.jpg", this);
                 ImageGallery.stdSaveImg(img_base, "img_base.jpg", this);
 
-                // 演算法 random 區塊化
-                // Log.d("Admin", "row: $y")
-                // Log.d("Admin", "col: $x")
-                var img_new: Mat
-                val rand1 = (Math.random()*30).toInt();
-                if (rand1 % 5 == 0) {
-                    // 五分之一的機率，隨機挑選演算法
-                    var rand = (Math.random()*3).toInt();
-                    //rand = 1;
-                    if (rand == 0) {
-                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                    } else if (rand == 1) {
-                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                var img_new: Mat = ImageGallery.stdLoadImg(baseImgName, this)
+
+                if (mode == 0) {
+
+                    Log.d("Edit", "random")
+
+                    // 演算法 random 區塊化
+                    // Log.d("Admin", "row: $y")
+                    // Log.d("Admin", "col: $x")
+                    val rand1 = (Math.random()*30).toInt();
+                    if (rand1 % 5 == 0) {
+                        // 五分之一的機率，隨機挑選演算法
+                        var rand = (Math.random()*3).toInt();
+                        //rand = 1;
+                        if (rand == 0) {
+                            img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                        } else if (rand == 1) {
+                            img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                        } else {
+                            img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        }
                     } else {
-                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        // 其他就是直接照位置來決定用哪個演算法
+                        // 一個小區塊的長＆寬
+                        val heightBlock = 3
+                        val widthBLock = 3
+                        // 區塊位置
+                        val rowBlock = y / heightBlock
+                        val colBLock = x / widthBLock
+                        // 確認是否為 integer division
+                        // Log.d("Admin", "rowBlock: $rowBlock")
+                        // Log.d("Admin", "colBLock: $colBLock")
+
+                        var chooseAlgorithm = (rowBlock + colBLock) % 3
+
+                        //chooseAlgorithm = 2
+                        // chooseAlgorithm = 1
+
+                        if (chooseAlgorithm == 0) {
+                            img_new = imageGallery.algorithm_BAI(img_user, img_base)
+                        } else if (chooseAlgorithm == 1) {
+                            img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+                        } else {
+                            img_new = imageGallery.algorithm_Tim(img_user, img_base)
+                        }
                     }
-                } else {
-                    // 其他就是直接照位置來決定用哪個演算法
-                    // 一個小區塊的長＆寬
-                    val heightBlock = 3
-                    val widthBLock = 3
-                    // 區塊位置
-                    val rowBlock = y / heightBlock
-                    val colBLock = x / widthBLock
-                    // 確認是否為 integer division
-                    // Log.d("Admin", "rowBlock: $rowBlock")
-                    // Log.d("Admin", "colBLock: $colBLock")
 
-                    var chooseAlgorithm = (rowBlock + colBLock) % 3
+                } else if (mode == 1) {
 
-                    //chooseAlgorithm = 2
-                    // chooseAlgorithm = 1
+                    Log.d("Edit", "BAI")
+                    img_new = imageGallery.algorithm_BAI(img_user, img_base)
 
-                    if (chooseAlgorithm == 0) {
-                        img_new = imageGallery.algorithm_BAI(img_user, img_base)
-                    } else if (chooseAlgorithm == 1) {
-                        img_new = imageGallery.algorithm_shiuan(img_user, img_base)
-                    } else {
-                        img_new = imageGallery.algorithm_Tim(img_user, img_base)
-                    }
+                } else if (mode == 2) {
+
+                    Log.d("Edit", "shiuan")
+                    img_new = imageGallery.algorithm_shiuan(img_user, img_base)
+
+                } else if (mode == 3) {
+
+                    Log.d("Edit", "Tim")
+                    img_new = imageGallery.algorithm_Tim(img_user, img_base)
+
                 }
 
 
@@ -445,7 +470,14 @@ class EditActivity : AppCompatActivity() {
                 img_new = ImageGallery.matDuplicateWithPadding(img_new, 10);
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
+                val rowArray =  arrayOf("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L")
+                var newFileNamePrefix: String = ""
+                if (colToSend > 11) {
+                    newFileNamePrefix = "R_" + rowArray[rowToSend] + "${colToSend-11}"
+                } else {
+                    newFileNamePrefix = "L_" + rowArray[rowToSend] + "$colToSend"
+                }
+                newFilename = newFileNamePrefix + "_" +newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -557,7 +589,6 @@ class EditActivity : AppCompatActivity() {
                 // end testing for algorithm ----
 
                 // Write computed img
-                newFilename = "cmp_"+newFilename
                 ImageGallery.internalImgWrite(newFilename, img_new,this)
                 //TODO:
                 Log.d("Admin", imageGallery.get_Imgstatus(0, 0).toString())
@@ -673,7 +704,7 @@ class EditActivity : AppCompatActivity() {
 
     private fun doPhotoCrop(filename: String, context: Context, crop_x: Int, crop_y: Int, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
         // Crop Photo
-        var newFilename = "cp_"+filename
+        var newFilename = filename
         while(!ImageGallery.getImageDir(context).canExecute())
         {
             Log.d("IO", "not yet")
@@ -696,7 +727,7 @@ class EditActivity : AppCompatActivity() {
 
     private fun doSuitablePhotoCrop(filename: String, context: Context, CROP_WIDTH: Int, CROP_HEIGHT: Int): String{
         // Crop Photo
-        var newFilename = "cp_"+filename
+        var newFilename = filename
         while(!ImageGallery.getImageDir(context).canExecute())
         {
             Log.d("IO", "not yet")
@@ -730,8 +761,8 @@ class EditActivity : AppCompatActivity() {
             }
             // Write Img
             val imgfile = File(imgDir, filename)
-            val desFile = File(imgDir, "cmpr_"+filename)
-            newFilename = "cmpr_"+filename
+            val desFile = File(imgDir, filename)
+            newFilename = filename
 
             // Compress and save
             val compressedImageFile = Compressor.compress(context, imgfile) {
@@ -860,21 +891,36 @@ class EditActivity : AppCompatActivity() {
 
     }
 
-    @Throws(FileNotFoundException::class, IOException::class)
-    private fun toSketch(filename: String, context: Context?): String? {
-        val bmOriginal = ImageGallery.internalBitMapRead(filename, context)
-        val sketchImage = SketchImage.Builder(context, bmOriginal).build()
-        val bmProcessed = sketchImage.getImageAs(
-            SketchImage.ORIGINAL_TO_SKETCH, 80 // value 0 - 100
-            // Other options
-            // SketchImage.ORIGINAL_TO_GRAY
-            // SketchImage.ORIGINAL_TO_COLORED_SKETCH
-            // SketchImage.ORIGINAL_TO_SOFT_SKETCH
-            // And many more.....
-        )
-        ImageGallery.InternalBitMapWrite(bmProcessed, "skt_$filename", context)
-        return "skt_$filename"
+
+    private fun readModeFromTxt(): Int {
+
+        val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+
+        return reader.readLine().toInt()
+
     }
+
+
+//    @Throws(FileNotFoundException::class, IOException::class)
+//    private fun toSketch(filename: String, context: Context?): String? {
+//        val bmOriginal = ImageGallery.internalBitMapRead(filename, context)
+//        val sketchImage = SketchImage.Builder(context, bmOriginal).build()
+//        val bmProcessed = sketchImage.getImageAs(
+//            SketchImage.ORIGINAL_TO_SKETCH, 80 // value 0 - 100
+//            // Other options
+//            // SketchImage.ORIGINAL_TO_GRAY
+//            // SketchImage.ORIGINAL_TO_COLORED_SKETCH
+//            // SketchImage.ORIGINAL_TO_SOFT_SKETCH
+//            // And many more.....
+//        )
+//        ImageGallery.InternalBitMapWrite(bmProcessed, "skt_$filename", context)
+//        return "skt_$filename"
+//    }
 
     override fun onResume(){
         super.onResume()
