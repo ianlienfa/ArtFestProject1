@@ -25,6 +25,9 @@ class AdminActivity : AppCompatActivity() {
         val mode: Int = readModeFromTxt()
         binding.textViewMode.text = textMode(mode)
 
+        val board: Int = readBoardFromTxt()
+        binding.textViewBoard.text = textBoard(board)
+
 
         binding.gridViewOpen.setOnClickListener {
             val intent_to_gridview = Intent(this, GridViewActivity::class.java)
@@ -93,6 +96,17 @@ class AdminActivity : AppCompatActivity() {
         binding.buttonSetTo3.setOnClickListener {
             setMode(3)
             binding.textViewMode.text = textMode(3)
+        }
+
+
+
+        binding.buttonBoardSetTo1.setOnClickListener {
+            setBoard(1)
+            binding.textViewBoard.text = textBoard(1)
+        }
+        binding.buttonBoardSetTo2.setOnClickListener {
+            setBoard(2)
+            binding.textViewBoard.text = textBoard(2)
         }
 
     }
@@ -241,6 +255,66 @@ class AdminActivity : AppCompatActivity() {
         builder.append("\n")
 
         val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+
+//    ==================================================
+
+    private fun setBoard(newBoard: Int) {
+        saveBoardToTxt(newBoard)
+    }
+
+    private fun textBoard(s: Int): String {
+        when (s) {
+            1 -> return "only one"
+            2 -> return "left / right"
+        }
+        return "ERROR"
+    }
+
+    private fun readBoardFromTxt(): Int {
+
+        val filename = "board.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+//        for (line in reader.lineSequence()) {
+////            val cols = line.split(",").toTypedArray()
+////            var col: Int = 0
+////            for (c in cols) {
+////                mode = c.toInt()
+////                col++
+////            }
+////            row++
+//            Log.d("Admin", line.toString())
+//            reader.close()
+//        }
+
+        // For testing
+//        Log.d("Admin", reader.readLine().toString())
+
+        return reader.readLine().toInt()
+
+    }
+
+    private fun saveBoardToTxt(board: Int) {
+
+        // 2D-array to string
+        val builder = StringBuilder()
+        builder.append(board.toString());
+        builder.append("\n")
+
+        val filename = "board.txt"
         val file = File(this.getFilesDir(), filename)
 
         // write the 2D-array string to status file

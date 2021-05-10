@@ -91,39 +91,6 @@
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-    <Button
-        android:id="@+id/buttonSetTo0"
-        android:layout_width="88dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="460dp"
-        android:text="random"
-        android:textSize="11dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonSetTo1"
-        android:layout_width="58dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="208dp"
-        android:layout_marginTop="460dp"
-        android:text="BAI"
-        android:textSize="11dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonSetTo2"
-        android:layout_width="88dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="508dp"
-        android:text="shiuan"
-        android:textSize="11dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <!--    <Button-->
 <!--        android:id="@+id/button"-->
 <!--        android:layout_width="wrap_content"-->
@@ -134,25 +101,91 @@
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
+    <TextView
+        android:id="@+id/textViewMode"
+        android:layout_width="180dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="224dp"
+        android:gravity="center"
+        android:text="Mode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
-        android:id="@+id/buttonSetTo3"
-        android:layout_width="58dp"
+        android:id="@+id/buttonSetTo2"
+        android:layout_width="88dp"
         android:layout_height="40dp"
-        android:layout_marginStart="208dp"
-        android:layout_marginTop="508dp"
-        android:text="Tim"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="340dp"
+        android:text="shiuan"
+        android:textSize="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonBoardSetTo2"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="540dp"
+        android:text="left / right"
         android:textSize="11dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewMode"
+        android:id="@+id/textViewBoard"
         android:layout_width="180dp"
         android:layout_height="37dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="392dp"
+        android:layout_marginStart="96dp"
+        android:layout_marginTop="436dp"
         android:gravity="center"
-        android:text="Mode"
+        android:text="Board"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonBoardSetTo1"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="492dp"
+        android:text="only one"
+        android:textSize="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSetTo0"
+        android:layout_width="88dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="108dp"
+        android:layout_marginTop="292dp"
+        android:text="random"
+        android:textSize="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSetTo3"
+        android:layout_width="58dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="340dp"
+        android:text="Tim"
+        android:textSize="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSetTo1"
+        android:layout_width="58dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="292dp"
+        android:text="BAI"
+        android:textSize="11dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -160,8 +193,8 @@
         android:id="@+id/gridViewOpen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="116dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="72dp"
         android:text="GridView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -171,7 +204,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="136dp"
-        android:layout_marginTop="256dp"
+        android:layout_marginTop="144dp"
         android:text="vip list"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

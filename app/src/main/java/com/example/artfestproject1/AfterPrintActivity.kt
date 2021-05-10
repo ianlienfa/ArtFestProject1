@@ -11,7 +11,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.print.PrintHelper
+import java.io.BufferedReader
 import java.io.File
+import java.io.FileReader
 
 class AfterPrintActivity : AppCompatActivity() {
     protected var mMyApp: MyApp? = null
@@ -22,6 +24,8 @@ class AfterPrintActivity : AppCompatActivity() {
 
         // app reference
         mMyApp = this.applicationContext as MyApp
+
+        var board: Int = readBoardFromTxt()
 
         val rowArray = charArrayOf('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L')
         val row = intent.getIntExtra("row", 0)
@@ -39,10 +43,23 @@ class AfterPrintActivity : AppCompatActivity() {
         val c: Char = rowArray[row]
 
 //        textViewNumber.text = "$c$col"
-        if (col > 11) {
-            textViewNumber.text = "右 $c${col-11}"
-        } else {
-            textViewNumber.text = "左 $c$col"
+        if (board == 1) {
+
+            if (col > 11) {
+                textViewNumber.text = "$c${col-11}"
+            } else {
+                textViewNumber.text = "左 $c$col"
+                Toast.makeText(this, "記得到 admin 切換成 left / right 哦！", Toast.LENGTH_LONG).show()
+            }
+
+        } else if (board == 2) {
+
+            if (col > 11) {
+                textViewNumber.text = "右 $c${col-11}"
+            } else {
+                textViewNumber.text = "左 $c$col"
+            }
+
         }
 
         val back_to_main_button: Button = findViewById(R.id.back_to_main)
@@ -103,6 +120,20 @@ class AfterPrintActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun readBoardFromTxt(): Int {
+
+        val filename = "board.txt"
+        val file = File(this.getFilesDir(), filename)
+        val statusFilePath = file.absolutePath
+        val reader: BufferedReader = BufferedReader(FileReader(statusFilePath))
+        var line = ""
+        var row: Int = 0
+
+        return reader.readLine().toInt()
+
+    }
+
 
     override fun onResume(){
         super.onResume()
