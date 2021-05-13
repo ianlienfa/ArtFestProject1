@@ -16,14 +16,14 @@
         android:layout_height="235dp"
         android:visibility="invisible"
         tools:srcCompat="@tools:sample/avatars"
-        android:layout_marginTop="190dp"
+        android:layout_marginTop="215dp"
         android:layout_marginLeft="82dp"
         android:contentDescription="@string/todo"
        />
 
     <Button
         android:id="@+id/compute_button"
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="60dp"
         android:visibility="invisible"
         android:text="compute"
@@ -32,8 +32,8 @@
     <Button
         android:id="@+id/show_button"
         android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="470dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="510dp"
         android:layout_marginLeft="210dp"
         android:background="@android:color/transparent"
 
@@ -64,10 +64,20 @@
     <Button
         android:id="@+id/onemore_button"
         android:layout_width="100dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="470dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="510dp"
         android:layout_marginLeft="50dp"
         android:background="@android:color/transparent"/>
+
+    <Button
+        android:id="@+id/sendOpen"
+        android:layout_width="45dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginLeft="300dp"
+        android:background="@android:color/transparent"
+        tools:layout_editor_absoluteX="345dp"
+        tools:layout_editor_absoluteY="210dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"

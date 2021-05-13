@@ -25,17 +25,17 @@
         android:layout_width="45dp"
         android:layout_height="55dp"
         android:layout_marginTop="11dp"
-        android:layout_marginLeft="298dp"
+        android:layout_marginLeft="300dp"
         android:background="@android:color/transparent"
         tools:layout_editor_absoluteX="345dp"
         tools:layout_editor_absoluteY="210dp" />
 
     <Button
         android:id="@+id/camera_open"
-        android:layout_width="270dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginTop="490dp"
+        android:layout_width="match_parent"
+        android:layout_height="900dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="150dp"
         android:background="@android:color/transparent" />
 
 </RelativeLayout>

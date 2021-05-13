@@ -110,6 +110,14 @@ class MainActivity : AppCompatActivity() {
             saveModeToTxt(mode)
         }
 
+        // create board.txt (only one or left / right)
+        val board: Int
+        if (!hasBoardFile()) {
+            board = 1    // 1: only one,  2: left / right
+            createBoardFile()
+            saveBoardToTxt(board)
+        }
+
 //
 //        val img_user = ImageGallery.stdLoadImg("[4][7].jpg")
 //        val img_base = ImageGallery.stdLoadImg("[1][7].jpg")
@@ -279,6 +287,48 @@ class MainActivity : AppCompatActivity() {
         builder.append("\n")
 
         val filename = "mode.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        // write the 2D-array string to status file
+        val statusFilePath = file.absolutePath
+        val writer = BufferedWriter(FileWriter(statusFilePath))
+        writer.write(builder.toString());
+        writer.close();
+
+    }
+
+    //    ==================================================
+
+
+    private fun hasBoardFile(): Boolean {
+
+        val filename = "board.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        return file.exists()
+    }
+
+    private fun createBoardFile() {
+
+        val filename = "board.txt"
+        val file = File(this.getFilesDir(), filename)
+
+        if (!file.exists()) {
+            val fileContents = ""
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(fileContents.toByteArray())
+            }
+        }
+
+    }
+
+    private fun saveBoardToTxt(board: Int) {
+
+        val builder = StringBuilder()
+        builder.append(board.toString())
+        builder.append("\n")
+
+        val filename = "board.txt"
         val file = File(this.getFilesDir(), filename)
 
         // write the 2D-array string to status file

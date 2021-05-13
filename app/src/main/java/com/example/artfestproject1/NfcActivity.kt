@@ -11,6 +11,8 @@ import android.provider.Settings.ACTION_NFC_SETTINGS
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.artfestproject1.databinding.ActivityMainBinding
+import com.example.artfestproject1.databinding.ActivityNfcBinding
 import com.example.artfestproject1.utils.Utils
 import org.json.JSONObject
 import java.io.*
@@ -26,12 +28,16 @@ class NfcActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nfc)
         mMyApp = this.applicationContext as MyApp
+        val binding = ActivityNfcBinding.inflate(layoutInflater)
 
         val previousIntent = this.intent
         fromWhere = previousIntent.getStringExtra("fromWhere").toString()
         Log.d("Test", fromWhere)
 
         initNfcAdapter()
+
+
+
     }
 
     override fun onResume() {

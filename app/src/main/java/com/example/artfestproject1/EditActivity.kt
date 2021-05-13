@@ -133,6 +133,14 @@ class EditActivity : AppCompatActivity() {
             }
 
         }
+        binding.sendOpen.setOnClickListener {
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intenttosend = Intent(this, SendMailActivity::class.java)
+            startActivity(intenttosend)
+        }
 
         onemore_button.setOnClickListener{
 
@@ -907,7 +915,7 @@ class EditActivity : AppCompatActivity() {
     }
 
 
-    @Throws(FileNotFoundException::class, IOException::class)
+   @Throws(FileNotFoundException::class, IOException::class)
     private fun toSketch(filename: String, context: Context?): String? {
         val bmOriginal = ImageGallery.internalBitMapRead(filename, context)
         val sketchImage = SketchImage.Builder(context, bmOriginal).build()
@@ -915,13 +923,13 @@ class EditActivity : AppCompatActivity() {
             SketchImage.ORIGINAL_TO_SKETCH, 80 // value 0 - 100
             // Other options
             // SketchImage.ORIGINAL_TO_GRAY
-            // SketchImage.ORIGINAL_TO_COLORED_SKETCH
+                // SketchImage.ORIGINAL_TO_COLORED_SKETCH
             // SketchImage.ORIGINAL_TO_SOFT_SKETCH
-            // And many more.....
-        )
+          // And many more.....
+       )
         ImageGallery.InternalBitMapWrite(bmProcessed, "skt_$filename", context)
-        return "skt_$filename"
-    }
+       return "skt_$filename"
+   }
 
     override fun onResume(){
         super.onResume()

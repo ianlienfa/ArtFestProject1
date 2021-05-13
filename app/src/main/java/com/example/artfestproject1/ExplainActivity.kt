@@ -19,6 +19,15 @@ class ExplainActivity : AppCompatActivity() {
             startActivity(intent_to_camera)
         }
 
+        binding.sendOpen.setOnClickListener {
+            // TODO:
+            // val intent_to_login = Intent(this, LoginActivity::class.java)
+            // startActivity(intent_to_login)
+            // For testing
+            val intenttosend = Intent(this, SendMailActivity::class.java)
+            startActivity(intenttosend)
+        }
+
     }
     override fun onResume(){
         super.onResume()
